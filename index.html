@@ -1,345 +1,148 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="Sprechen">
 <meta name="theme-color" content="#0B0D12">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-
 <title>Sprechen</title>
 <style>
 :root{
-  --bg:#0B0D12; --ink:#F4F1EA; --muted:#8B93A7; --card:#141821;
-  --line:#2A3140; --red:#E24A3B; --hp:#E8B86D; --gold:#E8B86D;
-  --ok:#7dba74; --bad:#E24A3B;
+  --bg:#0B0D12; --ink:#F4F1EA; --muted:#8B93A7; --card:#161B24;
+  --line:#2A3140; --gold:#E8B86D; --red:#E24A3B; --ok:#6DBF8B;
 }
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
-  font-size:16px;line-height:1.4}
-body{background:var(--bg);color:var(--ink)}
-.wrap{max-width:430px;margin:0 auto;padding:16px 16px 108px}
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;font-size:16px;line-height:1.45}
+.amb{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.amb img,.amb video{width:100%;height:100%;object-fit:cover;filter:brightness(.32) saturate(1.05)}
+.ambdim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,13,18,.35),rgba(11,13,18,.88))}
+.wrap{max-width:430px;margin:0 auto;padding:16px 16px 110px;position:relative;z-index:1}
 button,input{font:inherit;color:inherit} button{cursor:pointer}
-.card,.item,.explain,.face,.search,.pin{
-  background:var(--card); border:1px solid var(--line); border-radius:18px;
-}
-.card{padding:16px;margin:10px 0}
-header.top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px}
-.brand b{display:block;font-size:1.7rem;font-weight:700;letter-spacing:-.04em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin:10px 0}
+.brand b{display:block;font-size:1.65rem;font-weight:700;letter-spacing:-.04em}
 .brand small{color:var(--gold);font-size:.85rem}
 .lede{color:var(--muted);margin:0 0 10px}
 .scene{color:var(--gold);font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin:0 0 6px}
+h2{margin:0 0 8px;font-size:1.08rem}
+.de{font-weight:750;font-size:1.28rem;line-height:1.4}
+.en{color:var(--muted);margin-top:6px}
+.btn{border:0;border-radius:14px;padding:14px 16px;min-height:50px;font-weight:700;background:#1A1F2A;color:var(--ink);width:100%;text-align:center}
+.btn.gold{background:var(--gold);color:#0B0D12}
+.btn.red{background:var(--red);color:#fff}
+.btn.ghost{background:transparent;border:1px solid var(--line)}
 .rowbtns{display:flex;flex-direction:column;gap:8px}
-.btn{border:0;border-radius:14px;padding:14px 16px;min-height:50px;font-weight:700;background:#1A1F2A;text-align:center;color:var(--ink)}
-.btn.primary{background:var(--red);color:#fff}
-.btn.accent{background:var(--gold);color:#0B0D12}
-.btn.ghost{background:#1A1F2A;border:1px solid var(--line)}
-h2,h3{margin:0 0 8px;font-size:1.05rem;font-weight:700}
-.de{font-weight:700;font-size:1.2rem;line-height:1.35}
-.eshint{color:var(--muted);font-size:.9rem;margin-top:4px}
-.qmeta{display:flex;justify-content:space-between;align-items:center;gap:8px;color:var(--muted);font-size:.85rem;margin-bottom:8px}
-.progress{height:4px;background:#2A3140;border-radius:99px;overflow:hidden;margin:8px 0 12px}
-.progress>i{display:block;height:100%;background:var(--gold);width:0}
-.nav{
-  position:fixed;bottom:0;left:0;right:0;z-index:5;
-  background:#0B0D12;border-top:1px solid var(--line);
-  display:grid;grid-template-columns:repeat(4,1fr);
-  padding:6px 10px calc(10px + env(safe-area-inset-bottom));
-}
-.nav button{border:0;background:transparent;color:#6B7385;padding:8px;border-radius:14px;min-height:48px}
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:6;background:#0B0D12;border-top:1px solid var(--line);
+  display:grid;grid-template-columns:repeat(4,1fr);padding:6px 8px calc(10px + env(safe-area-inset-bottom))}
+.nav button{border:0;background:transparent;color:#6B7385;min-height:48px;border-radius:14px}
 .nav button.on{color:var(--gold);background:rgba(232,184,109,.12)}
 .nav svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.ans{width:100%;padding:14px;border:1px solid var(--line);border-radius:14px;
-  font-size:1.1rem;background:#12151C;color:var(--ink);margin-top:10px}
-.speak{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:#12151C;color:var(--gold);flex:0 0 36px}
-.langs{display:flex;gap:8px;flex-wrap:wrap}
-.langs button{border:1px solid var(--line);background:#12151C;border-radius:999px;padding:8px 14px;font-weight:700;color:var(--muted)}
-.langs button.on{background:var(--gold);color:#0B0D12}
-.path{margin:6px 0 14px}
-.pin{display:flex;align-items:center;gap:12px;padding:12px 14px;margin:8px 0;width:100%;text-align:left;color:var(--ink);background:transparent;border:1px solid transparent}
+.pin{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 14px;margin:6px 0;
+  border:1px solid transparent;border-radius:16px;background:transparent;color:var(--ink)}
 .pin.here{border-color:var(--gold);background:rgba(232,184,109,.08)}
 .pin.lock{opacity:.4}
-.dot{width:10px;height:10px;border-radius:50%;background:#2A3140;flex:0 0 10px}
-.pin.here .dot{background:var(--gold);box-shadow:0 0 12px var(--gold)}
-.lockscr{min-height:78vh;display:flex;flex-direction:column;justify-content:flex-end}
-.lockscr h1{font-size:2.6rem;margin:0 0 12px;letter-spacing:-.05em;text-align:center}
-body.login #nav{display:none !important}
-.hero{display:flex;gap:10px;align-items:center}
-.hero img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:1px solid var(--line)}
-.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;border:1px solid var(--line);font-size:.75rem;color:var(--gold);font-weight:700}
-.arena{position:relative;height:52vh;overflow:hidden;border-radius:18px;background:#10141C;border:1px solid var(--line);touch-action:manipulation}
-.fall{
-  position:absolute;padding:10px 14px;border-radius:999px;font-weight:800;
-  background:#1A1F2A;border:1px solid var(--gold);color:var(--ink);white-space:nowrap;
-}
-.fall.bad{border-color:#D4524A;color:#D4524A}
-.built{min-height:44px;padding:10px;border-radius:12px;background:#12151C;margin:8px 0;font-weight:700}
-.buckets{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}
-.buckets .btn{padding:16px 8px;font-size:1.1rem}
-.cover{width:100%;height:88px;object-fit:cover;border-radius:14px;margin:8px 0 12px;display:block}
-.tenses>div{display:flex;gap:8px;align-items:center;margin:6px 0}
-.linecard{display:flex;gap:10px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}
-.linecard:last-child{border-bottom:0}
-.lvl{font-size:.7rem;color:var(--muted)}
-.flame{color:var(--gold);font-weight:700}
-.skyline,.pix,.ball,.badges,.hud,.bars,.overworld,.hero-bob{display:none}
-
-.amb{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
-.amb img,.amb video{width:100%;height:100%;object-fit:cover;filter:brightness(.34) saturate(1.08)}
-.ambdim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,13,18,.4),rgba(11,13,18,.82))}
-.wrap{position:relative;z-index:1}
-.fall{
-  min-height:52px;min-width:92px;font-size:1.2rem;font-weight:800;
-  padding:14px 18px;z-index:3;-webkit-tap-highlight-color:rgba(232,184,109,.35);
-  touch-action:manipulation;
-}
-.arena{height:38vh;max-height:320px;margin:8px 0 12px}
-.buckets .btn{min-height:64px;font-size:1.25rem;font-weight:800}
+.dot{width:10px;height:10px;border-radius:50%;background:#2A3140}
+.pin.here .dot{background:var(--gold);box-shadow:0 0 10px var(--gold)}
+.cover{width:100%;height:120px;object-fit:cover;border-radius:14px;margin:8px 0 12px;display:block}
+.line{display:flex;gap:10px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line);width:100%;text-align:left;background:transparent;color:var(--ink)}
+.line:last-child{border-bottom:0}
+.w{display:inline-block;margin:0 5px 8px 0;padding:4px 2px;border-bottom:2px solid var(--gold);font-weight:750;font-size:1.35rem;background:transparent;color:var(--ink)}
+.w.on{background:rgba(232,184,109,.16);border-radius:8px}
+.gloss{background:#12151C;border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0;min-height:64px}
 .chipbox{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
-.chipbox .btn{min-height:52px;padding:12px 16px;flex:1 1 30%}
-@media (prefers-reduced-motion:reduce){.fall{transition:none}}
-
+.chipbox .btn{width:auto;flex:1 1 28%;min-height:52px}
+.ans{width:100%;padding:14px;border:1px solid var(--line);border-radius:14px;background:#12151C;font-size:1.1rem;margin:10px 0}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:8;background:#141821;border-top:1px solid var(--gold);
+  border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));max-height:82vh;overflow:auto}
+.sheet .de{font-size:1.45rem}
+.lockscr{min-height:78vh;display:flex;flex-direction:column;justify-content:flex-end}
+.lockscr h1{font-size:2.6rem;margin:0 0 8px;text-align:center;letter-spacing:-.05em}
+body.login .nav{display:none}
+.chip{display:inline-block;padding:4px 10px;border:1px solid var(--line);border-radius:999px;color:var(--gold);font-size:.75rem;font-weight:700}
+.ok{color:var(--ok)} .bad{color:var(--red)}
+.speak{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:#12151C;color:var(--gold);flex:0 0 40px}
+.buckets{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 </style>
 </head>
 <body>
+<div class="amb" id="amb"></div>
 <div class="wrap" id="app"></div>
 <nav class="nav" id="nav"></nav>
 <script>
 const DATA = {"units":[["El motor","sein, haben, werden, modales. Sin esto no hay frase."],["Hacer y mover","Lo que haces con el cuerpo y con otras personas."],["Cabeza y sitio","Pensar, conocer, quedarte, estar."],["El día","Comer, dormir, trabajar, ir, necesitar."],["Info","Oír, entender, leer, escribir, esperar."],["Hablar de verdad","Llamar, contar, decidir, olvidar, lograr."],["Sentir","Lo que dices cuando la conversación baja de velocidad."],["Debate","Acuerdo, rechazo, expectativa, qué pasó."],["Partículas","an-, auf-, mit-, aus-. El alemán oral vive aquí."],["Cerrar el día","Pagar, pedir, llegar, perder, mudarse."]],"verbs":[{"u":0,"inf":"sein","es":"ser / estar","aux":"sein","part":"gewesen","pk":"pret","ich":"bin","du":"bist","er":"ist","wir":"sind","pret":"war","sep":"","refl":false,"now":["Ich bin müde.","Estoy cansado."],"past":["Ich war gestern müde.","Ayer estaba cansado."],"fut":["Morgen bin ich frei.","Mañana estoy libre."]},{"u":0,"inf":"haben","es":"tener","aux":"haben","part":"gehabt","pk":"pret","ich":"habe","du":"hast","er":"hat","wir":"haben","pret":"hatte","sep":"","refl":false,"now":["Ich habe Zeit.","Tengo tiempo."],"past":["Ich hatte keine Zeit.","No tenía tiempo."],"fut":["Morgen habe ich Zeit.","Mañana tengo tiempo."]},{"u":0,"inf":"werden","es":"llegar a ser / aux. futuro","aux":"sein","part":"geworden","pk":"pret","ich":"werde","du":"wirst","er":"wird","wir":"werden","pret":"wurde","sep":"","refl":false,"now":["Es wird kalt.","Se está poniendo frío."],"past":["Es wurde kalt.","Se puso frío."],"fut":["Ich werde Arzt.","Voy a ser médico."]},{"u":0,"inf":"können","es":"poder","aux":"haben","part":"gekonnt","pk":"pret","ich":"kann","du":"kannst","er":"kann","wir":"können","pret":"konnte","sep":"","refl":false,"now":["Ich kann das machen.","Puedo hacer eso."],"past":["Ich konnte gestern nicht kommen.","Ayer no pude venir."],"fut":["Ich werde das können.","Voy a poder hacerlo."]},{"u":0,"inf":"müssen","es":"tener que","aux":"haben","part":"gemusst","pk":"pret","ich":"muss","du":"musst","er":"muss","wir":"müssen","pret":"musste","sep":"","refl":false,"now":["Ich muss arbeiten.","Tengo que trabajar."],"past":["Ich musste warten.","Tuve que esperar."],"fut":["Morgen muss ich früh aufstehen.","Mañana tengo que levantarme temprano."]},{"u":0,"inf":"wollen","es":"querer","aux":"haben","part":"gewollt","pk":"pret","ich":"will","du":"willst","er":"will","wir":"wollen","pret":"wollte","sep":"","refl":false,"now":["Ich will Kaffee.","Quiero café."],"past":["Ich wollte dich anrufen.","Quería llamarte."],"fut":["Ich will nächste Woche kommen.","Quiero venir la semana que viene."]},{"u":0,"inf":"sollen","es":"deber (se espera)","aux":"haben","part":"gesollt","pk":"pret","ich":"soll","du":"sollst","er":"soll","wir":"sollen","pret":"sollte","sep":"","refl":false,"now":["Du sollst das lesen.","Se supone que debes leer eso."],"past":["Ich sollte um acht da sein.","Se suponía que yo estaba a las ocho."],"fut":["Ich soll morgen anrufen.","Debo llamar mañana."]},{"u":0,"inf":"dürfen","es":"tener permiso / poder","aux":"haben","part":"gedurft","pk":"pret","ich":"darf","du":"darfst","er":"darf","wir":"dürfen","pret":"durfte","sep":"","refl":false,"now":["Darf ich fragen?","¿Puedo preguntar?"],"past":["Ich durfte nicht bleiben.","No me dejaron quedarme."],"fut":["Du darfst morgen kommen.","Puedes venir mañana."]},{"u":0,"inf":"mögen","es":"gustar","aux":"haben","part":"gemocht","pk":"pret","ich":"mag","du":"magst","er":"mag","wir":"mögen","pret":"mochte","sep":"","refl":false,"now":["Ich mag dich.","Me gustas."],"past":["Ich mochte den Film.","Me gustó la película."],"fut":["Du wirst das mögen.","Te va a gustar."]},{"u":0,"inf":"wissen","es":"saber (un hecho)","aux":"haben","part":"gewusst","pk":"pret","ich":"weiß","du":"weißt","er":"weiß","wir":"wissen","pret":"wusste","sep":"","refl":false,"now":["Ich weiß das nicht.","No lo sé."],"past":["Ich wusste das nicht.","No lo sabía."],"fut":["Dann wirst du es wissen.","Entonces lo sabrás."]},{"u":1,"inf":"machen","es":"hacer","aux":"haben","part":"gemacht","pk":"perf","ich":"mache","du":"machst","er":"macht","wir":"machen","pret":"","sep":"","refl":false,"now":["Ich mache Kaffee.","Hago café."],"past":["Ich habe Kaffee gemacht.","Hice café."],"fut":["Ich mache später Kaffee.","Luego hago café."]},{"u":1,"inf":"sagen","es":"decir","aux":"haben","part":"gesagt","pk":"perf","ich":"sage","du":"sagst","er":"sagt","wir":"sagen","pret":"","sep":"","refl":false,"now":["Ich sage die Wahrheit.","Digo la verdad."],"past":["Ich habe nichts gesagt.","No dije nada."],"fut":["Ich sage es ihm morgen.","Se lo digo mañana."]},{"u":1,"inf":"gehen","es":"ir (a pie)","aux":"sein","part":"gegangen","pk":"perf","ich":"gehe","du":"gehst","er":"geht","wir":"gehen","pret":"","sep":"","refl":false,"now":["Ich gehe nach Hause.","Voy a casa."],"past":["Ich bin nach Hause gegangen.","Me fui a casa."],"fut":["Morgen gehe ich ins Büro.","Mañana voy a la oficina."]},{"u":1,"inf":"kommen","es":"venir","aux":"sein","part":"gekommen","pk":"perf","ich":"komme","du":"kommst","er":"kommt","wir":"kommen","pret":"","sep":"","refl":false,"now":["Ich komme gleich.","Vengo ahora mismo."],"past":["Ich bin zu spät gekommen.","Llegué tarde."],"fut":["Ich komme morgen um zehn.","Vengo mañana a las diez."]},{"u":1,"inf":"geben","es":"dar","aux":"haben","part":"gegeben","pk":"perf","ich":"gebe","du":"gibst","er":"gibt","wir":"geben","pret":"","sep":"","refl":false,"now":["Gib mir bitte das.","Dame eso, por favor."],"past":["Sie hat mir Zeit gegeben.","Me dio tiempo."],"fut":["Ich gebe dir Bescheid.","Te aviso."]},{"u":1,"inf":"sehen","es":"ver","aux":"haben","part":"gesehen","pk":"perf","ich":"sehe","du":"siehst","er":"sieht","wir":"sehen","pret":"","sep":"","refl":false,"now":["Ich sehe das Problem.","Veo el problema."],"past":["Ich habe ihn gestern gesehen.","Lo vi ayer."],"fut":["Wir sehen uns morgen.","Nos vemos mañana."]},{"u":1,"inf":"nehmen","es":"tomar / coger","aux":"haben","part":"genommen","pk":"perf","ich":"nehme","du":"nimmst","er":"nimmt","wir":"nehmen","pret":"","sep":"","refl":false,"now":["Ich nehme den Bus.","Cojo el bus."],"past":["Ich habe das Auto genommen.","Cogí el coche."],"fut":["Ich nehme morgen den Zug.","Mañana cojo el tren."]},{"u":1,"inf":"lassen","es":"dejar / hacer que","aux":"haben","part":"gelassen","pk":"perf","ich":"lasse","du":"lässt","er":"lässt","wir":"lassen","pret":"","sep":"","refl":false,"now":["Lass mich in Ruhe.","Déjame en paz."],"past":["Ich habe das Fenster offen gelassen.","Dejé la ventana abierta."],"fut":["Ich lasse dir eine Nachricht.","Te dejo un mensaje."]},{"u":1,"inf":"finden","es":"encontrar / parecer","aux":"haben","part":"gefunden","pk":"perf","ich":"finde","du":"findest","er":"findet","wir":"finden","pret":"","sep":"","refl":false,"now":["Ich finde das gut.","Me parece bien."],"past":["Ich habe den Schlüssel gefunden.","Encontré la llave."],"fut":["Du wirst eine Lösung finden.","Vas a encontrar una solución."]},{"u":1,"inf":"tun","es":"hacer (neutro)","aux":"haben","part":"getan","pk":"perf","ich":"tue","du":"tust","er":"tut","wir":"tun","pret":"","sep":"","refl":false,"now":["Was tust du da?","¿Qué haces ahí?"],"past":["Ich habe nichts getan.","No hice nada."],"fut":["Was wirst du tun?","¿Qué vas a hacer?"]},{"u":2,"inf":"sprechen","es":"hablar","aux":"haben","part":"gesprochen","pk":"perf","ich":"spreche","du":"sprichst","er":"spricht","wir":"sprechen","pret":"","sep":"","refl":false,"now":["Ich spreche ein bisschen Deutsch.","Hablo un poco de alemán."],"past":["Wir haben lange gesprochen.","Hablamos largo rato."],"fut":["Morgen sprechen wir darüber.","Mañana hablamos de eso."]},{"u":2,"inf":"fragen","es":"preguntar","aux":"haben","part":"gefragt","pk":"perf","ich":"frage","du":"fragst","er":"fragt","wir":"fragen","pret":"","sep":"","refl":false,"now":["Darf ich dich etwas fragen?","¿Puedo preguntarte algo?"],"past":["Ich habe sie gefragt.","Le pregunté."],"fut":["Ich frage ihn morgen.","Le pregunto mañana."]},{"u":2,"inf":"denken","es":"pensar","aux":"haben","part":"gedacht","pk":"perf","ich":"denke","du":"denkst","er":"denkt","wir":"denken","pret":"","sep":"","refl":false,"now":["Ich denke oft an dich.","Pienso mucho en ti."],"past":["Ich habe an uns gedacht.","Pensé en nosotros."],"fut":["Denk an mich.","Piensa en mí."]},{"u":2,"inf":"glauben","es":"creer","aux":"haben","part":"geglaubt","pk":"perf","ich":"glaube","du":"glaubst","er":"glaubt","wir":"glauben","pret":"","sep":"","refl":false,"now":["Ich glaube dir.","Te creo."],"past":["Ich habe das nicht geglaubt.","No me lo creí."],"fut":["Du wirst es noch glauben.","Ya te lo vas a creer."]},{"u":2,"inf":"meinen","es":"opinar / querer decir","aux":"haben","part":"gemeint","pk":"perf","ich":"meine","du":"meinst","er":"meint","wir":"meinen","pret":"","sep":"","refl":false,"now":["Was meinst du?","¿Tú qué opinas?"],"past":["Ich habe das nicht so gemeint.","No lo dije así."],"fut":["Sag mir, was du wirklich meinst.","Dime lo que de verdad opinas."]},{"u":2,"inf":"kennen","es":"conocer (persona/sitio)","aux":"haben","part":"gekannt","pk":"perf","ich":"kenne","du":"kennst","er":"kennt","wir":"kennen","pret":"","sep":"","refl":false,"now":["Ich kenne ihn gut.","Lo conozco bien."],"past":["Ich habe sie früher gekannt.","La conocí antes."],"fut":["Dann wirst du die Stadt kennen.","Entonces vas a conocer la ciudad."]},{"u":2,"inf":"heißen","es":"llamarse","aux":"haben","part":"geheißen","pk":"perf","ich":"heiße","du":"heißt","er":"heißt","wir":"heißen","pret":"","sep":"","refl":false,"now":["Ich heiße Oliver.","Me llamo Oliver."],"past":["Wie hat das geheißen?","¿Cómo se llamaba eso?"],"fut":["Wie wird das Kind heißen?","¿Cómo se va a llamar el niño?"]},{"u":2,"inf":"bleiben","es":"quedarse","aux":"sein","part":"geblieben","pk":"perf","ich":"bleibe","du":"bleibst","er":"bleibt","wir":"bleiben","pret":"","sep":"","refl":false,"now":["Ich bleibe hier.","Me quedo aquí."],"past":["Ich bin zu Hause geblieben.","Me quedé en casa."],"fut":["Ich bleibe bis Sonntag.","Me quedo hasta el domingo."]},{"u":2,"inf":"stehen","es":"estar de pie / poner","aux":"haben","part":"gestanden","pk":"perf","ich":"stehe","du":"stehst","er":"steht","wir":"stehen","pret":"","sep":"","refl":false,"now":["Ich stehe vor der Tür.","Estoy de pie frente a la puerta."],"past":["Das Auto hat dort gestanden.","El coche estaba ahí."],"fut":["Morgen stehe ich dort.","Mañana estoy ahí de pie."]},{"u":2,"inf":"liegen","es":"estar tumbado / quedar","aux":"haben","part":"gelegen","pk":"perf","ich":"liege","du":"liegst","er":"liegt","wir":"liegen","pret":"","sep":"","refl":false,"now":["Das Handy liegt auf dem Tisch.","El móvil está en la mesa."],"past":["Ich habe lange im Bett gelegen.","Estuve mucho rato en la cama."],"fut":["Der Schlüssel wird dort liegen.","La llave estará ahí."]},{"u":3,"inf":"essen","es":"comer","aux":"haben","part":"gegessen","pk":"perf","ich":"esse","du":"isst","er":"isst","wir":"essen","pret":"","sep":"","refl":false,"now":["Ich esse gerade.","Estoy comiendo."],"past":["Ich habe Pizza gegessen.","Comí pizza."],"fut":["Wir essen später zusammen.","Comemos luego juntos."]},{"u":3,"inf":"trinken","es":"beber","aux":"haben","part":"getrunken","pk":"perf","ich":"trinke","du":"trinkst","er":"trinkt","wir":"trinken","pret":"","sep":"","refl":false,"now":["Ich trinke Wasser.","Bebo agua."],"past":["Wir haben Wein getrunken.","Bebimos vino."],"fut":["Ich trinke später einen Kaffee.","Luego me tomo un café."]},{"u":3,"inf":"schlafen","es":"dormir","aux":"haben","part":"geschlafen","pk":"perf","ich":"schlafe","du":"schläfst","er":"schläft","wir":"schlafen","pret":"","sep":"","refl":false,"now":["Ich schlafe schlecht.","Duermo mal."],"past":["Ich habe nur fünf Stunden geschlafen.","Dormí solo cinco horas."],"fut":["Heute schlafe ich früh.","Hoy me duermo temprano."]},{"u":3,"inf":"wohnen","es":"vivir (reside)","aux":"haben","part":"gewohnt","pk":"perf","ich":"wohne","du":"wohnst","er":"wohnt","wir":"wohnen","pret":"","sep":"","refl":false,"now":["Ich wohne in Berlin.","Vivo en Berlín."],"past":["Ich habe in Madrid gewohnt.","Viví en Madrid."],"fut":["Nächstes Jahr wohne ich allein.","El año que viene vivo solo."]},{"u":3,"inf":"arbeiten","es":"trabajar","aux":"haben","part":"gearbeitet","pk":"perf","ich":"arbeite","du":"arbeitest","er":"arbeitet","wir":"arbeiten","pret":"","sep":"","refl":false,"now":["Ich arbeite von zu Hause.","Trabajo desde casa."],"past":["Ich habe den ganzen Tag gearbeitet.","Trabajé todo el día."],"fut":["Morgen arbeite ich nicht.","Mañana no trabajo."]},{"u":3,"inf":"leben","es":"vivir (la vida)","aux":"haben","part":"gelebt","pk":"perf","ich":"lebe","du":"lebst","er":"lebt","wir":"leben","pret":"","sep":"","refl":false,"now":["Ich lebe gern hier.","Me gusta vivir aquí."],"past":["Er hat lange in Deutschland gelebt.","Vivió mucho tiempo en Alemania."],"fut":["Wir werden in Frieden leben.","Vamos a vivir en paz."]},{"u":3,"inf":"fahren","es":"ir (vehículo)","aux":"sein","part":"gefahren","pk":"perf","ich":"fahre","du":"fährst","er":"fährt","wir":"fahren","pret":"","sep":"","refl":false,"now":["Ich fahre zur Arbeit.","Voy al trabajo (en vehículo)."],"past":["Ich bin nach Hamburg gefahren.","Fui a Hamburgo."],"fut":["Wir fahren am Wochenende weg.","El fin de semana nos vamos."]},{"u":3,"inf":"kaufen","es":"comprar","aux":"haben","part":"gekauft","pk":"perf","ich":"kaufe","du":"kaufst","er":"kauft","wir":"kaufen","pret":"","sep":"","refl":false,"now":["Ich kaufe Brot.","Compro pan."],"past":["Ich habe ein Ticket gekauft.","Compré un billete."],"fut":["Ich kaufe das morgen.","Eso lo compro mañana."]},{"u":3,"inf":"brauchen","es":"necesitar","aux":"haben","part":"gebraucht","pk":"perf","ich":"brauche","du":"brauchst","er":"braucht","wir":"brauchen","pret":"","sep":"","refl":false,"now":["Ich brauche Hilfe.","Necesito ayuda."],"past":["Ich habe mehr Zeit gebraucht.","Necesité más tiempo."],"fut":["Du wirst das brauchen.","Lo vas a necesitar."]},{"u":3,"inf":"helfen","es":"ayudar","aux":"haben","part":"geholfen","pk":"perf","ich":"helfe","du":"hilfst","er":"hilft","wir":"helfen","pret":"","sep":"","refl":false,"now":["Kannst du mir helfen?","¿Me puedes ayudar?"],"past":["Sie hat mir geholfen.","Me ayudó."],"fut":["Ich helfe dir später.","Te ayudo luego."]},{"u":4,"inf":"hören","es":"oír / escuchar","aux":"haben","part":"gehört","pk":"perf","ich":"höre","du":"hörst","er":"hört","wir":"hören","pret":"","sep":"","refl":false,"now":["Ich höre dich nicht.","No te oigo."],"past":["Hast du das gehört?","¿Oíste eso?"],"fut":["Wir hören uns morgen.","Hablamos mañana."]},{"u":4,"inf":"verstehen","es":"entender","aux":"haben","part":"verstanden","pk":"perf","ich":"verstehe","du":"verstehst","er":"versteht","wir":"verstehen","pret":"","sep":"","refl":false,"now":["Ich verstehe dich.","Te entiendo."],"past":["Ich habe nichts verstanden.","No entendí nada."],"fut":["Dann wirst du es verstehen.","Entonces lo vas a entender."]},{"u":4,"inf":"lernen","es":"aprender","aux":"haben","part":"gelernt","pk":"perf","ich":"lerne","du":"lernst","er":"lernt","wir":"lernen","pret":"","sep":"","refl":false,"now":["Ich lerne Deutsch.","Aprendo alemán."],"past":["Ich habe drei Verben gelernt.","Aprendí tres verbos."],"fut":["Ich lerne jeden Tag.","Aprendo todos los días."]},{"u":4,"inf":"lesen","es":"leer","aux":"haben","part":"gelesen","pk":"perf","ich":"lese","du":"liest","er":"liest","wir":"lesen","pret":"","sep":"","refl":false,"now":["Ich lese eine Nachricht.","Leo un mensaje."],"past":["Ich habe den Text gelesen.","Leí el texto."],"fut":["Ich lese das später.","Eso lo leo luego."]},{"u":4,"inf":"schreiben","es":"escribir","aux":"haben","part":"geschrieben","pk":"perf","ich":"schreibe","du":"schreibst","er":"schreibt","wir":"schreiben","pret":"","sep":"","refl":false,"now":["Ich schreibe dir.","Te escribo."],"past":["Ich habe ihr geschrieben.","Le escribí."],"fut":["Ich schreibe das morgen.","Lo escribo mañana."]},{"u":4,"inf":"spielen","es":"jugar / tocar","aux":"haben","part":"gespielt","pk":"perf","ich":"spiele","du":"spielst","er":"spielt","wir":"spielen","pret":"","sep":"","refl":false,"now":["Die Kinder spielen draußen.","Los niños juegan fuera."],"past":["Wir haben Fußball gespielt.","Jugamos al fútbol."],"fut":["Heute Abend spiele ich Gitarre.","Esta noche toco la guitarra."]},{"u":4,"inf":"warten","es":"esperar","aux":"haben","part":"gewartet","pk":"perf","ich":"warte","du":"wartest","er":"wartet","wir":"warten","pret":"","sep":"","refl":false,"now":["Warte kurz.","Espera un segundo."],"past":["Ich habe zehn Minuten gewartet.","Esperé diez minutos."],"fut":["Ich warte vor dem Café.","Espero delante del café."]},{"u":4,"inf":"suchen","es":"buscar","aux":"haben","part":"gesucht","pk":"perf","ich":"suche","du":"suchst","er":"sucht","wir":"suchen","pret":"","sep":"","refl":false,"now":["Ich suche meine Brille.","Busco mis gafas."],"past":["Ich habe lange gesucht.","Busqué mucho rato."],"fut":["Wir werden eine Wohnung suchen.","Vamos a buscar un piso."]},{"u":4,"inf":"bringen","es":"traer / llevar","aux":"haben","part":"gebracht","pk":"perf","ich":"bringe","du":"bringst","er":"bringt","wir":"bringen","pret":"","sep":"","refl":false,"now":["Bringst du Wein mit?","¿Traes vino?"],"past":["Ich habe dir Kaffee gebracht.","Te traje café."],"fut":["Ich bringe das morgen mit.","Lo traigo mañana."]},{"u":4,"inf":"zeigen","es":"mostrar","aux":"haben","part":"gezeigt","pk":"perf","ich":"zeige","du":"zeigst","er":"zeigt","wir":"zeigen","pret":"","sep":"","refl":false,"now":["Zeig mal.","Enséñame."],"past":["Sie hat mir den Weg gezeigt.","Me mostró el camino."],"fut":["Ich zeige es dir später.","Te lo enseño luego."]},{"u":5,"inf":"treffen","es":"encontrar / verse","aux":"haben","part":"getroffen","pk":"perf","ich":"treffe","du":"triffst","er":"trifft","wir":"treffen","pret":"","sep":"","refl":false,"now":["Wir treffen uns um acht.","Nos vemos a las ocho."],"past":["Ich habe sie in der Stadt getroffen.","Me la encontré en la ciudad."],"fut":["Treffen wir uns morgen?","¿Nos vemos mañana?"]},{"u":5,"inf":"anrufen","es":"llamar (teléfono)","aux":"haben","part":"angerufen","pk":"perf","ich":"rufe an","du":"rufst an","er":"ruft an","wir":"rufen an","pret":"","sep":"an","refl":false,"now":["Ich rufe dich später an.","Te llamo luego."],"past":["Ich habe dich gestern angerufen.","Te llamé ayer."],"fut":["Ruf mich morgen an.","Llámame mañana."]},{"u":5,"inf":"erzählen","es":"contar","aux":"haben","part":"erzählt","pk":"perf","ich":"erzähle","du":"erzählst","er":"erzählt","wir":"erzählen","pret":"","sep":"","refl":false,"now":["Erzähl mal.","Cuenta."],"past":["Er hat alles erzählt.","Lo contó todo."],"fut":["Ich erzähle es dir später.","Te lo cuento luego."]},{"u":5,"inf":"erklären","es":"explicar","aux":"haben","part":"erklärt","pk":"perf","ich":"erkläre","du":"erklärst","er":"erklärt","wir":"erklären","pret":"","sep":"","refl":false,"now":["Kannst du das erklären?","¿Puedes explicar eso?"],"past":["Sie hat es mir erklärt.","Me lo explicó."],"fut":["Ich erkläre es nochmal.","Lo explico otra vez."]},{"u":5,"inf":"versuchen","es":"intentar","aux":"haben","part":"versucht","pk":"perf","ich":"versuche","du":"versuchst","er":"versucht","wir":"versuchen","pret":"","sep":"","refl":false,"now":["Ich versuche es.","Lo intento."],"past":["Ich habe es versucht.","Lo intenté."],"fut":["Versuch es morgen nochmal.","Inténtalo otra vez mañana."]},{"u":5,"inf":"schaffen","es":"lograr / poder con","aux":"haben","part":"geschafft","pk":"perf","ich":"schaffe","du":"schaffst","er":"schafft","wir":"schaffen","pret":"","sep":"","refl":false,"now":["Ich schaffe das.","Puedo con esto."],"past":["Wir haben es geschafft.","Lo logramos."],"fut":["Du wirst das schaffen.","Vas a poder."]},{"u":5,"inf":"entscheiden","es":"decidir","aux":"haben","part":"entschieden","pk":"perf","ich":"entscheide mich","du":"entscheidest dich","er":"entscheidet sich","wir":"entscheiden uns","pret":"","sep":"","refl":true,"now":["Ich entscheide mich jetzt.","Me decido ahora."],"past":["Ich habe mich noch nicht entschieden.","Aún no me he decidido."],"fut":["Wir entscheiden das morgen.","Eso lo decidimos mañana."]},{"u":5,"inf":"erinnern","es":"acordarse","aux":"haben","part":"erinnert","pk":"perf","ich":"erinnere mich","du":"erinnerst dich","er":"erinnert sich","wir":"erinnern uns","pret":"","sep":"","refl":true,"now":["Ich erinnere mich an dich.","Me acuerdo de ti."],"past":["Hast du dich daran erinnert?","¿Te acordaste de eso?"],"fut":["Ich werde mich daran erinnern.","Me voy a acordar."]},{"u":5,"inf":"vergessen","es":"olvidar","aux":"haben","part":"vergessen","pk":"perf","ich":"vergesse","du":"vergisst","er":"vergisst","wir":"vergessen","pret":"","sep":"","refl":false,"now":["Ich vergesse immer die Namen.","Siempre olvido los nombres."],"past":["Ich habe es vergessen.","Se me olvidó."],"fut":["Vergiss mich nicht.","No me olvides."]},{"u":5,"inf":"merken","es":"notar / darse cuenta","aux":"haben","part":"gemerkt","pk":"perf","ich":"merke","du":"merkst","er":"merkt","wir":"merken","pret":"","sep":"","refl":false,"now":["Ich merke das.","Me doy cuenta."],"past":["Hast du das gemerkt?","¿Te diste cuenta?"],"fut":["Dann wirst du den Unterschied merken.","Entonces vas a notar la diferencia."]},{"u":6,"inf":"fühlen","es":"sentirse","aux":"haben","part":"gefühlt","pk":"perf","ich":"fühle mich","du":"fühlst dich","er":"fühlt sich","wir":"fühlen uns","pret":"","sep":"","refl":true,"now":["Ich fühle mich gut.","Me siento bien."],"past":["Ich habe mich allein gefühlt.","Me sentí solo."],"fut":["Bald wirst du dich besser fühlen.","Pronto te vas a sentir mejor."]},{"u":6,"inf":"hoffen","es":"esperar (deseo)","aux":"haben","part":"gehofft","pk":"perf","ich":"hoffe","du":"hoffst","er":"hofft","wir":"hoffen","pret":"","sep":"","refl":false,"now":["Ich hoffe das.","Eso espero."],"past":["Ich habe auf eine Nachricht gehofft.","Esperaba un mensaje."],"fut":["Hoffentlich klappt das morgen.","Ojalá salga mañana."]},{"u":6,"inf":"wünschen","es":"desear","aux":"haben","part":"gewünscht","pk":"perf","ich":"wünsche","du":"wünschst","er":"wünscht","wir":"wünschen","pret":"","sep":"","refl":false,"now":["Ich wünsche dir alles Gute.","Te deseo lo mejor."],"past":["Ich habe mir das gewünscht.","Eso deseaba."],"fut":["Was wünschst du dir zum Geburtstag?","¿Qué te deseas de cumpleaños?"]},{"u":6,"inf":"lieben","es":"amar","aux":"haben","part":"geliebt","pk":"perf","ich":"liebe","du":"liebst","er":"liebt","wir":"lieben","pret":"","sep":"","refl":false,"now":["Ich liebe das Leben hier.","Amo la vida aquí."],"past":["Ich habe diese Stadt geliebt.","Amé esta ciudad."],"fut":["Du wirst das lieben.","Esto te va a encantar."]},{"u":6,"inf":"vermissen","es":"echar de menos","aux":"haben","part":"vermisst","pk":"perf","ich":"vermisse","du":"vermisst","er":"vermisst","wir":"vermissen","pret":"","sep":"","refl":false,"now":["Ich vermisse dich.","Te echo de menos."],"past":["Ich habe euch sehr vermisst.","Os eché mucho de menos."],"fut":["Ich werde das vermissen.","Lo voy a echar de menos."]},{"u":6,"inf":"vertrauen","es":"confiar","aux":"haben","part":"vertraut","pk":"perf","ich":"vertraue","du":"vertraust","er":"vertraut","wir":"vertrauen","pret":"","sep":"","refl":false,"now":["Ich vertraue dir.","Confío en ti."],"past":["Ich habe ihm vertraut.","Confié en él."],"fut":["Du kannst mir vertrauen.","Puedes confiar en mí."]},{"u":6,"inf":"interessieren","es":"interesarse","aux":"haben","part":"interessiert","pk":"perf","ich":"interessiere mich","du":"interessierst dich","er":"interessiert sich","wir":"interessieren uns","pret":"","sep":"","refl":true,"now":["Ich interessiere mich für Sprachen.","Me interesan los idiomas."],"past":["Hat dich das interessiert?","¿Te interesó?"],"fut":["Das wird dich interessieren.","Esto te va a interesar."]},{"u":6,"inf":"gehören","es":"pertenecer","aux":"haben","part":"gehört","pk":"perf","ich":"gehöre","du":"gehörst","er":"gehört","wir":"gehören","pret":"","sep":"","refl":false,"now":["Das gehört dir.","Esto es tuyo."],"past":["Das Haus hat uns gehört.","La casa era nuestra."],"fut":["Bald gehört dir das.","Pronto será tuyo."]},{"u":6,"inf":"bedeuten","es":"significar","aux":"haben","part":"bedeutet","pk":"perf","ich":"bedeute","du":"bedeutest","er":"bedeutet","wir":"bedeuten","pret":"","sep":"","refl":false,"now":["Was bedeutet das?","¿Qué significa eso?"],"past":["Das hat viel bedeutet.","Eso significó mucho."],"fut":["Das wird alles bedeuten.","Eso lo va a significar todo."]},{"u":6,"inf":"überlegen","es":"pensar / sopesar","aux":"haben","part":"überlegt","pk":"perf","ich":"überlege","du":"überlegst","er":"überlegt","wir":"überlegen","pret":"","sep":"","refl":false,"now":["Ich überlege noch.","Aún lo estoy pensando."],"past":["Ich habe lange überlegt.","Lo pensé mucho."],"fut":["Überleg es dir bis morgen.","Piénsalo hasta mañana."]},{"u":7,"inf":"diskutieren","es":"discutir (debate)","aux":"haben","part":"diskutiert","pk":"perf","ich":"diskutiere","du":"diskutierst","er":"diskutiert","wir":"diskutieren","pret":"","sep":"","refl":false,"now":["Wir diskutieren das gerade.","Lo estamos debatiendo."],"past":["Wir haben stundenlang diskutiert.","Estuvimos horas debatiendo."],"fut":["Lass uns das morgen diskutieren.","Lo debatimos mañana."]},{"u":7,"inf":"vorschlagen","es":"proponer","aux":"haben","part":"vorgeschlagen","pk":"perf","ich":"schlage vor","du":"schlägst vor","er":"schlägt vor","wir":"schlagen vor","pret":"","sep":"vor","refl":false,"now":["Ich schlage vor, dass wir gehen.","Propongo que nos vamos."],"past":["Sie hat einen Kompromiss vorgeschlagen.","Ella propuso un acuerdo."],"fut":["Was schlägst du vor?","¿Qué propones?"]},{"u":7,"inf":"zustimmen","es":"estar de acuerdo","aux":"haben","part":"zugestimmt","pk":"perf","ich":"stimme zu","du":"stimmst zu","er":"stimmt zu","wir":"stimmen zu","pret":"","sep":"zu","refl":false,"now":["Ich stimme dir zu.","Estoy de acuerdo contigo."],"past":["Er hat nicht zugestimmt.","Él no estuvo de acuerdo."],"fut":["Ich werde zustimmen.","Voy a aceptar."]},{"u":7,"inf":"ablehnen","es":"rechazar","aux":"haben","part":"abgelehnt","pk":"perf","ich":"lehne ab","du":"lehnst ab","er":"lehnt ab","wir":"lehnen ab","pret":"","sep":"ab","refl":false,"now":["Ich lehne das ab.","Eso lo rechazo."],"past":["Sie hat das Angebot abgelehnt.","Rechazó la oferta."],"fut":["Ich werde nicht ablehnen.","No voy a rechazar."]},{"u":7,"inf":"vergleichen","es":"comparar","aux":"haben","part":"verglichen","pk":"perf","ich":"vergleiche","du":"vergleichst","er":"vergleicht","wir":"vergleichen","pret":"","sep":"","refl":false,"now":["Vergleich nicht alles.","No compares todo."],"past":["Ich habe die Preise verglichen.","Comparé los precios."],"fut":["Wir vergleichen das später.","Eso lo comparamos luego."]},{"u":7,"inf":"verändern","es":"cambiar","aux":"haben","part":"verändert","pk":"perf","ich":"verändere","du":"veränderst","er":"verändert","wir":"verändern","pret":"","sep":"","refl":false,"now":["Das verändert alles.","Eso lo cambia todo."],"past":["Es hat sich viel verändert.","Ha cambiado mucho."],"fut":["Das wird uns verändern.","Esto nos va a cambiar."]},{"u":7,"inf":"erwarten","es":"esperar (expectativa)","aux":"haben","part":"erwartet","pk":"perf","ich":"erwarte","du":"erwartest","er":"erwartet","wir":"erwarten","pret":"","sep":"","refl":false,"now":["Ich erwarte eine Nachricht.","Espero un mensaje."],"past":["Ich habe das nicht erwartet.","No me lo esperaba."],"fut":["Was erwartest du von mir?","¿Qué esperas de mí?"]},{"u":7,"inf":"passieren","es":"pasar / ocurrir","aux":"sein","part":"passiert","pk":"perf","ich":"passiere","du":"passierst","er":"passiert","wir":"passieren","pret":"","sep":"","refl":false,"now":["Was passiert hier?","¿Qué pasa aquí?"],"past":["Was ist passiert?","¿Qué ha pasado?"],"fut":["Es wird nichts passieren.","No va a pasar nada."]},{"u":7,"inf":"antworten","es":"responder","aux":"haben","part":"geantwortet","pk":"perf","ich":"antworte","du":"antwortest","er":"antwortet","wir":"antworten","pret":"","sep":"","refl":false,"now":["Ich antworte später.","Respondo luego."],"past":["Sie hat nicht geantwortet.","No respondió."],"fut":["Ich antworte dir morgen.","Te respondo mañana."]},{"u":7,"inf":"danken","es":"agradecer","aux":"haben","part":"gedankt","pk":"perf","ich":"danke","du":"dankst","er":"dankt","wir":"danken","pret":"","sep":"","refl":false,"now":["Ich danke dir.","Te doy las gracias."],"past":["Ich habe dir nicht gedankt.","No te agradecí."],"fut":["Ich danke dir morgen persönlich.","Mañana te lo agradezco en persona."]},{"u":8,"inf":"anfangen","es":"empezar","aux":"haben","part":"angefangen","pk":"perf","ich":"fange an","du":"fängst an","er":"fängt an","wir":"fangen an","pret":"","sep":"an","refl":false,"now":["Ich fange jetzt an.","Empiezo ahora."],"past":["Wir haben um acht angefangen.","Empezamos a las ocho."],"fut":["Wann fängst du an?","¿Cuándo empiezas?"]},{"u":8,"inf":"aufhören","es":"dejar de / parar","aux":"haben","part":"aufgehört","pk":"perf","ich":"höre auf","du":"hörst auf","er":"hört auf","wir":"hören auf","pret":"","sep":"auf","refl":false,"now":["Hör bitte auf.","Para, por favor."],"past":["Es hat plötzlich aufgehört.","Paró de golpe."],"fut":["Ich höre um sechs auf.","Paro a las seis."]},{"u":8,"inf":"aufstehen","es":"levantarse","aux":"sein","part":"aufgestanden","pk":"perf","ich":"stehe auf","du":"stehst auf","er":"steht auf","wir":"stehen auf","pret":"","sep":"auf","refl":false,"now":["Morgen stehe ich dort.","Mañana estoy ahí de pie."],"past":["Ich bin zu spät aufgestanden.","Me levanté tarde."],"fut":["Morgen stehe ich früher auf.","Mañana me levanto antes."]},{"u":8,"inf":"ankommen","es":"llegar","aux":"sein","part":"angekommen","pk":"perf","ich":"komme an","du":"kommst an","er":"kommt an","wir":"kommen an","pret":"","sep":"an","refl":false,"now":["Wann kommst du an?","¿Cuándo llegas?"],"past":["Ich bin gerade angekommen.","Acabo de llegar."],"fut":["Der Zug kommt um neun an.","El tren llega a las nueve."]},{"u":8,"inf":"mitkommen","es":"venir con","aux":"sein","part":"mitgekommen","pk":"perf","ich":"komme mit","du":"kommst mit","er":"kommt mit","wir":"kommen mit","pret":"","sep":"mit","refl":false,"now":["Kommst du mit?","¿Te vienes?"],"past":["Sie ist nicht mitgekommen.","Ella no se vino."],"fut":["Ich komme morgen mit.","Mañana me voy con vosotros."]},{"u":8,"inf":"aussehen","es":"parecer / lucir","aux":"haben","part":"ausgesehen","pk":"perf","ich":"sehe aus","du":"siehst aus","er":"sieht aus","wir":"sehen aus","pret":"","sep":"aus","refl":false,"now":["Du siehst müde aus.","Tienes pinta de cansado."],"past":["Das hat gut ausgesehen.","Eso se veía bien."],"fut":["Morgen siehst du besser aus.","Mañana vas a estar mejor."]},{"u":8,"inf":"vorstellen","es":"presentarse / imaginar","aux":"haben","part":"vorgestellt","pk":"perf","ich":"stelle mich vor","du":"stellst dich vor","er":"stellt sich vor","wir":"stellen uns vor","pret":"","sep":"vor","refl":true,"now":["Ich stelle mich vor.","Me presento."],"past":["Er hat sich nicht vorgestellt.","No se presentó."],"fut":["Stell dir das mal vor.","Imagínate eso."]},{"u":8,"inf":"öffnen","es":"abrir","aux":"haben","part":"geöffnet","pk":"perf","ich":"öffne","du":"öffnest","er":"öffnet","wir":"öffnen","pret":"","sep":"","refl":false,"now":["Öffne bitte das Fenster.","Abre la ventana, por favor."],"past":["Ich habe die Tür geöffnet.","Abrí la puerta."],"fut":["Der Laden öffnet um neun.","La tienda abre a las nueve."]},{"u":8,"inf":"schließen","es":"cerrar","aux":"haben","part":"geschlossen","pk":"perf","ich":"schließe","du":"schließt","er":"schließt","wir":"schließen","pret":"","sep":"","refl":false,"now":["Schließ bitte die Tür.","Cierra la puerta, por favor."],"past":["Wir haben um sechs geschlossen.","Cerramos a las seis."],"fut":["Ich schließe das Fenster.","Cierro la ventana."]},{"u":8,"inf":"halten","es":"parar / sostener / considerar","aux":"haben","part":"gehalten","pk":"perf","ich":"halte","du":"hältst","er":"hält","wir":"halten","pret":"","sep":"","refl":false,"now":["Der Bus hält hier.","El bus para aquí."],"past":["Ich habe mein Wort gehalten.","Cumplí mi palabra."],"fut":["Halt mich auf dem Laufenden.","Tenme al tanto."]},{"u":9,"inf":"bekommen","es":"recibir / conseguir","aux":"haben","part":"bekommen","pk":"perf","ich":"bekomme","du":"bekommst","er":"bekommt","wir":"bekommen","pret":"","sep":"","refl":false,"now":["Ich bekomme eine Nachricht.","Me llega un mensaje."],"past":["Hast du mein Mail bekommen?","¿Recibiste mi correo?"],"fut":["Du bekommst das morgen.","Eso lo recibes mañana."]},{"u":9,"inf":"bezahlen","es":"pagar","aux":"haben","part":"bezahlt","pk":"perf","ich":"bezahle","du":"bezahlst","er":"bezahlt","wir":"bezahlen","pret":"","sep":"","refl":false,"now":["Ich bezahle.","Pago yo."],"past":["Ich habe bar bezahlt.","Pagué en efectivo."],"fut":["Wir bezahlen später.","Pagamos luego."]},{"u":9,"inf":"bestellen","es":"pedir / encargar","aux":"haben","part":"bestellt","pk":"perf","ich":"bestelle","du":"bestellst","er":"bestellt","wir":"bestellen","pret":"","sep":"","refl":false,"now":["Ich bestelle einen Kaffee.","Pido un café."],"past":["Hast du schon bestellt?","¿Ya pediste?"],"fut":["Ich bestelle das online.","Eso lo pido online."]},{"u":9,"inf":"gewinnen","es":"ganar","aux":"haben","part":"gewonnen","pk":"perf","ich":"gewinne","du":"gewinnst","er":"gewinnt","wir":"gewinnen","pret":"","sep":"","refl":false,"now":["Wer gewinnt?","¿Quién gana?"],"past":["Wir haben gewonnen.","Ganamos."],"fut":["Das wirst du nicht gewinnen.","Eso no lo vas a ganar."]},{"u":9,"inf":"verlieren","es":"perder","aux":"haben","part":"verloren","pk":"perf","ich":"verliere","du":"verlierst","er":"verliert","wir":"verlieren","pret":"","sep":"","refl":false,"now":["Ich verliere oft den Schlüssel.","A menudo pierdo la llave."],"past":["Ich habe mein Handy verloren.","Perdí el móvil."],"fut":["Du wirst uns nicht verlieren.","No nos vas a perder."]},{"u":9,"inf":"laufen","es":"correr / andar / funcionar","aux":"sein","part":"gelaufen","pk":"perf","ich":"laufe","du":"läufst","er":"läuft","wir":"laufen","pret":"","sep":"","refl":false,"now":["Ich laufe zur U-Bahn.","Corro al metro."],"past":["Ich bin zehn Kilometer gelaufen.","Corrí diez kilómetros."],"fut":["Das wird nicht so laufen.","Eso no va a funcionar así."]},{"u":9,"inf":"sitzen","es":"estar sentado","aux":"haben","part":"gesessen","pk":"perf","ich":"sitze","du":"sitzt","er":"sitzt","wir":"sitzen","pret":"","sep":"","refl":false,"now":["Ich sitze im Café.","Estoy sentado en el café."],"past":["Wir haben stundenlang da gesessen.","Estuvimos horas sentados ahí."],"fut":["Setz dich, wir sitzen zusammen.","Siéntate, nos sentamos juntos."]},{"u":9,"inf":"fallen","es":"caer","aux":"sein","part":"gefallen","pk":"perf","ich":"falle","du":"fällst","er":"fällt","wir":"fallen","pret":"","sep":"","refl":false,"now":["Pass auf, du fällst.","Cuidado, te caes."],"past":["Das Glas ist runtergefallen.","El vaso se cayó."],"fut":["Es wird dir nicht schwerfallen.","No te va a resultar difícil."]},{"u":9,"inf":"ziehen","es":"tirar / mudarse","aux":"sein","part":"gezogen","pk":"perf","ich":"ziehe","du":"ziehst","er":"zieht","wir":"ziehen","pret":"","sep":"","refl":false,"now":["Wir ziehen nach Berlin.","Nos estamos mudando a Berlín."],"past":["Wir sind nach Berlin gezogen.","Nos mudamos a Berlín."],"fut":["Nächstes Jahr ziehen wir um.","El año que viene nos mudamos."]},{"u":9,"inf":"rufen","es":"llamar / gritar","aux":"haben","part":"gerufen","pk":"perf","ich":"rufe","du":"rufst","er":"ruft","wir":"rufen","pret":"","sep":"","refl":false,"now":["Ruf mich, wenn du da bist.","Llámame cuando llegues."],"past":["Ich habe laut gerufen.","Grité fuerte."],"fut":["Ich rufe gleich zurück.","Devuelvo la llamada ahora."]}]};
 const EN = {"sein":["to be","I'm tired.","I was tired yesterday.","I'll be free tomorrow."],"haben":["to have","I have time.","I had no time.","I'll have time tomorrow."],"werden":["to become / will","It's getting cold.","It got cold.","I'm going to be a doctor."],"können":["can / to be able to","I can do that.","I couldn't come yesterday.","I'll be able to do it."],"müssen":["must / to have to","I have to work.","I had to wait.","I have to get up early tomorrow."],"wollen":["to want","I want coffee.","I wanted to call you.","I want to come next week."],"sollen":["should / ought to","You're supposed to read that.","I was supposed to be there at eight.","I'm supposed to call tomorrow."],"dürfen":["may / to be allowed","May I ask?","I wasn't allowed to stay.","You may come tomorrow."],"mögen":["to like","I like you.","I liked the film.","You're going to like that."],"wissen":["to know (a fact)","I don't know that.","I didn't know that.","Then you'll know."],"machen":["to do / make","I'm making coffee.","I made coffee.","I'll make coffee later."],"sagen":["to say","I'm telling the truth.","I said nothing.","I'll tell him tomorrow."],"gehen":["to go (on foot)","I'm going home.","I went home.","I'm going to the office tomorrow."],"kommen":["to come","I'm coming right now.","I arrived too late.","I'm coming tomorrow at ten."],"geben":["to give","Please give me that.","She gave me time.","I'll let you know."],"sehen":["to see","I see the problem.","I saw him yesterday.","See you tomorrow."],"nehmen":["to take","I'm taking the bus.","I took the car.","I'm taking the train tomorrow."],"lassen":["to let / leave","Leave me alone.","I left the window open.","I'll leave you a message."],"finden":["to find / think","I think that's good.","I found the key.","You'll find a solution."],"tun":["to do","What are you doing?","I didn't do anything.","What are you going to do?"],"sprechen":["to speak","I speak a little German.","We talked for a long time.","We'll talk about it tomorrow."],"fragen":["to ask","May I ask you something?","I asked her.","I'll ask him tomorrow."],"denken":["to think","I think about you a lot.","I thought about us.","Think of me."],"glauben":["to believe","I believe you.","I didn't believe that.","You'll believe it yet."],"meinen":["to mean / think","What do you think?","I didn't mean it that way.","Tell me what you really think."],"kennen":["to know (a person)","I know him well.","I knew her before.","Then you'll know the city."],"heißen":["to be called","My name is Oliver.","What was that called?","What will the child be called?"],"bleiben":["to stay","I'm staying here.","I stayed at home.","I'm staying until Sunday."],"stehen":["to stand","I'm standing in front of the door.","The car was standing there.","I'll be standing there tomorrow."],"liegen":["to lie / be located","The phone is on the table.","I lay in bed for a long time.","The key will be there."],"essen":["to eat","I'm eating right now.","I ate pizza.","We'll eat together later."],"trinken":["to drink","I'm drinking water.","We drank wine.","I'll have a coffee later."],"schlafen":["to sleep","I sleep badly.","I only slept five hours.","I'm going to bed early today."],"wohnen":["to live (reside)","I live in Berlin.","I lived in Madrid.","I'll live alone next year."],"arbeiten":["to work","I work from home.","I worked all day.","I'm not working tomorrow."],"leben":["to live (life)","I like living here.","He lived in Germany for a long time.","We'll live in peace."],"fahren":["to go (vehicle)","I'm driving to work.","I went to Hamburg.","We're going away this weekend."],"kaufen":["to buy","I'm buying bread.","I bought a ticket.","I'll buy that tomorrow."],"brauchen":["to need","I need help.","I needed more time.","You're going to need that."],"helfen":["to help","Can you help me?","She helped me.","I'll help you later."],"hören":["to hear / listen","I can't hear you.","Did you hear that?","Talk to you tomorrow."],"verstehen":["to understand","I understand you.","I didn't understand anything.","Then you'll understand."],"lernen":["to learn","I'm learning German.","I learned three verbs.","I learn every day."],"lesen":["to read","I'm reading a message.","I read the text.","I'll read that later."],"schreiben":["to write","I'm writing to you.","I wrote to her.","I'll write that tomorrow."],"spielen":["to play","The kids are playing outside.","We played football.","I'm playing guitar tonight."],"warten":["to wait","Wait a second.","I waited ten minutes.","I'll wait in front of the café."],"suchen":["to look for","I'm looking for my glasses.","I looked for a long time.","We'll look for an apartment."],"bringen":["to bring","Are you bringing wine?","I brought you coffee.","I'll bring that tomorrow."],"zeigen":["to show","Show me.","She showed me the way.","I'll show you later."],"treffen":["to meet","We're meeting at eight.","I ran into her in town.","Shall we meet tomorrow?"],"anrufen":["to call (phone)","I'll call you later.","I called you yesterday.","Call me tomorrow."],"erzählen":["to tell","Go on, tell me.","He told everything.","I'll tell you later."],"erklären":["to explain","Can you explain that?","She explained it to me.","I'll explain it again."],"versuchen":["to try","I'll try.","I tried.","Try again tomorrow."],"schaffen":["to manage / pull off","I can do this.","We pulled it off.","You're going to manage it."],"entscheiden":["to decide","I'm deciding now.","I haven't decided yet.","We'll decide that tomorrow."],"erinnern":["to remember","I remember you.","Did you remember?","I'll remember that."],"vergessen":["to forget","I always forget names.","I forgot.","Don't forget me."],"merken":["to notice","I notice that.","Did you notice?","Then you'll notice the difference."],"fühlen":["to feel","I feel good.","I felt alone.","You'll feel better soon."],"hoffen":["to hope","I hope so.","I was hoping for a message.","Hopefully it works tomorrow."],"wünschen":["to wish","I wish you all the best.","I wished for that.","What do you want for your birthday?"],"lieben":["to love","I love life here.","I loved this city.","You're going to love this."],"vermissen":["to miss","I miss you.","I missed you a lot.","I'll miss that."],"vertrauen":["to trust","I trust you.","I trusted him.","You can trust me."],"interessieren":["to be interested","I'm interested in languages.","Did that interest you?","This will interest you."],"gehören":["to belong","That belongs to you.","The house belonged to us.","Soon that'll be yours."],"bedeuten":["to mean / signify","What does that mean?","That meant a lot.","That will mean everything."],"überlegen":["to consider","I'm still thinking.","I thought it over for a long time.","Think it over until tomorrow."],"diskutieren":["to discuss","We're discussing it right now.","We discussed it for hours.","Let's discuss it tomorrow."],"vorschlagen":["to suggest","I suggest we leave.","She suggested a compromise.","What do you suggest?"],"zustimmen":["to agree","I agree with you.","He didn't agree.","I'll agree."],"ablehnen":["to refuse","I refuse that.","She turned down the offer.","I won't refuse."],"vergleichen":["to compare","Don't compare everything.","I compared the prices.","We'll compare that later."],"verändern":["to change","That changes everything.","A lot has changed.","This will change us."],"erwarten":["to expect","I'm expecting a message.","I didn't expect that.","What do you expect from me?"],"passieren":["to happen","What's happening here?","What happened?","Nothing's going to happen."],"antworten":["to answer","I'll answer later.","She didn't answer.","I'll answer you tomorrow."],"danken":["to thank","Thank you.","I didn't thank you.","I'll thank you in person tomorrow."],"anfangen":["to start","I'm starting now.","We started at eight.","When do you start?"],"aufhören":["to stop","Please stop.","It stopped suddenly.","I stop at six."],"aufstehen":["to get up","I get up at seven.","I got up too late.","I'll get up earlier tomorrow."],"ankommen":["to arrive","When do you arrive?","I just arrived.","The train arrives at nine."],"mitkommen":["to come along","Are you coming?","She didn't come along.","I'll come with you tomorrow."],"aussehen":["to look / appear","You look tired.","That looked good.","You'll look better tomorrow."],"vorstellen":["to introduce / imagine","Let me introduce myself.","He didn't introduce himself.","Just imagine that."],"öffnen":["to open","Please open the window.","I opened the door.","The shop opens at nine."],"schließen":["to close","Please close the door.","We closed at six.","I'm closing the window."],"halten":["to stop / keep / hold","The bus stops here.","I kept my word.","Keep me posted."],"bekommen":["to get / receive","I'm getting a message.","Did you get my email?","You'll get that tomorrow."],"bezahlen":["to pay","I'll pay.","I paid cash.","We'll pay later."],"bestellen":["to order","I'm ordering a coffee.","Have you ordered yet?","I'll order that online."],"gewinnen":["to win","Who's winning?","We won.","You're not going to win that."],"verlieren":["to lose","I often lose the key.","I lost my phone.","You won't lose us."],"laufen":["to run / walk / work","I'm running to the metro.","I ran ten kilometers.","That's not going to work."],"sitzen":["to sit","I'm sitting in the café.","We sat there for hours.","Sit down, we'll sit together."],"fallen":["to fall","Careful, you'll fall.","The glass fell down.","It won't be hard for you."],"ziehen":["to move / pull","We're moving to Berlin.","We moved to Berlin.","We're moving next year."],"rufen":["to call / shout","Call me when you're there.","I shouted loudly.","I'll call back in a second."]};
-const STORE="sprechen.v3";
-const V0=DATA.verbs, U0=DATA.units;
-const LOCALES=[
-  {id:"en",live:true},{id:"es",live:true},{id:"de",live:true},
-  {id:"it",live:false},{id:"pt-PT",live:false},{id:"fr",live:false}
+const STORE="sprechen.v4", ACCTS="sprechen.accts.v1", WHO="sprechen.who";
+const CITIES=[
+  {id:"berlin",name:"Berlín",scene:"U-Bahn, 01:40",lede:"Cómo se llega a la fiesta.",units:[0,1],live:true,img:"img/berlin.jpg"},
+  {id:"dresden",name:"Dresde",scene:"Elba · lluvia",lede:"Una mesa. Un rato.",units:[2,3],live:true,img:"img/rain.jpg"},
+  {id:"munich",name:"Múnich",scene:"Sala · 23:00",lede:"Pedir y brindar.",units:[4,5],live:true,img:"img/club.jpg"},
+  {id:"vienna",name:"Viena",scene:"Cena · 21:30",lede:"Inversores. Qué haces.",units:[6,7],live:true,img:"img/dinner.jpg"},
+  {id:"barcelona",name:"Barcelona",scene:"Luego",lede:"Otro idioma.",units:[8,9],live:false,img:"img/cafe.jpg"}
 ];
-const I18N={
-en:{
-  sub:"German through English. Spanish only when it gets dense.",
-  today:"Town", town:"Town", steps:"Steps", cards:"Cards", speak:"Train", train:"Train", map:"Dex", dex:"Dex",
-  start:"Start speaking", review:"Review weak verbs", cardsCta:"Flashcards due",
-  stepsCta:"First 12 steps of German",
-  session:"Today’s session", sessionLede:"You type German from English. No options. Fail → it comes back.",
-  due:"due", mastered:"ready to say",
-  what:"What are you saying?", build:"German — type it.",
-  shift:"Say it in German.", sayHint:"Type the German. No list.",
-  now:"NOW", past:"YESTERDAY (how people talk)", fut:"TOMORROW",
-  check:"Check", hear:"Hear", next:"Next", againQ:"This line again",
-  undo:"Undo last", done:"Session closed", again:"Another round", mapBtn:"See the map",
-  ok:"That’s how you say it.", almost:"Almost. The line is:",
-  green:"Full verb = meaning + 3 tenses.",
-  bases:"The first steps", basesLede:"This is A1. Not vocabulary trivia — the skeleton of a sentence.",
-  cardsEmpty:"No cards due. Speak first, then they land here.",
-  again:"Again", hard:"Hard", good:"Good", easy:"Easy",
-  flip:"Tap to flip",
-  why:"Why this works",
-  hint:"ES hint",
-  soon:"later",
-  nextStep:"Next step", youAre:"You are here", locked:"Clear the previous zone first.",
-  cont:"Continue Oliver's path", streak:"day streak", quest:"Daily quest: 8 lines",
-  welcome:"Oliver. This is your village.", pick:"How much German do you already have?",
-  b0:"Zero. Start at the inn.", b1:"I can say Hallo.", b2:"I can order a coffee.",
-  mapBack:"Map", here:"YOU",
-  login:"Continue tonight", user:"Your name", pass:"A secret only you know",
-  enter:"Come in", create:"New night", logout:"Leave the cafe",
-  she:"Lina", sheLede:"Berlin. 23:41. She hasn't looked away.",
-  sayToHer:"Answer so it lands.", smile:"She smiles. That one stayed.",
-  cool:"She waits. Try again — she can hear hesitation.",
-  ig:"She slides a note: @lina.nacht — fictional. You earned the scene.",
-  roof:"Hidden: the rooftop. She only takes people who can speak.",
-  roofCta:"Rooftop (hidden)",
-  saveNote:"Progress saves on this phone (Safari). Telegram forgets it. Copy a backup.",
-  copySave:"Copy backup", pasteSave:"Paste backup",
-  copied:"Copied. Save it in Notes.", badSave:"That backup is not valid.",
-  pastePrompt:"Paste your backup here:",
-
-},
-es:{
-  sub:"Alemán vía inglés. El español solo cuando se pone denso.",
-  today:"Pueblo", town:"Pueblo", steps:"Bases", cards:"Cartas", speak:"Entreno", train:"Entreno", map:"Dex", dex:"Dex",
-  start:"Empezar a hablar", review:"Repasar los débiles", cardsCta:"Flashcards pendientes",
-  stepsCta:"Los 12 primeros pasos del alemán",
-  session:"Sesión de hoy", sessionLede:"Escribes aleman desde ingles. Sin opciones. Si fallas, vuelve.",
-  due:"pendientes", mastered:"listos para la boca",
-  what:"¿Qué estás diciendo?", build:"Alemán — escríbelo.",
-  shift:"Dilo en alemán.", sayHint:"Escribe el alemán. Sin lista.",
-  now:"AHORA", past:"AYER (como se habla)", fut:"MAÑANA",
-  check:"Comprobar", hear:"Oír", next:"Siguiente", againQ:"Otra vez esta frase",
-  undo:"Quitar última", done:"Sesión cerrada", again:"Otra ronda", mapBtn:"Ver el mapa",
-  ok:"Así se habla.", almost:"Casi. La frase es:",
-  green:"Verde = significado + 3 tiempos.",
-  bases:"Los primeros pasos", basesLede:"Esto es A1. No trivia: el esqueleto de una frase.",
-  cardsEmpty:"Nada pendiente. Habla primero; las cartas llegan solas.",
-  again:"Otra vez", hard:"Difícil", good:"Bien", easy:"Fácil",
-  flip:"Toca para girar",
-  why:"Por qué funciona",
-  hint:"pista ES",
-  soon:"luego",
-  nextStep:"Siguiente paso", youAre:"Estas aqui", locked:"Primero la zona anterior.",
-  cont:"Seguir el camino de Oliver", streak:"dias seguidos", quest:"Mision: 8 frases",
-  welcome:"Oliver. Este es tu pueblo.", pick:"Cuanto aleman traes ya?",
-  b0:"Cero. Empiezo en la posada.", b1:"Se decir Hallo.", b2:"Pido un cafe.",
-  mapBack:"Mapa", here:"TU",
-  login:"Sigue esta noche", user:"Tu nombre", pass:"Un secreto solo tuyo",
-  enter:"Entrar", create:"Noche nueva", logout:"Salir del cafe",
-  she:"Lina", sheLede:"Berlin. 23:41. No ha apartado la mirada.",
-  sayToHer:"Dilo para que llegue.", smile:"Sonrie. Esa se quedo.",
-  cool:"Espera. Otra vez — oye la duda.",
-  ig:"Te pasa una nota: @lina.nacht — ficticia. Te ganaste la escena.",
-  roof:"Oculto: la azotea. Solo sube quien sabe hablar.",
-  roofCta:"Azotea (oculto)",
-  saveNote:"El progreso se guarda en este iPhone (Safari). Telegram lo borra. Copia un backup.",
-  copySave:"Copiar backup", pasteSave:"Pegar backup",
-  copied:"Copiado. Guardalo en Notas.", badSave:"Ese backup no vale.",
-  pastePrompt:"Pega aqui tu backup:",
-
-},
-de:{
-  sub:"Deutsch über Englisch. Spanisch nur wenn’s dicht wird.",
-  today:"Stadt", town:"Stadt", steps:"Schritte", cards:"Karten", speak:"Training", train:"Training", map:"Dex", dex:"Dex",
-  start:"Loslegen", review:"Schwache Verben", cardsCta:"Fällige Karten",
-  stepsCta:"Die ersten 12 Schritte",
-  session:"Heutige Session", sessionLede:"Du schreibst Deutsch aus dem Englischen. Keine Optionen.",
-  due:"fällig", mastered:"mundfertig",
-  what:"Was sagst du gerade?", build:"Deutsch — tippen.",
-  shift:"Sag es auf Deutsch.", sayHint:"Deutsch tippen. Keine Liste.",
-  now:"JETZT", past:"GESTERN (gesprochen)", fut:"MORGEN",
-  check:"Prüfen", hear:"Hören", next:"Weiter", againQ:"Diesen Satz nochmal",
-  undo:"Letztes weg", done:"Session zu", again:"Noch eine Runde", mapBtn:"Zur Karte",
-  ok:"So sagt man das.", almost:"Fast. Der Satz ist:",
-  green:"Voll = Bedeutung + 3 Zeiten.",
-  bases:"Die ersten Schritte", basesLede:"Das ist A1. Das Skelett eines Satzes.",
-  cardsEmpty:"Nichts fällig. Erst sprechen, dann landen die Karten hier.",
-  again:"Nochmal", hard:"Schwer", good:"Gut", easy:"Leicht",
-  flip:"Tippen zum Umdrehen",
-  why:"Warum das sitzt",
-  hint:"ES-Hinweis",
-  soon:"später",
-  nextStep:"Naechster Schritt", youAre:"Du bist hier", locked:"Erst die Zone davor.",
-  cont:"Olivers Weg weiter", streak:"Tage in Folge", quest:"Quest: 8 Saetze",
-  welcome:"Oliver. Das ist dein Dorf.", pick:"Wie viel Deutsch kannst du schon?",
-  b0:"Null. Zur Taverne.", b1:"Ich kann Hallo.", b2:"Ich bestelle Kaffee.",
-  mapBack:"Karte", here:"DU",
-  saveNote:"Fortschritt bleibt auf diesem iPhone (Safari). Telegram loescht ihn. Backup kopieren.",
-  copySave:"Backup kopieren", pasteSave:"Backup einfuegen",
-  copied:"Kopiert. In Notizen sichern.", badSave:"Backup ungueltig.",
-  pastePrompt:"Backup hier einfuegen:",
-
-}
+const ART={Mann:"der",Frau:"die",Kind:"das",Zeit:"die",Kaffee:"der",Bus:"der",Film:"der",Zug:"der",Bahn:"die",Tür:"die",Nacht:"die",Bier:"das",Glas:"das",Haus:"das",Auto:"das",Problem:"das",Wahrheit:"die",Schlüssel:"der"};
+const GLOSS={
+  ich:["I","yo","pronombre"], du:["you","tú","pronombre"], er:["he","él","pronombre"], sie:["she/they","ella/ellos","pronombre"],
+  wir:["we","nosotros","pronombre"], es:["it","eso","pronombre"],
+  der:["the (m)","el","artículo maskulin"], die:["the (f/pl)","la / las","artículo"], das:["the (n)","lo / el","artículo neutrum"],
+  den:["the (m Akk)","al / el","artículo"], dem:["the (Dat)","al","artículo"], ein:["a (m/n)","un","artículo"], eine:["a (f)","una","artículo"],
+  nicht:["not","no","negación"], und:["and","y","conjunción"], auch:["also","también",""], sehr:["very","muy",""],
+  hier:["here","aquí",""], dort:["there","allí",""], jetzt:["now","ahora",""], heute:["today","hoy",""],
+  morgen:["tomorrow","mañana",""], gestern:["yesterday","ayer",""], bitte:["please","por favor",""],
+  mit:["with","con","preposición"], zu:["to","a","preposición"], nach:["to/after","a / después","preposición"],
+  in:["in","en",""], auf:["on","en / sobre",""], für:["for","para",""]
 };
-const STEPS=[
-{id:"pron", lvl:"A1.1",
- en:"Pronouns", es:"Pronombres", de:"Pronomen",
- enB:"ich · du · er/sie/es · wir · ihr · Sie/sie. You need these before any verb.",
- esB:"ich yo · du tú · er/sie/es · wir nosotros · ihr vosotros · Sie formal / sie ellos.",
- deB:"Ohne Pronomen kein Satz. ich du er sie es wir ihr Sie.",
- front:"I / you (informal) / he", back:"ich / du / er"},
-{id:"sein", lvl:"A1.1",
- en:"sein — to be", es:"sein — ser/estar", de:"sein",
- enB:"ich bin · du bist · er/sie/es ist · wir sind · ihr seid · Sie/sie sind. Spoken past: ich war — not bin gewesen.",
- esB:"Pasado hablado: ich war. Nadie dice ich bin gewesen en la calle.",
- deB:"Gesprochen: ich war, nicht ich bin gewesen.",
- front:"I am / I was", back:"ich bin / ich war"},
-{id:"haben", lvl:"A1.1",
- en:"haben — to have", es:"haben — tener", de:"haben",
- enB:"ich habe · du hast · er hat · wir haben. Spoken past: ich hatte.",
- esB:"Pasado hablado: ich hatte, no habe gehabt.",
- deB:"Gesprochen: ich hatte.",
- front:"I have / I had", back:"ich habe / ich hatte"},
-{id:"endings", lvl:"A1.1",
- en:"Present endings", es:"Terminaciones del presente", de:"Präsens-Endungen",
- enB:"Regular: ich -e · du -st · er -t · wir -en. Strong verbs change the vowel in du/er: geben → du gibst.",
- esB:"Regular: -e -st -t -en. Fuertes cambian vocal en du/er: geben → du gibst.",
- deB:"ich -e, du -st, er -t, wir -en. Stark: du gibst, du siehst.",
- front:"du (machen / geben)", back:"du machst / du gibst"},
-{id:"art", lvl:"A1.1",
- en:"der / die / das", es:"der / die / das", de:"Artikel",
- enB:"the: der (m) die (f) das (n) die (pl). a: ein / eine / ein. Learn the article WITH the noun.",
- esB:"el/la: der die das die. un/una: ein eine ein. El artículo se memoriza CON el nombre.",
- deB:"Artikel immer mit dem Nomen lernen.",
- front:"the man / the woman / the child", back:"der Mann / die Frau / das Kind"},
-{id:"v2", lvl:"A1.1",
- en:"Verb second", es:"Verbo en 2ª posición", de:"Verbzweit",
- enB:"In a main clause the conjugated verb is always slot 2. Morgen gehe ich. Not Morgen ich gehe.",
- esB:"En la oración principal el verbo conjugado es el slot 2. Morgen gehe ich.",
- deB:"Im Hauptsatz steht das Verb an Position 2.",
- front:"Tomorrow I go home.", back:"Morgen gehe ich nach Hause."},
-{id:"akk", lvl:"A1.1",
- en:"Accusative", es:"Acusativo", de:"Akkusativ",
- enB:"Direct object. Only masculine the changes: der → den, ein → einen. die/das stay.",
- esB:"Solo el masculino cambia: der→den, ein→einen. die y das no se mueven.",
- deB:"Nur Maskulinum ändert sich: den / einen.",
- front:"I see the man.", back:"Ich sehe den Mann."},
-{id:"modals", lvl:"A1.1",
- en:"Modals + infinitive at the end", es:"Modales + infinitivo al final", de:"Modalverben",
- enB:"kann, muss, will, soll, darf, mag. Second verb sits at the end: Ich will Kaffee trinken.",
- esB:"El segundo verbo se va al final: Ich will Kaffee trinken.",
- deB:"Ich will Kaffee trinken — Infinitiv am Ende.",
- front:"I want to drink coffee.", back:"Ich will Kaffee trinken."},
-{id:"perfekt", lvl:"A1.2",
- en:"Spoken past = Perfekt", es:"Pasado hablado = Perfekt", de:"Perfekt",
- enB:"haben/sein + participle. Motion/change → sein: ich bin gegangen. BUT sein/haben/modals stay Präteritum: ich war, ich hatte, ich konnte.",
- esB:"Movimiento/cambio: sein. Pero sein/haben/modales: ich war / hatte / konnte.",
- deB:"Die meisten Verben: Perfekt. sein, haben, Modalverben: Präteritum.",
- front:"I went home. / I was tired.", back:"Ich bin nach Hause gegangen. / Ich war müde."},
-{id:"sep", lvl:"A1.2",
- en:"Separable verbs", es:"Verbos separables", de:"Trennbare Verben",
- enB:"anrufen → ich rufe an. Prefix jumps to the end in the present. Perfekt: angerufen (prefix glued back).",
- esB:"Presente: el prefijo se va al final. Perfekt: se pega otra vez (angerufen).",
- deB:"Präsens: ich rufe an. Perfekt: ich habe angerufen.",
- front:"I’ll call you later.", back:"Ich rufe dich später an."},
-{id:"neg", lvl:"A1.2",
- en:"nicht vs kein", es:"nicht vs kein", de:"nicht / kein",
- enB:"kein negates a noun with kein/ein: Ich habe keine Zeit. nicht negates the verb/adjective: Ich bin nicht müde.",
- esB:"kein = no hay/un. nicht = no soy/no hago.",
- deB:"kein beim Nomen, nicht beim Verb/Adjektiv.",
- front:"I have no time. / I’m not tired.", back:"Ich habe keine Zeit. / Ich bin nicht müde."},
-{id:"time", lvl:"A1.2",
- en:"Tomorrow = present + time", es:"Mañana = presente + tiempo", de:"Zukunft mit Präsens",
- enB:"Germans mostly use present + a time word: Morgen gehe ich. werden + infinitive is for promises/plans: Ich werde anrufen.",
- esB:"Lo cotidiano: Morgen gehe ich. werden: promesas / planes.",
- deB:"Alltag: Präsens + Zeitangabe. werden: Absicht.",
- front:"I’m going tomorrow.", back:"Morgen gehe ich."}
-];
-const LVL=u=>u<=1?"A1.1":u<=3?"A1.2":u<=7?"A2":"A2+";
-const LCLS=l=>l==="A1.1"?"A11":l==="A1.2"?"A12":l==="A2"?"A2":"A2p";
+let V=[], S, app;
+
+function $(s,el=document){return el.querySelector(s);}
+function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
+function tokens(s){return s.replace(/[¿?¡!.,]/g," ").split(/\s+/).filter(Boolean);}
+function norm(s){return (s||"").toLowerCase().replace(/ß/g,"ss").replace(/[¿?¡!.,]/g,"").replace(/\s+/g," ").trim();}
+function shuffle(a){a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a;}
+function cityOf(u){return CITIES.find(c=>c.units.includes(u))||CITIES[0];}
+function recUnit(){return S.lastUnit||0;}
+function recCity(){return cityOf(recUnit());}
 
 function hydrate(){
-  const fix={aufstehen:["Ich stehe um sieben auf.","Me levanto a las siete."]};
-  return V0.map(v=>{
-    const e=EN[v.inf]; if(!e) throw new Error("missing EN "+v.inf);
-    const nowDe=fix[v.inf]?fix[v.inf][0]:v.now[0];
-    const nowEs=fix[v.inf]?fix[v.inf][1]:v.now[1];
-    return Object.assign({},v,{
-      en:e[0], lvl:LVL(v.u),
-      now:[nowDe,e[1],nowEs],
-      past:[v.past[0],e[2],v.past[1]],
-      fut:[v.inf==="aufstehen"?"Morgen stehe ich früher auf.":v.fut[0], e[3],
-           v.inf==="aufstehen"?"Mañana me levanto antes.":v.fut[1]]
-    });
+  V=DATA.verbs.map(v=>{
+    const e=EN[v.inf]||[v.es,v.now[1],v.past[1],v.fut[1]];
+    return Object.assign({},v,{en:e[0], enNow:e[1], enPast:e[2], enFut:e[3]});
   });
 }
-const V=hydrate();
-const UNITS=U0.map((u,i)=>({title:u[0],lede:u[1],
-  en:["The engine","Do & move","Head & place","The day","Info","Real talk","Feel","Debate","Particles","Close the day"][i],
-  de:["Der Motor","Tun & bewegen","Kopf & Ort","Der Tag","Info","Echtes Sprechen","Fühlen","Debatte","Partikeln","Den Tag schließen"][i],
-  enL:["sein, haben, werden, modals. No sentence without these.","What you do with your body and with other people.","Think, know, stay, be somewhere.","Eat, sleep, work, go, need.","Hear, understand, read, write, wait.","Call, tell, decide, forget, pull it off.","What you say when the talk slows down.","Agree, refuse, expect, what happened.","an-, auf-, mit-, aus-. Spoken German lives here.","Pay, order, arrive, lose, move."][i],
-  deL:["sein, haben, werden, Modalverben.","Tun und bewegen.","Denken, kennen, bleiben.","Essen, schlafen, arbeiten.","Hören, verstehen, lesen.","Anrufen, erzählen, entscheiden.","Wenn das Gespräch tiefer geht.","Zustimmen, ablehnen, erwarten.","trennbare Verben.","Bezahlen, ankommen, umziehen."][i]}));
+function deLine(v,t){return v[t][0];}
+function esLine(v,t){return v[t][1];}
+function enLine(v,t){return t==="past"?v.enPast:t==="fut"?v.enFut:v.enNow;}
 
-const $=(s,el=document)=>el.querySelector(s);
-const app=$("#app");
-let S=load();
-const Vmap=Object.fromEntries(V.map(v=>[v.inf,v]));
+function speak(text){
+  try{
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang="de-DE"; u.rate=0.92;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function setAmb(src, vid){
+  const a=$("#amb");
+  a.innerHTML= vid
+    ? `<video autoplay muted loop playsinline webkit-playsinline src="${src}"></video><div class="ambdim"></div>`
+    : `<img src="${src}" alt=""><div class="ambdim"></div>`;
+}
 
-function blank(){return {xp:0,ui:"en",seen:{},srs:{},q:null,queue:[],idx:0,total:0,locked:false,screen:"home",filter:"all",onboarded:false,floor:0,streak:0,lastDay:"",lastUnit:0,mood:12,combo:0,rooftop:false,user:"",diff:"easy",partner:"off"};}
-function load(){try{return Object.assign(blank(),JSON.parse(localStorage.getItem(STORE)||"{}"));}catch(e){return blank();}}
-function payload(){return {xp:S.xp,ui:S.ui,seen:S.seen,srs:S.srs,onboarded:S.onboarded,floor:S.floor,streak:S.streak,lastDay:S.lastDay,lastUnit:S.lastUnit,mood:S.mood,combo:S.combo,rooftop:S.rooftop,user:S.user,diff:S.diff||"easy",partner:S.partner||"off"};}
+function blank(){return {xp:0,ui:"es",seen:{},reviews:[],srs:{},screen:"home",onboarded:true,floor:0,streak:0,lastDay:"",lastUnit:0,diff:"easy",user:"",card:null,mode:null};}
+function payload(){return {xp:S.xp,ui:S.ui,seen:S.seen,reviews:S.reviews,srs:S.srs,onboarded:true,floor:S.floor,streak:S.streak,lastDay:S.lastDay,lastUnit:S.lastUnit,diff:S.diff,user:S.user};}
+function who(){return localStorage.getItem(WHO)||"";}
+function accts(){try{return JSON.parse(localStorage.getItem(ACCTS)||"{}");}catch(e){return {};}}
+function setAccts(A){localStorage.setItem(ACCTS,JSON.stringify(A));}
+function save(){
+  localStorage.setItem(STORE, JSON.stringify(payload()));
+  const n=who(); if(!n) return;
+  const A=accts(); if(A[n]){ A[n].data=payload(); setAccts(A); }
+}
+function load(){ try{return Object.assign(blank(), JSON.parse(localStorage.getItem(STORE)||"{}"));}catch(e){return blank();} }
 
-const ACCTS="sprechen.accts.v1", WHO="sprechen.who";
 async function sha(s){
   try{
     if(crypto.subtle){
@@ -349,762 +152,349 @@ async function sha(s){
     }
   }catch(e){}
   let h=0; for(let i=0;i<s.length;i++) h=((h<<5)-h)+s.charCodeAt(i)|0;
-  return "x"+Math.abs(h);
-}
-function accts(){try{return JSON.parse(localStorage.getItem(ACCTS)||"{}");}catch(e){return {};}}
-function setAccts(o){localStorage.setItem(ACCTS,JSON.stringify(o));}
-function who(){return localStorage.getItem(WHO)||"";}
-function save(){
-  localStorage.setItem(STORE,JSON.stringify(payload()));
-  const u=who(); if(!u) return;
-  const A=accts(); if(!A[u]) return;
-  A[u].data=payload(); setAccts(A);
-}
-const _saveBare=null;
-async function doLogin(create){
-  const name=($("#user")&&$("#user").value||"").trim().toLowerCase();
-  const pass=$("#pass")&&$("#pass").value||"";
-  if(name.length<2||pass.length<4){alert("Nombre 2 letras. Contraseña 4 o más — la inventas tú."); return;}
-  const A=accts(); const h=await sha(pass);
-  if(create){
-    if(A[name]){alert("Ese nombre ya existe en este iPhone. Usa Ya tengo cuenta."); return;}
-    A[name]={h,data:Object.assign(blank(),{user:name,onboarded:true,floor:0})};
-  } else {
-    if(!A[name]||A[name].h!==h){alert("Nombre o contraseña mal."); return;}
-  }
-  setAccts(A); localStorage.setItem(WHO,name);
-  S=Object.assign(blank(), A[name].data||{}); S.user=name; save(); go("home");
-}
-function logout(){localStorage.removeItem(WHO); S=blank(); renderLogin();}
-function renderLogin(){
-  document.body.classList.add("login");
-  $("#nav").innerHTML="";
-  app.innerHTML=`<div class="lockscr">
-    <h1>Sprechen</h1>
-    <p class="lede" style="text-align:center">Esta noche necesitas el idioma.</p>
-    <div class="card">
-      <input class="ans" id="user" placeholder="Tu nombre" style="margin-top:0" autocomplete="username">
-      <input class="ans" id="pass" type="password" placeholder="Contraseña (tú la eliges, 4+)" autocomplete="new-password">
-      <div class="rowbtns" style="margin-top:12px">
-        <button class="btn primary" id="up">Crear cuenta</button>
-        <button class="btn ghost" id="in">Ya tengo cuenta</button>
-      </div>
-    </div>
-  </div>`;
-  setAmb("img/night.mp4", true);
-  $("#up").onclick=()=>doLogin(true);
-  $("#in").onclick=()=>doLogin(false);
-}
-
-
-async function exportSave(){
-  const txt=JSON.stringify(payload());
-  try{await navigator.clipboard.writeText(txt); alert(t("copied"));}
-  catch(e){prompt(t("pastePrompt"), txt);}
-}
-function importSave(){
-  const txt=prompt(t("pastePrompt"));
-  if(!txt) return;
-  try{
-    const o=JSON.parse(txt);
-    if(!o||typeof o!=="object") throw 0;
-    S=Object.assign(blank(), o);
-    save(); go("home");
-  }catch(e){alert(t("badSave"));}
-}
-function t(k){return (I18N[S.ui]||I18N.en)[k]||I18N.en[k]||k;}
-function pivot(){return S.ui==="es"?2:1;} // learn via EN unless UI is ES
-function line(v,tense,langIdx){return v[tense][langIdx];}
-function mastery(v){const s=S.seen[v.inf]||{};return ["mean","now","past","fut"].filter(k=>s[k]).length;}
-function mastered(){return V.filter(v=>mastery(v)===4).length;}
-function lvlStats(){
-  const g={}; V.forEach(v=>{g[v.lvl]=g[v.lvl]||{n:0,m:0}; g[v.lvl].n++; g[v.lvl].m+=mastery(v)/4;});
-  return g;
-}
-let speakGen=0;
-function deVoice(){
-  try{return speechSynthesis.getVoices().find(x=>x.lang&&x.lang.toLowerCase().startsWith("de"))||null;}catch(e){return null;}
-}
-function speak(text){
-  if(!text) return;
-  const gen=++speakGen;
-  const run=()=>{
-    if(gen!==speakGen) return;
-    try{
-      speechSynthesis.cancel();
-      const u=new SpeechSynthesisUtterance(text);
-      u.lang="de-DE"; u.rate=.92;
-      const de=deVoice(); if(de) u.voice=de;
-      if(gen!==speakGen) return;
-      speechSynthesis.speak(u);
-    }catch(e){}
-  };
-  try{
-    if(!speechSynthesis.getVoices().length){
-      speechSynthesis.onvoiceschanged=run;
-      setTimeout(run,250);
-    } else {
-      setTimeout(run,40);
-    }
-  }catch(e){}
-}
-function esc(s){return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");}
-function shuffle(a){a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a;}
-function tokens(s){return s.replace(/[¿?¡!.,]/g," ").split(/\s+/).filter(Boolean);}
-function norm(s){return s.toLowerCase().replace(/ß/g,"ss").replace(/[¿?¡!.,]/g,"").replace(/\s+/g," ").trim();}
-let gameRAF=0;
-function stopGame(){ if(gameRAF) cancelAnimationFrame(gameRAF); gameRAF=0; }
-function go(name){
-  if(!who()){ renderLogin(); return; }
-  document.body.classList.remove("login");
-  stopGame();
-  S.screen=name; nav();
-  if(name==="home"){ S.q=null; S.queue=[]; renderHome(); }
-  else if(name==="learn")renderLearn();
-  else if(name==="play")renderPlay();
-  else if(name==="set")renderSet();
-  else if(name==="boost")renderBoost();
-  else if(name==="steps")renderSteps();
-  else if(name==="cards")renderCards();
-  else if(name==="speak"){ if(!S.q) renderPlay(); else renderQ(); }
-  else renderHome();
+  return "x"+h;
 }
 
 function ico(n){
   const p={
     home:'<path d="M4 11.5 12 4l8 7.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1z"/>',
     book:'<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 5.5v16"/>',
-    dumb:'<path d="M6 9v6M18 9v6M6 12h12M4 10v4M20 10v4"/>',
-    gear:'<circle cx="12" cy="12" r="3"/><path d="M12 3v2M12 19v2M5 5l1.5 1.5M17.5 17.5 19 19M3 12h2M19 12h2M5 19l1.5-1.5M17.5 6.5 19 5"/>'
+    rev:'<path d="M4 7h10M4 12h16M4 17h8"/><circle cx="19" cy="17" r="3"/>',
+    gear:'<circle cx="12" cy="12" r="3"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"/>'
   };
   return `<svg viewBox="0 0 24 24">${p[n]}</svg>`;
 }
 function nav(){
-  const items=[["home","home"],["learn","book"],["boost","dumb"],["set","gear"]];
-  const on = id => S.screen===id || (S.screen==="speak"&&id==="learn");
-  $("#nav").innerHTML=items.map(([id,ic])=>`<button data-go="${id}" class="${on(id)?"on":""}" aria-label="${id}">${ico(ic)}</button>`).join("");
+  const items=[["home","home"],["scene","book"],["reviews","rev"],["set","gear"]];
+  $("#nav").innerHTML=items.map(([id,ic])=>`<button data-go="${id}" class="${(S.screen===id||(["card","practice","sheet"].includes(S.screen)&&id==="scene"))?"on":""}">${ico(ic)}</button>`).join("");
   $("#nav").querySelectorAll("button").forEach(b=>b.onclick=()=>go(b.dataset.go));
 }
-function trainerLv(){return 1+Math.floor((S.xp||0)/80);}
-
-function langs(){
-  return `<div class="langs">${LOCALES.map(l=>`<button ${l.live?"":"disabled"} class="${l.live?(S.ui===l.id?"on":""):"off"}" data-l="${l.id}">${l.id==="pt-PT"?"PT":l.id.toUpperCase()}${l.live?"":" · "+t("soon")}</button>`).join("")}</div>`;
-}
-function setUi(id){S.ui=id; save(); go(S.screen==="q"?"speak":S.screen);}
-
-function pixIco(kind){
-  const fill = kind===1?"#d48432":kind===2?"#3c7546":kind===3?"#7a4524":"#8eb8c8";
-  return `<svg class="pix" width="32" height="32" viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true">
-    <rect x="2" y="7" width="12" height="8" fill="${fill}"/>
-    <rect x="1" y="4" width="14" height="4" fill="#2a1c10"/>
-    <rect x="4" y="2" width="8" height="3" fill="#7a4524"/>
-    <rect x="7" y="10" width="3" height="5" fill="#2a1c10"/>
-    <rect x="10" y="9" width="3" height="3" fill="#cfe0e8"/></svg>`;
-}
-function skyline(){
-  return `<svg class="skyline" viewBox="0 0 320 48" preserveAspectRatio="none" shape-rendering="crispEdges" aria-hidden="true">
-    <rect width="320" height="48" fill="#8eb8c8"/>
-    <rect y="32" width="320" height="16" fill="#4a7a3c"/>
-    <rect x="12" y="18" width="28" height="22" fill="#7a4524"/>
-    <rect x="8" y="12" width="36" height="8" fill="#2a1c10"/>
-    <rect x="56" y="20" width="24" height="20" fill="#d48432"/>
-    <rect x="52" y="14" width="32" height="8" fill="#2a1c10"/>
-    <rect x="100" y="16" width="40" height="24" fill="#fff1d0"/>
-    <rect x="96" y="10" width="48" height="8" fill="#7a4524"/>
-    <rect x="160" y="22" width="22" height="18" fill="#3c7546"/>
-    <rect x="200" y="14" width="36" height="26" fill="#7a4524"/>
-    <rect x="196" y="8" width="44" height="8" fill="#2a1c10"/>
-    <rect x="252" y="20" width="30" height="20" fill="#dcb14a"/>
-    <rect x="248" y="14" width="38" height="8" fill="#2a1c10"/>
-    <rect x="118" y="18" width="8" height="8" fill="#8eb8c8"/>
-    <rect x="214" y="20" width="8" height="8" fill="#cfe0e8"/>
-  </svg>`;
-}
-function ringSvg(pct){
-  const p=Math.round(pct*100);
-  return `<div class="stat"><b>HP ${p}/100</b><div class="xpbar"><i style="width:${p}%"></i></div></div>`;
+function go(name){
+  if(!who()){ renderLogin(); return; }
+  document.body.classList.remove("login");
+  if(name==="home"){ S.card=null; S.mode=null; }
+  S.screen=name; nav();
+  if(name==="home") renderHome();
+  else if(name==="scene") renderScene();
+  else if(name==="card") renderCard();
+  else if(name==="practice") renderPractice();
+  else if(name==="reviews") renderReviews();
+  else if(name==="set") renderSet();
+  else renderHome();
 }
 
-
-function unitMastery(i){
-  const vs=V.filter(v=>v.u===i); if(!vs.length) return 0;
-  return vs.reduce((a,v)=>a+mastery(v),0)/(vs.length*4);
-}
-function recommendedUnit(){
-  for(let i=S.floor||0;i<10;i++) if(unitMastery(i)<0.7) return i;
-  return 9;
-}
-function unlocked(i){
-  if(i<=(S.floor||0)) return true;
-  return unitMastery(i-1)>=0.35;
-}
-function tickStreak(){
-  const d=new Date().toISOString().slice(0,10);
-  if(S.lastDay===d) return;
-  const y=new Date(); y.setDate(y.getDate()-1);
-  S.streak = S.lastDay===y.toISOString().slice(0,10) ? (S.streak||0)+1 : 1;
-  S.lastDay=d; save();
-}
-function beep(ok){
-  try{
-    const ctx=new (window.AudioContext||window.webkitAudioContext)();
-    const o=ctx.createOscillator(), g=ctx.createGain();
-    o.type="square"; o.frequency.value=ok?520:180; g.gain.value=0.04;
-    o.connect(g); g.connect(ctx.destination); o.start();
-    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+0.12);
-    o.stop(ctx.currentTime+0.13);
-  }catch(e){}
+function sceneVerbs(){
+  const c=recCity();
+  return V.filter(v=>c.units.includes(v.u));
 }
 
-function dueCards(){
-  const now=Date.now();
-  return Object.entries(S.srs).filter(([,c])=>c.due<=now).map(([id,c])=>id);
-}
-function ensureSrs(id, payload){
-  if(!S.srs[id]) S.srs[id]={due:Date.now(), ivl:0, ef:2.5, n:0, ...payload};
-}
-
-
-const CITIES=[
-  {id:"berlin", name:"Berlín", scene:"U-Bahn, 01:40", lede:"How do you even get to the party.", units:[0,1], live:true, img:"img/berlin.jpg"},
-  {id:"dresden", name:"Dresde", scene:"Elba · lluvia", lede:"Una mesa. Un rato.", units:[2,3], live:true, img:"img/rain.jpg"},
-  {id:"munich", name:"Múnich", scene:"Sala · 23:00", lede:"Pedir y brindar.", units:[4,5], live:true, img:"img/club.jpg"},
-  {id:"vienna", name:"Viena", scene:"Cena · 21:30", lede:"Inversores. Qué haces.", units:[6,7], live:true, img:"img/dinner.jpg"},
-  {id:"barcelona", name:"Barcelona", scene:"Luego", lede:"Otro idioma.", units:[8,9], live:false, img:"img/cafe.jpg"}
-];
-function setAmb(src, isVid){
-  let a=document.getElementById("amb");
-  if(!a){ a=document.createElement("div"); a.id="amb"; a.className="amb"; document.body.insertBefore(a, document.body.firstChild); }
-  if(isVid) a.innerHTML='<video autoplay muted loop playsinline webkit-playsinline src="'+src+'"></video><div class="ambdim"></div>';
-  else a.innerHTML='<img src="'+src+'" alt=""><div class="ambdim"></div>';
-}
-function cityOfUnit(u){return CITIES.find(c=>c.units.includes(u))||CITIES[0];}
-function recCity(){return cityOfUnit(recommendedUnit());}
-const ART={"Mann":"der","Frau":"die","Kind":"das","Zeit":"die","Kaffee":"der","Bus":"der","Film":"der","Schlüssel":"der","Zug":"der","Bahn":"die","Tür":"die","Nacht":"die","Bier":"das","Glas":"das","Haus":"das","Auto":"das","Problem":"das","Wahrheit":"die"};
-
-function startGames(weak, unit, kind){
-  tickStreak();
-  if(!kind){ renderPlay(); return; }
-  if(unit==null && !weak) unit=recommendedUnit();
-  S.lastUnit=unit==null?S.lastUnit:unit; save();
-  let pool=unit!=null? V.filter(v=>v.u===unit): weak? V.filter(v=>mastery(v)>0&&mastery(v)<4): V;
-  if(!pool.length) pool=V;
-  const pick=shuffle(pool).slice(0,5);
-  const tense=(S.diff||"easy")==="easy"?"now":"past";
-  S.queue=pick.map(v=>({kind, v, tense}));
-  S.idx=0; S.total=S.queue.length; S.locked=false; S.q=S.queue[0]; S.screen="speak";
-  renderQ();
-}
-function renderPlay(){
-  const rec=S.lastUnit||recommendedUnit();
-  const city=cityOfUnit(rec);
-  setAmb(city.img, false);
-  app.innerHTML=`<header class="top"><div class="brand"><b>Jugar</b><small>${city.name} · tú eliges</small></div></header>
-    <p class="lede">Nada se lanza solo. Principiante: primero oír, luego un modo.</p>
-    <div class="rowbtns">
-      <button class="btn accent" data-k="learn">Ver y oír — sin examen</button>
-      <button class="btn ghost" data-k="chips">Orden — toca las palabras</button>
-      <button class="btn ghost" data-k="article">der / die / das</button>
-      <button class="btn ghost" data-k="say">Escribir la frase</button>
-      <button class="btn ghost" data-k="smash">Lluvia — arcade</button>
-    </div>
-    <p class="lede" style="margin-top:14px">La lluvia es extra, no el camino.</p>`;
-  app.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{
-    if(b.dataset.k==="learn") go("learn");
-    else startGames(false, rec, b.dataset.k);
-  });
-  nav();
+function wordInfo(w, v){
+  const k=w.toLowerCase().replace(/[.,!?]/g,"");
+  if(GLOSS[k]) return {de:w, en:GLOSS[k][0], es:GLOSS[k][1], tag:GLOSS[k][2]||"palabra"};
+  const forms=["ich","du","er","wir","pret","part","inf"];
+  if(v){
+    if(norm(w)===norm(v.inf) || norm(w)===norm(v.ich) || norm(w)===norm(v.du) || norm(w)===norm(v.er) || norm(w)===norm(v.wir) || norm(w)===norm(v.pret))
+      return {de:w, en:v.en, es:v.es, tag:"verbo · "+v.inf};
+  }
+  const hit=V.find(x=>[x.inf,x.ich,x.du,x.er,x.wir,x.pret].some(f=>norm(f)===norm(w)));
+  if(hit) return {de:w, en:hit.en, es:hit.es, tag:"verbo · "+hit.inf};
+  return {de:w, en:"", es:"toca Guardar si quieres repasarla", tag:"palabra"};
 }
 
-function renderOnboard(){
-  app.innerHTML=`<header class="top"><div class="brand"><b>Hoy</b><small>¿dónde empiezas?</small></div></header>
+async function doLogin(create){
+  const name=($("#user")&&$("#user").value||"").trim().toLowerCase();
+  const pass=$("#pass")&&$("#pass").value||"";
+  if(name.length<2||pass.length<4){alert("Nombre 2 letras. Contraseña 4+ — la inventas tú."); return;}
+  const A=accts(); const h=await sha(pass);
+  if(create){
+    if(A[name]){alert("Ese nombre ya existe. Usa Ya tengo cuenta."); return;}
+    A[name]={h,data:Object.assign(blank(),{user:name})};
+  } else {
+    if(!A[name]||A[name].h!==h){alert("Nombre o contraseña mal."); return;}
+  }
+  setAccts(A); localStorage.setItem(WHO,name);
+  S=Object.assign(blank(), A[name].data||{}); S.user=name; save(); go("home");
+}
+function logout(){ localStorage.removeItem(WHO); S=blank(); renderLogin(); }
+
+function renderLogin(){
+  document.body.classList.add("login");
+  $("#nav").innerHTML="";
+  setAmb("img/night.mp4", true);
+  app.innerHTML=`<div class="lockscr">
+    <h1>Sprechen</h1>
+    <p class="lede" style="text-align:center">Esta noche necesitas el idioma.</p>
     <div class="card">
-      <p class="scene">El viaje</p>
+      <input class="ans" id="user" placeholder="Tu nombre" autocapitalize="none">
+      <input class="ans" id="pass" type="password" placeholder="Contraseña (tú la eliges, 4+)">
       <div class="rowbtns">
-        <button class="btn accent" data-f="0">Berlín — de cero</button>
-        <button class="btn ghost" data-f="2">Dresde — ya digo Hallo</button>
-        <button class="btn ghost" data-f="6">Viena — me defiendo</button>
+        <button class="btn red" id="up">Crear cuenta</button>
+        <button class="btn ghost" id="in">Ya tengo cuenta</button>
       </div>
-    </div>`;
-  app.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{
-    S.onboarded=true; S.floor=+b.dataset.f; S.lastUnit=S.floor; save(); renderHome();
-  });
-  nav();
-}
-function renderHome(){
-  S.onboarded=true;
-  tickStreak();
-  const rec=recommendedUnit();
-  const city=cityOfUnit(rec);
-  app.innerHTML=`
-    <header class="top">
-      <div class="brand"><b>Hoy</b><small class="flame">✦ ${S.streak||0}</small></div>
-    </header>
-    <div class="path">
-      ${CITIES.map(c=>{
-        const here=c.id===city.id;
-        const lock=!c.live;
-        return `<button class="pin ${here?"here":""} ${lock?"lock":""}" data-id="${c.id}" ${lock?"disabled":""}>
-          <i class="dot"></i><span><b>${c.name}</b>${here?" · estás aquí":lock?" · candado":""}</span>
-        </button>`;
-      }).join("")}
     </div>
+  </div>`;
+  $("#up").onclick=()=>doLogin(true);
+  $("#in").onclick=()=>doLogin(false);
+}
+
+function renderHome(){
+  const city=recCity();
+  setAmb("img/night.mp4", true);
+  const due=(S.reviews||[]).filter(r=>!r.due || r.due<=Date.now()).length;
+  app.innerHTML=`<header class="top"><div class="brand"><b>Hoy</b><small>${who()} · ${S.reviews.length} guardadas</small></div></header>
+    ${CITIES.map(c=>`<button class="pin ${c.id===city.id?"here":""} ${c.live?"":"lock"}" data-id="${c.id}" ${c.live?"":"disabled"}>
+      <i class="dot"></i><span><b>${c.name}</b>${c.id===city.id?" · estás aquí":c.live?"":" · candado"}</span>
+    </button>`).join("")}
     <div class="card">
       <p class="scene">${city.name}</p>
       <img class="cover" src="${city.img}" alt="">
       <h2>${city.scene}</h2>
       <p class="lede">${city.lede}</p>
       <div class="rowbtns">
-        <button class="btn accent" id="learn">Ver y oír esta noche</button>
-        <button class="btn ghost" id="play">Elegir un juego</button>
+        <button class="btn gold" id="goScene">Abrir la escena</button>
+        <button class="btn ghost" id="goRev">${due?due+" por repasar":"Reviews"}</button>
       </div>
     </div>`;
-  setAmb("img/night.mp4", true);
-  $("#learn").onclick=()=>go("learn");
-  $("#play").onclick=()=>go("play");
   app.querySelectorAll(".pin").forEach(b=>b.onclick=()=>{
     const c=CITIES.find(x=>x.id===b.dataset.id); if(!c||!c.live) return;
-    S.lastUnit=c.units[0]; save(); go("learn");
+    S.lastUnit=c.units[0]; save(); renderHome();
   });
+  $("#goScene").onclick=()=>go("scene");
+  $("#goRev").onclick=()=>go("reviews");
   nav();
 }
 
-const EGGS=[
-  {id:"balcon", n:2, scene:"Balcón", de:"Bleibst du noch lange?", en:"Are you staying much longer?", es:"¿Te quedas mucho?"},
-  {id:"cena", n:6, scene:"Cena · ¿en qué trabajas?", de:"Woran arbeitest du?", en:"What are you working on?", es:"¿En qué trabajas?"},
-  {id:"club", n:10, scene:"Fuera del club", de:"Du hast gute Energie.", en:"You've got good energy.", es:"Tienes buena energía."},
-  {id:"hobby", n:14, scene:"Hobbies", de:"Ich tanze gern. Und du?", en:"I like dancing. You?", es:"Me gusta bailar. ¿Y tú?"},
-  {id:"spiaggia", n:99, scene:"Spiaggia, lluvia", de:"Sollen wir unterstellen?", en:"Shall we take shelter?", es:"¿Nos metemos a cubierto?"}
-];
-function renderBoost(){
-  const m=mastered();
-  const weak=V.filter(v=>mastery(v)>0&&mastery(v)<4).length;
-  app.innerHTML=`<header class="top"><div class="brand"><b>Reforzar</b><small class="flame">✦ ${S.streak||0}</small></div></header>
-    <div class="card" style="background:linear-gradient(90deg,#C47A22,#E8B86D);color:#0B0D12">
-      <h2 style="color:#0B0D12">A · Repasar esta ciudad</h2>
-      <p class="lede" style="color:#3a2a12">${weak} a medias. Juego, no examen.</p>
-      <button class="btn" id="weak" style="background:#0B0D12;color:#E8B86D">Jugar flojos</button>
-    </div>
-    <div class="card">
-      <h2>B · Huevos de oro</h2>
-      <p class="lede">La noche no oficial. No sale en Hoy.</p>
-      ${EGGS.map(e=>{
-        const open=m>=e.n || (e.id==="roof"&&S.rooftop);
-        return `<div class="item" style="margin:0 0 8px">
-          ${open?`<p class="scene">${e.scene}</p><b class="de" style="font-size:1.05rem">${e.de}</b>
-            <div class="eshint">${e.en} · ${e.es}</div>
-            <button type="button" class="btn ghost" data-say="${esc(e.de)}" style="margin-top:8px">🔊</button>`
-          :`<p class="lede" style="margin:0">🔒 ${e.scene}</p>`}
-        </div>`;
-      }).join("")}
-    </div>`;
-  $("#weak").onclick=()=>go("play");
-  app.querySelectorAll("[data-say]").forEach(b=>b.onclick=()=>speak(b.dataset.say));
-  nav();
-}
-
-function renderLearn(){
-  const rec=S.lastUnit||recommendedUnit();
-  S.lastUnit=rec; save();
-  const city=cityOfUnit(rec);
-  const verbs=V.filter(v=>city.units.includes(v.u)).slice(0,8);
+function renderScene(){
+  const city=recCity();
+  const vs=sceneVerbs();
+  setAmb(city.img,false);
+  S.card=null;
   app.innerHTML=`<header class="top"><div class="brand"><b>${city.scene}</b></div><span class="chip">${city.name}</span></header>
-    <p class="lede">${city.lede} Primero las oyes. Luego las tumbas jugando.</p>
-    <div class="card" id="list"></div>
-    <button class="btn accent" id="talk" style="width:100%;margin-top:12px">Elegir un juego</button>`;
-  $("#list").innerHTML=verbs.map(v=>`
-    <div class="linecard">
+    <p class="lede">${city.lede} Toca una frase. Como Seedlang: la oyes, la abres, la guardas.</p>
+    <div class="card" id="list"></div>`;
+  $("#list").innerHTML=vs.map((v,i)=>`
+    <button class="line" data-i="${V.indexOf(v)}">
       <div style="flex:1">
-        <div class="de" style="font-size:1.05rem">${v.now[0]}</div>
-        <div class="eshint">${v.en} · ${v.es}</div>
+        <div class="de" style="font-size:1.08rem">${esc(v.now[0])}</div>
+        <div class="en">${esc(S.ui==="es"?v.es:v.enNow)}</div>
       </div>
-      <button type="button" class="speak" data-i="${V.indexOf(v)}">🔊</button>
-    </div>`).join("");
+      <span class="speak">🔊</span>
+    </button>`).join("");
   $("#list").onclick=e=>{
-    const b=e.target.closest("[data-i]"); if(!b) return;
-    const v=V[+b.dataset.i]; if(v) speak(v.now[0]);
+    const sp=e.target.closest(".speak");
+    const b=e.target.closest(".line"); if(!b) return;
+    const v=V[+b.dataset.i];
+    if(sp){ speak(v.now[0]); e.stopPropagation(); return; }
+    openCard(v,"now");
   };
-  setAmb(city.img, false);
-  $("#talk").onclick=()=>go("play");
   nav();
 }
 
-function renderSet(){
-  const d=S.diff||"easy";
-  const p=S.partner||"off";
-  app.innerHTML=`<header class="top"><div class="brand"><b>Ajustes</b><small>sin pelea</small></div></header>
+function openCard(v, tense){
+  S.card={inf:v.inf, tense:tense||"now"}; save();
+  S.screen="card"; renderCard();
+}
+function currentV(){ return V.find(x=>x.inf===S.card.inf); }
+
+function wordsHtml(de, v, active){
+  return tokens(de).map((w,i)=>`<button class="w ${active===i?"on":""}" data-w="${esc(w)}" data-i="${i}">${esc(w)}</button>`).join(" ");
+}
+
+function renderCard(){
+  const v=currentV(); if(!v){ go("scene"); return; }
+  const tense=S.card.tense||"now";
+  const de=deLine(v,tense), en=enLine(v,tense), es=esLine(v,tense);
+  const city=cityOf(v.u);
+  setAmb(city.img,false);
+  app.innerHTML=`<header class="top"><div class="brand"><b>${city.scene}</b></div><span class="chip">${city.name}</span></header>
+    <p class="lede">Toca cualquier palabra.</p>
     <div class="card">
-      <h2>Dificultad</h2>
-      <p class="lede">Fácil = solo presente, puedes oír antes de escribir. Difícil = 3 tiempos, oyes después.</p>
-      <div class="rowbtns">
-        <button class="btn ${d==="easy"?"primary":"ghost"}" data-d="easy">Fácil — presente</button>
-        <button class="btn ${d==="mid"?"primary":"ghost"}" data-d="mid">Medio — presente + pasado</button>
-        <button class="btn ${d==="hard"?"primary":"ghost"}" data-d="hard">Difícil — 3 tiempos</button>
+      <div id="words">${wordsHtml(de,v,-1)}</div>
+      <div class="gloss" id="gloss">Toca una palabra para verla.</div>
+      <p class="en">${esc(S.ui==="de"?"": (S.ui==="es"?es:en))}</p>
+      <div class="rowbtns" style="margin-top:12px">
+        <button class="btn ghost" id="hear">🔊 Oír esta frase</button>
+        <button class="btn gold" id="prac">Practicar esta</button>
+        <button class="btn ghost" id="save">Guardar en Reviews</button>
+        <button class="btn ghost" id="back">Todas las frases</button>
       </div>
-    </div>
-    <div class="card">
-      <h2>Compañera</h2>
-      <p class="lede">Opcional. El café no es un examen.</p>
-      <div class="rowbtns">
-        <button class="btn ${p==="off"?"primary":"ghost"}" data-p="off">Nadie — solo frases</button>
-        <button class="btn ${p==="lina"?"primary":"ghost"}" data-p="lina">Lina</button>
-        <button class="btn ${p==="mara"?"primary":"ghost"}" data-p="mara">Mara</button>
-      </div>
-    </div>
-    <div class="card">
-      <h2>Idioma de la app</h2>
-      ${langs()}
-    </div>
-    <div class="card">
-      <h2>Backup</h2>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        <button class="btn ghost" id="ex">Copiar backup</button>
-        <button class="btn ghost" id="im">Pegar backup</button>
-      </div>
-      <button class="btn ghost" id="lo" style="margin-top:8px;width:100%">Salir de la cuenta</button>
-    </div>
-    <div class="card">
-      <button class="btn ghost" id="dex">Lista 100 verbos</button>
-      <button class="btn ghost" id="st" style="margin-top:8px">Bases A1</button>
     </div>`;
-  app.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{S.diff=b.dataset.d; save(); renderSet();});
-  app.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{S.partner=b.dataset.p; save(); renderSet();});
-  app.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>setUi(b.dataset.l));
-  $("#ex").onclick=exportSave; $("#im").onclick=importSave;
-  $("#lo").onclick=logout; $("#dex").onclick=()=>go("atlas"); $("#st").onclick=()=>go("steps");
+  bindWords(v);
+  $("#hear").onclick=()=>speak(de);
+  $("#prac").onclick=()=>pickPractice();
+  $("#save").onclick=()=>{ saveReview(v,tense); $("#save").textContent="Guardada"; };
+  $("#back").onclick=()=>go("scene");
+  speak(de);
   nav();
 }
-
-function renderSteps(){
-  app.innerHTML=`<header class="top"><div class="brand"><b>${t("bases")}</b><small>${t("basesLede")}</small></div>${langs()}</header>
-    <div class="steps" id="list"></div>`;
-  app.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>setUi(b.dataset.l));
-  $("#list").innerHTML=STEPS.map((s,i)=>{
-    const title=S.ui==="de"?s.de:S.ui==="es"?s.es:s.en;
-    const body=S.ui==="de"?s.deB:S.ui==="es"?s.esB:s.enB;
-    return `<button class="step" data-i="${i}"><span class="n">${i+1}</span>
-      <span><span class="lvl ${LCLS(s.lvl)}">${s.lvl}</span> <b>${title}</b>
-      <div class="lede" style="margin:4px 0 0">${body}</div></span></button>`;
-  }).join("");
-  $("#list").querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>openStep(+b.dataset.i));
-  nav();
-}
-function openStep(i){
-  const s=STEPS[i]; const title=S.ui==="de"?s.de:S.ui==="es"?s.es:s.en;
-  const body=S.ui==="de"?s.deB:S.ui==="es"?s.esB:s.enB;
-  const extra=S.ui==="en"?`<p class="eshint">${s.esB}</p>`:"";
-  app.innerHTML=`<div class="qmeta"><button class="btn ghost" id="back" style="padding:8px 12px;min-height:40px">←</button><span class="lvl ${LCLS(s.lvl)}">${s.lvl}</span></div>
-    <div class="card" style="margin-top:10px">
-      <h2>${title}</h2>
-      <p class="lede">${body}</p>${extra}
-      <div class="flip" id="fc"><div class="inner">
-        <div class="face"><p class="lede">${t("flip")}</p><p class="de">${s.front}</p></div>
-        <div class="face back"><p class="de">${s.back}</p><button class="speak" id="say" type="button">🔊</button></div>
-      </div></div>
-      <button class="btn primary" id="flipb">${t("flip")}</button>
-    </div>`;
-  $("#back").onclick=()=>renderSteps();
-  const flip=()=>$("#fc").classList.toggle("on");
-  $("#flipb").onclick=flip; $("#fc").onclick=e=>{if(e.target.id!=="say")flip();};
-  $("#say").onclick=ev=>{ev.stopPropagation(); speak(s.back);};
-}
-
-function makeCardsFromVerbs(){
-  V.forEach(v=>{
-    if(!mastery(v)) return;
-    ["now","past","fut"].forEach(tense=>{
-      const id=v.inf+"|"+tense;
-      ensureSrs(id,{kind:"verb",inf:v.inf,tense});
-    });
+function bindWords(v){
+  $("#words").querySelectorAll(".w").forEach(b=>b.onclick=()=>{
+    $("#words").querySelectorAll(".w").forEach(x=>x.classList.remove("on"));
+    b.classList.add("on");
+    const info=wordInfo(b.dataset.w, v);
+    $("#gloss").innerHTML=`<b>${esc(info.de)}</b> · ${esc(info.tag)}<div class="en">${esc(info.en)} · ${esc(info.es)}</div>`;
+    speak(info.de);
   });
-  STEPS.forEach(s=>ensureSrs("step|"+s.id,{kind:"step",sid:s.id}));
-  save();
 }
-function reviewSrs(id, grade){
-  // grade: 0 again, 1 hard, 2 good, 3 easy
-  const c=S.srs[id]||{ivl:0,ef:2.5,n:0};
-  if(grade===0){c.ivl=0; c.due=Date.now()+2*60*1000; c.n=0;}
-  else{
-    c.n++;
-    if(c.ivl===0) c.ivl = grade===1?0.5: grade===2?1:3;
-    else c.ivl = c.ivl * (grade===1?1.2: grade===2?2.3:3.3);
-    c.due=Date.now()+c.ivl*24*60*60*1000;
-  }
-  S.srs[id]=c; save();
-}
-function renderCards(){
-  makeCardsFromVerbs();
-  const due=dueCards();
-  if(!due.length){
-    app.innerHTML=`<header class="top"><div class="brand"><b>${t("cards")}</b><small>${t("cardsEmpty")}</small></div>${langs()}</header>
-      <button class="btn primary" id="sp">${t("start")}</button>`;
-    $("#sp").onclick=()=>startSession();
-    app.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>setUi(b.dataset.l));
-    nav(); return;
-  }
-  showCard(due[0], due.length);
-}
-function showCard(id, left){
-  let front, back, deLine;
-  if(id.startsWith("step|")){
-    const s=STEPS.find(x=>x.id===id.slice(5));
-    front=s.front; back=s.back; deLine=s.back;
-  } else {
-    const [inf,tense]=id.split("|"); const v=Vmap[inf];
-    front=line(v,tense,pivot()); back=line(v,tense,0); deLine=back;
-  }
-  app.innerHTML=`<div class="qmeta"><span>${t("cards")} · ${left} ${t("due")}</span><span>${id.split("|")[0]}</span></div>
-    <div class="flip" id="fc"><div class="inner">
-      <div class="face"><p class="lede">${t("flip")}</p><p class="de">${front}</p></div>
-      <div class="face back"><p class="de">${back}</p></div>
-    </div></div>
-    <div class="rowbtns" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-      <button class="btn ghost" id="flipb">${t("flip")}</button>
-      <button class="btn ghost" id="hear">${t("hear")}</button>
-      <button class="btn bad" id="g0">${t("again")}</button>
-      <button class="btn ghost" id="g1">${t("hard")}</button>
-      <button class="btn ok" id="g2">${t("good")}</button>
-      <button class="btn accent" id="g3">${t("easy")}</button>
+
+function pickPractice(){
+  const v=currentV();
+  app.innerHTML=`<header class="top"><div class="brand"><b>¿Cómo practicas?</b></div></header>
+    <p class="lede">${esc(deLine(v,S.card.tense))} — tú eliges. Un modo, esta frase.</p>
+    <div class="rowbtns">
+      <button class="btn gold" data-m="chips">Armar palabras</button>
+      <button class="btn ghost" data-m="say">Escribirla</button>
+      <button class="btn ghost" data-m="art">der / die / das</button>
+      <button class="btn ghost" id="cancel">Volver a la ficha</button>
     </div>`;
-  const flip=()=>$("#fc").classList.toggle("on");
-  $("#flipb").onclick=flip; $("#fc").onclick=flip;
-  $("#hear").onclick=()=>speak(deLine);
-  [0,1,2,3].forEach(g=>$("#g"+g).onclick=()=>{reviewSrs(id,g); if(g>=2) S.xp+=5; save(); renderCards();});
+  app.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{ S.mode=b.dataset.m; S.screen="practice"; renderPractice(); });
+  $("#cancel").onclick=()=>renderCard();
   nav();
 }
 
-function startSession(weak=false, unit=null){
-  tickStreak();
-  if(unit==null && !weak) unit = recommendedUnit();
-  S.lastUnit = unit==null? S.lastUnit: unit; save();
-  let pool= unit!=null? V.filter(v=>v.u===unit) : weak? V.filter(v=>mastery(v)<4).sort((a,b)=>mastery(a)-mastery(b)) : V;
-  if(S.filter && S.filter!=="all") pool=pool.filter(v=>v.lvl===S.filter);
-  if(!pool.length) pool=V;
-  const pick=shuffle(pool).slice(0,8);
-  const diff=S.diff||"easy";
-  const tenses=diff==="easy"?["now"]:diff==="mid"?["now","past"]:["now","past","fut"];
-  S.queue=pick.flatMap(v=>tenses.map(tense=>({kind:"say",v,tense})));
-  S.idx=0; S.total=S.queue.length; S.locked=false; S.q=S.queue[0]; S.screen="speak";
-  renderQ();
-}
-function pickTense(v){const s=S.seen[v.inf]||{}; if(!s.now)return"now"; if(!s.past)return"past"; if(!s.fut)return"fut";
-  return ["now","past","fut"][Math.floor(Math.random()*3)];}
-function mark(inf,key){S.seen[inf]=S.seen[inf]||{}; S.seen[inf][key]=true; save();}
-
-function renderQ(){
-  if(!S.q){renderDone(); return;}
-  const q=S.q;
-  const city0=cityOfUnit(q.v.u); setAmb(city0.img, false);
-  if(q.kind==="smash"){ playSmash(q); return; }
-  if(q.kind==="article"){ playArticle(q); return; }
-  if(q.kind==="chips"){ playChips(q); return; }
-  const v=q.v, pct=Math.round(100*S.idx/Math.max(1,S.total));
-  const prompt=line(v,q.tense,pivot());
-  const city=cityOfUnit(v.u);
-  const easy=(S.diff||"easy")==="easy";
-  app.innerHTML=`<div class="qmeta"><button class="btn ghost" id="toMap" style="min-height:36px;padding:6px 10px">Hoy</button><span>${city.scene}</span></div>
-    <div class="progress"><i style="width:${pct}%"></i></div>
-    <div class="card">
-      <p class="scene">Tu turno</p>
-      <p class="de">${esc(prompt)}</p>
-      <input class="ans" id="ans" type="text" enterkeyhint="done" autocapitalize="off" autocomplete="off" placeholder="Escribe en alemán…">
-      <div id="feed"></div>
-      <div style="display:flex;gap:8px;margin-top:14px">
-        <button class="btn primary" id="check" style="flex:1">Comprobar</button>
-        ${easy?`<button class="btn ghost" id="hearPre">🔊</button>`:""}
-      </div>
-    </div>`;
-  const inp=$("#ans");
-  if(inp){ inp.focus(); inp.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); grade(); } }; }
-  $("#check").onclick=grade; $("#toMap").onclick=()=>{S.q=null;S.queue=[]; go("home");};
-  const hp=$("#hearPre"); if(hp) hp.onclick=()=>speak(v[q.tense][0]);
-  nav();
-}
-function winQ(v, tense){
-  mark(v.inf, tense); mark(v.inf,"mean");
-  S.xp+=12; S.mood=Math.min(100,(S.mood||12)+6); S.combo=(S.combo||0)+1; save();
-  beep(true); speak(v[tense][0]);
-  S.locked=true;
-  setTimeout(()=>{ S.locked=false; next(); }, 650);
-}
-function failQ(){ S.combo=0; beep(false); }
-
-function hit(el, fn){
-  const go=ev=>{ ev.preventDefault(); ev.stopPropagation(); fn(); };
-  el.addEventListener("pointerup", go);
-  el.addEventListener("click", go);
-}
-function playChips(q){
-  const v=q.v, de=v[q.tense][0], need=tokens(de);
-  const decoy=shuffle(["der","die","das","ein","eine","nicht"]).slice(0,2);
-  const city=cityOfUnit(v.u);
+function renderPractice(){
+  const v=currentV(); if(!v){ go("scene"); return; }
+  const tense=S.card.tense||"now";
+  const de=deLine(v,tense);
+  const city=cityOf(v.u);
+  setAmb(city.img,false);
+  if(S.mode==="say"){
+    app.innerHTML=`<p class="scene">${city.scene}</p>
+      <p class="lede">${esc(S.ui==="es"?esLine(v,tense):enLine(v,tense))}</p>
+      <input class="ans" id="ans" placeholder="Escríbela en alemán" autocapitalize="off">
+      <button class="btn gold" id="check">Comprobar</button>`;
+    $("#check").onclick=()=>{
+      const ok=norm($("#ans").value)===norm(de);
+      showSheet(v,tense,ok);
+    };
+    return nav();
+  }
+  if(S.mode==="art"){
+    const keys=Object.keys(ART);
+    const noun=keys[Math.floor(Math.random()*keys.length)];
+    app.innerHTML=`<p class="scene">${city.scene} · artículo</p>
+      <div class="card" style="text-align:center">
+        <p class="de" style="font-size:2rem">${noun}</p>
+        <div class="buckets">
+          <button class="btn ghost" data-a="der">der</button>
+          <button class="btn ghost" data-a="die">die</button>
+          <button class="btn ghost" data-a="das">das</button>
+        </div>
+      </div>`;
+    app.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>showSheet(v,tense,b.dataset.a===ART[noun]));
+    return nav();
+  }
+  // chips — Seedlang-like build, then sheet (never auto-skip)
+  const need=tokens(de);
+  const decoy=shuffle(["der","die","das","ein","nicht"]).slice(0,2);
   let got=[];
-  app.innerHTML=`<div class="qmeta"><button class="btn ghost" id="toMap" style="min-height:36px;padding:6px 10px">Hoy</button><span>${S.idx+1}/${S.total} · orden</span></div>
-    <p class="scene">${city.scene}</p>
-    <p class="lede">${line(v,q.tense,pivot())}</p>
-    <div class="built" id="built">…</div>
+  app.innerHTML=`<p class="scene">${city.scene} · armar</p>
+    <p class="lede">${esc(S.ui==="es"?esLine(v,tense):enLine(v,tense))}</p>
+    <div class="card" id="built" style="min-height:52px">…</div>
     <div class="chipbox" id="box"></div>`;
-  $("#toMap").onclick=()=>{S.q=null;S.queue=[]; go("home");};
   const box=$("#box");
   shuffle(need.concat(decoy)).forEach(w=>{
     const b=document.createElement("button"); b.className="btn ghost"; b.textContent=w;
-    hit(b, ()=>{
+    b.onclick=()=>{
       if(w===need[got.length]){
         got.push(w); b.remove(); $("#built").textContent=got.join(" ");
-        if(got.length===need.length) winQ(v,q.tense);
-      } else { b.style.borderColor="#E24A3B"; failQ(); }
-    });
+        if(got.length===need.length) showSheet(v,tense,true);
+      } else { b.style.borderColor="var(--red)"; }
+    };
     box.appendChild(b);
   });
   nav();
 }
-function playSmash(q){
-  const v=q.v, de=v[q.tense][0];
-  const need=tokens(de);
-  const decoy=["der","die","das","ein","eine","den"];
-  const city=cityOfUnit(v.u);
-  app.innerHTML=`<div class="qmeta"><button class="btn ghost" id="toMap" style="min-height:36px;padding:6px 10px">Hoy</button><span>${S.idx+1}/${S.total} · lluvia</span></div>
-    <p class="scene">${city.scene}</p>
-    <p class="lede">${line(v,q.tense,pivot())} — toca la siguiente palabra. Lento a propósito.</p>
-    <div class="built" id="built">${need.map(()=>"·").join(" ")}</div>
-    <div class="arena" id="arena"></div>`;
-  $("#toMap").onclick=()=>{stopGame(); S.q=null;S.queue=[]; go("home");};
-  nav();
-  const arena=$("#arena");
-  let got=[], items=[], last=0, locked=false;
-  const spawn=()=>{
-    if(items.length>=3) return;
-    const missing=need.filter((w,i)=>got[i]!==w);
-    const word = Math.random()<0.65 && missing.length ? missing[0] : decoy[Math.floor(Math.random()*decoy.length)];
-    const el=document.createElement("button");
-    el.type="button";
-    el.className="fall"+(need.includes(word)?"":" bad");
-    el.textContent=word;
-    el.style.left=(6+Math.random()*62)+"%";
-    el.style.top="-50px";
-    arena.appendChild(el);
-    const it={el, word, y:-50, sp:0.35+Math.random()*0.25};
-    items.push(it);
-    const tap=()=>{
-      if(locked) return;
-      const nextW=need[got.length];
-      if(word===nextW){
-        got.push(word);
-        $("#built").textContent=got.join(" ")+(got.length<need.length?" …":"");
-        el.remove(); items=items.filter(x=>x!==it);
-        if(got.length===need.length){ locked=true; stopGame(); winQ(v,q.tense); }
-      } else {
-        el.style.background="#E24A3B"; failQ();
-      }
-    };
-    hit(el, tap);
-  };
-  const loop=ts=>{
-    if(!last) last=ts;
-    if(ts-last>1600){ spawn(); last=ts; }
-    const H=arena.clientHeight||280;
-    items.forEach(it=>{ it.y+=it.sp*1.15; it.el.style.top=it.y+"px"; });
-    items=items.filter(it=>{
-      if(it.y>H-8){ it.el.remove(); return false; }
-      return true;
-    });
-    gameRAF=requestAnimationFrame(loop);
-  };
-  spawn();
-  gameRAF=requestAnimationFrame(loop);
-}
-function playArticle(q){
-  const v=q.v;
-  const keys=Object.keys(ART);
-  const noun=keys[Math.floor(Math.random()*keys.length)];
-  const right=ART[noun];
-  const city=cityOfUnit(v.u);
-  app.innerHTML=`<div class="qmeta"><button class="btn ghost" id="toMap" style="min-height:36px;padding:6px 10px">Hoy</button><span>${S.idx+1}/${S.total} · artículo</span></div>
-    <p class="scene">${city.scene}</p>
-    <div class="card" style="text-align:center">
-      <p class="lede">Elige el artículo. No cae nada.</p>
-      <p class="de" style="font-size:2rem;margin:12px 0">${noun}</p>
-      <div class="buckets">
-        <button class="btn ghost" data-a="der">der</button>
-        <button class="btn ghost" data-a="die">die</button>
-        <button class="btn ghost" data-a="das">das</button>
-      </div>
-    </div>`;
-  $("#toMap").onclick=()=>{S.q=null;S.queue=[]; go("home");};
-  nav();
-  app.querySelectorAll("[data-a]").forEach(b=>hit(b, ()=>{
-    if(b.dataset.a===right){ b.className="btn accent"; winQ(v,q.tense||"now"); }
-    else { b.style.borderColor="#E24A3B"; failQ(); }
-  }));
+
+function saveReview(v,tense){
+  S.reviews=S.reviews||[];
+  const de=deLine(v,tense);
+  if(S.reviews.some(r=>r.de===de)) return;
+  S.reviews.unshift({de,en:enLine(v,tense),es:esLine(v,tense),inf:v.inf,tense,due:Date.now()});
+  save();
 }
 
-function grade(){
-  if(S.locked){ next(); return; }
-  const q=S.q,v=q.v;
-  const de=v[q.tense][0];
-  const typed=($("#ans")&&$("#ans").value)||"";
-  const ok=norm(typed)===norm(de);
-  let why=q.tense==="past"?(v.pk==="pret"?`Spoken: ich ${v.pret}.`:`${v.aux} + ${v.part}.`)
-    :q.tense==="fut"?`Present + time, or werden.`
-    :`ich ${v.ich} · du ${v.du} · er ${v.er}`;
-  if(ok) mark(v.inf,q.tense);
-  if(ok) mark(v.inf,"mean");
-  S.locked=true;
-  if($("#ans")) $("#ans").disabled=true;
-  $("#feed").innerHTML=`<div class="explain"><b>${ok?t("smile"):t("cool")}</b>
-    <div class="de" style="font-size:1.18rem;margin-top:6px">${de}</div>
-    <div style="margin-top:6px">${v.inf} · ${why}</div>${ok&&(S.mood>=80)?`<p class="react">${t("ig")}</p>`:""}${ok&&S.rooftop?`<p class="react">${t("roof")}</p>`:""}</div>`;
-  if(ok){S.xp+=10; S.mood=Math.min(100,(S.mood||12)+8); S.combo=(S.combo||0)+1; if(S.combo>=5||S.mood>=70) S.rooftop=true; save(); beep(true);}
-  else {S.queue.push(q); S.mood=Math.max(4,(S.mood||12)-6); S.combo=0; beep(false);}
-  $("#check").textContent=ok?t("next"):t("againQ");
-  $("#check").classList.add(ok?"ok":"bad");
-  const hear=document.createElement("button");
-  hear.className="btn ghost"; hear.id="hearNow"; hear.textContent=t("hear");
-  hear.onclick=()=>speak(de);
-  $("#check").parentNode.appendChild(hear);
+function showSheet(v,tense,ok){
+  const de=deLine(v,tense);
+  S.screen="sheet";
   speak(de);
-}
-function next(){S.queue.shift(); S.idx++; S.locked=false; S.q=S.queue[0]||null; if(!S.q) renderDone(); else renderQ();}
-function renderDone(){
-  app.innerHTML=`<div class="card"><h2>${t("done")}</h2>
-    <p class="lede">${mastered()} / 100 ${t("mastered")}</p>
-    <div class="rowbtns"><button class="btn primary" id="again">${t("again")}</button>
-    <button class="btn ghost" id="home">${t("mapBtn")}</button></div></div>`;
-  $("#again").onclick=()=>go("play"); $("#home").onclick=()=>go("home"); nav();
-}
-function renderAtlas(){
-  app.innerHTML=`<header class="top"><div class="brand"><b>100</b><small>EN · ES · DE</small></div>${langs()}</header>
-    <input class="search" id="q" placeholder="sein · eat · anrufen">
-    <div id="list"></div>`;
-  app.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>setUi(b.dataset.l));
-  const draw=(f="")=>{
-    f=f.trim().toLowerCase();
-    const rows=V.map((v,i)=>({v,i})).filter(x=>!f||(x.v.inf+x.v.en+x.v.es+x.v.now[0]).toLowerCase().includes(f));
-    $("#list").innerHTML=rows.map(({v,i})=>`
-      <div class="item">
-        <div style="display:flex;gap:8px;align-items:center">
-          <b class="de" style="font-size:1.2rem;flex:1">${v.inf}</b>
-          <span class="lvl ${LCLS(v.lvl)}">${v.lvl}</span>
-          <span class="lvl A11">${mastery(v)}/4</span>
-        </div>
-        <div class="eshint">${v.en} · ${v.es}</div>
-        <div class="tenses">
-          <div><b>now</b> ${v.now[0]} <button type="button" class="speak" data-i="${i}" data-t="now">🔊</button></div>
-          <div><b>past</b> ${v.past[0]} <button type="button" class="speak" data-i="${i}" data-t="past">🔊</button></div>
-          <div><b>fut</b> ${v.fut[0]} <button type="button" class="speak" data-i="${i}" data-t="fut">🔊</button></div>
-          <div class="eshint">ich ${v.ich} · du ${v.du} · er ${v.er} · ${v.pk==="pret"?"pret. "+v.pret:v.aux+" "+v.part}</div>
-        </div>
-      </div>`).join("");
-    $("#list").onclick=e=>{
-      const b=e.target.closest("[data-t]"); if(!b) return;
-      const v=V[+b.dataset.i]; if(!v) return;
-      speak(v[b.dataset.t][0]);
-    };
+  const city=cityOf(v.u);
+  const overlay=document.createElement("div");
+  overlay.className="sheet";
+  overlay.innerHTML=`<p class="scene">${ok?"Bien · fíjate":"Mírala otra vez"}</p>
+    <div id="swords">${wordsHtml(de,v,-1)}</div>
+    <div class="gloss" id="sgloss">Toca una palabra. El audio es de ESA frase.</div>
+    <p class="en">${esc(enLine(v,tense))} · ${esc(esLine(v,tense))}</p>
+    <div class="rowbtns" style="margin-top:12px">
+      <button class="btn ghost" id="hear">🔊 Oír otra vez</button>
+      <button class="btn ghost" id="save">Guardar en Reviews</button>
+      <button class="btn gold" id="next">Continuar</button>
+    </div>`;
+  document.body.appendChild(overlay);
+  const bind=()=>{
+    overlay.querySelectorAll(".w").forEach(b=>b.onclick=()=>{
+      overlay.querySelectorAll(".w").forEach(x=>x.classList.remove("on"));
+      b.classList.add("on");
+      const info=wordInfo(b.dataset.w,v);
+      $("#sgloss",overlay).innerHTML=`<b>${esc(info.de)}</b> · ${esc(info.tag)}<div class="en">${esc(info.en)} · ${esc(info.es)}</div>`;
+      speak(info.de);
+    });
   };
-  draw(); $("#q").oninput=e=>draw(e.target.value); nav();
+  bind();
+  $("#hear",overlay).onclick=()=>speak(de);
+  $("#save",overlay).onclick=()=>{ saveReview(v,tense); $("#save",overlay).textContent="Guardada"; };
+  $("#next",overlay).onclick=()=>{ overlay.remove(); S.mode=null; go("scene"); };
 }
-if(typeof speechSynthesis!=="undefined") speechSynthesis.onvoiceschanged=()=>{};
-go("home");
+
+function renderReviews(){
+  setAmb("img/night.jpg",false);
+  const list=S.reviews||[];
+  app.innerHTML=`<header class="top"><div class="brand"><b>Reviews</b><small>${list.length} fichas</small></div></header>
+    <p class="lede">Como Seedlang: lo que guardas vuelve aquí. Toca para oír y analizar.</p>
+    <div class="card">
+      <button class="btn gold" id="gender">Trainer · der / die / das</button>
+    </div>
+    <div class="card" id="list">${list.length?"":"Aún no hay nada. En una ficha: Guardar."}</div>`;
+  if(list.length){
+    $("#list").innerHTML=list.map((r,i)=>`<button class="line" data-i="${i}">
+      <div style="flex:1"><div class="de" style="font-size:1.05rem">${esc(r.de)}</div><div class="en">${esc(r.en)}</div></div>
+    </button>`).join("");
+    $("#list").onclick=e=>{
+      const b=e.target.closest(".line"); if(!b) return;
+      const r=list[+b.dataset.i];
+      const v=V.find(x=>x.inf===r.inf)||V[0];
+      openCard(v, r.tense||"now");
+    };
+  }
+  $("#gender").onclick=()=>{ S.card={inf:V[0].inf,tense:"now"}; S.mode="art"; S.screen="practice"; renderPractice(); };
+  nav();
+}
+
+function renderSet(){
+  setAmb("img/night.jpg",false);
+  app.innerHTML=`<header class="top"><div class="brand"><b>Ajustes</b></div></header>
+    <div class="card">
+      <h2>Idioma de la app</h2>
+      <div class="rowbtns">
+        ${[["es","Español"],["en","English"],["de","Deutsch"]].map(([id,l])=>`<button class="btn ${S.ui===id?"gold":"ghost"}" data-u="${id}">${l}</button>`).join("")}
+      </div>
+      <p class="lede" style="margin-top:10px">Italiano y más se abren con la ciudad.</p>
+    </div>
+    <div class="card">
+      <h2>Cuenta</h2>
+      <p class="lede">${who()} · solo este iPhone</p>
+      <button class="btn ghost" id="out">Salir</button>
+    </div>`;
+  app.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{S.ui=b.dataset.u; save(); renderSet();});
+  $("#out").onclick=logout;
+  nav();
+}
+
+hydrate();
+app=$("#app");
+S=load();
+if(!who()) renderLogin();
+else go("home");
 </script>
 </body>
 </html>
