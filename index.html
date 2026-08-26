@@ -82,10 +82,16 @@ h2,h3{margin:0 0 8px;font-size:1.05rem;font-weight:800}
 .nav{
   position:fixed;bottom:0;left:0;right:0;z-index:5;
   background:#fff; border-top:3px solid var(--ink);
-  display:grid;grid-template-columns:repeat(3,1fr);
+  display:grid;grid-template-columns:repeat(4,1fr);
   padding:8px 8px calc(10px + env(safe-area-inset-bottom));
 }
-.nav button{border:0;background:transparent;color:var(--muted);font-weight:800;font-size:.9rem;padding:10px 4px;border-radius:14px}
+.nav button{border:0;background:transparent;color:var(--muted);font-weight:800;font-size:.62rem;padding:8px 2px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.nav svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.chipbox{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chipbox .btn{width:auto;flex:1 1 28%;text-align:center}
+.buckets{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.arena{position:relative;height:38vh;max-height:300px;overflow:hidden;border:3px solid var(--ink);border-radius:18px;background:var(--cream);margin:10px 0}
+.fall{position:absolute;min-height:52px;padding:12px 16px;border:3px solid var(--ink);border-radius:999px;background:#fff;font-weight:800;font-size:1.1rem;-webkit-tap-highlight-color:transparent}
 .nav button.on{color:var(--ink); background:var(--cream)}
 .flip{min-height:180px;margin:8px 0 12px}
 .flip .inner{position:relative;min-height:180px}
@@ -416,15 +422,137 @@ function tokens(s){return s.replace(/[¿?¡!.,]/g," ").split(/\s+/).filter(Boole
 function norm(s){return s.toLowerCase().replace(/ß/g,"ss").replace(/[¿?¡!.,]/g,"").replace(/\s+/g," ").trim();}
 function go(name){S.screen=name; nav(); if(name==="home")renderHome(); else if(name==="steps")renderSteps();
   else if(name==="cards")renderCards(); else if(name==="speak"){ if(!S.q) startSession(); else renderQ(); }
+  else if(name==="play") renderPlayHub();
   else renderAtlas();}
 
 function trainerLv(){return 1+Math.floor((S.xp||0)/80);}
 function unitMastery(i){const vs=V.filter(v=>v.u===i); if(!vs.length) return 0; return vs.reduce((a,v)=>a+mastery(v),0)/(vs.length*4);}
+function ico(n){
+  const p={
+    home:'<path d="M4 11 12 4l8 7v9a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1z"/>',
+    train:'<path d="M5 19h14M7 19l-2 3M17 19l2 3M6 8h12v8H6zM9 8V5h6v3"/>',
+    play:'<rect x="4" y="8" width="16" height="12" rx="3"/><path d="M8 12h.01M16 12h.01M10 16h4"/>',
+    dex:'<circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><circle cx="8" cy="16" r="3"/><circle cx="16" cy="16" r="3"/>'
+  };
+  return `<svg viewBox="0 0 24 24">${p[n]}</svg>`;
+}
 function nav(){
-  const items=[["home","town"],["speak","train"],["atlas","dex"]];
-  $("#nav").innerHTML=items.map(([id,k])=>`<button data-go="${id}" class="${S.screen===id||(S.screen==="q"&&id==="speak")?"on":""}">${t(k)}</button>`).join("");
+  const items=[["home","home","town"],["speak","train","train"],["play","play","Play"],["atlas","dex","dex"]];
+  const on=id=>S.screen===id || (S.screen==="q"&&id==="speak") || (S.screen==="minigame"&&id==="play");
+  $("#nav").innerHTML=items.map(([id,ic,k])=>`<button data-go="${id}" class="${on(id)?"on":""}">${ico(ic)}</button>`).join("");
   $("#nav").querySelectorAll("button").forEach(b=>b.onclick=()=>go(b.dataset.go));
 }
+
+const ART={Mann:"der",Frau:"die",Kind:"das",Zeit:"die",Kaffee:"der",Bus:"der",Film:"der",Zug:"der",Bahn:"die",Tür:"die",Nacht:"die",Bier:"das",Glas:"das",Haus:"das",Auto:"das",Problem:"das"};
+let gameRAF=0;
+function stopMini(){ if(gameRAF) cancelAnimationFrame(gameRAF); gameRAF=0; }
+function renderPlayHub(){
+  stopMini();
+  S.screen="play";
+  app.innerHTML=`<header class="top"><div class="mark"><div class="ball"></div><div class="brand"><b>Play</b><small>extra · no sustituye Train</small></div></div></header>
+    <p class="lede">El camino de verbos sigue en Train. Aquí solo minijuegos. Tú eliges.</p>
+    <div class="rowbtns">
+      <button class="btn accent" data-g="art">der / die / das</button>
+      <button class="btn ghost" data-g="chips">Armar la frase</button>
+      <button class="btn ghost" data-g="rain">Lluvia lenta</button>
+      <button class="btn primary" id="toTrain">Ir a Train (verbos)</button>
+    </div>`;
+  app.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>startMini(b.dataset.g));
+  $("#toTrain").onclick=()=>go("speak");
+  nav();
+}
+function startMini(kind){
+  const v=shuffle(V)[0];
+  S.screen="minigame";
+  if(kind==="art") return miniArt();
+  if(kind==="chips") return miniChips(v);
+  return miniRain(v);
+}
+function miniArt(){
+  const keys=Object.keys(ART);
+  const noun=keys[Math.floor(Math.random()*keys.length)];
+  app.innerHTML=`<div class="qmeta"><button class="btn ghost" id="back" style="min-height:36px;padding:6px 10px">Play</button><span>der · die · das</span></div>
+    <div class="card" style="text-align:center">
+      <p class="lede">Elige el artículo. No cae nada.</p>
+      <p class="de" style="font-size:2rem;margin:12px 0">${noun}</p>
+      <div class="buckets">
+        <button class="btn ghost" data-a="der">der</button>
+        <button class="btn ghost" data-a="die">die</button>
+        <button class="btn ghost" data-a="das">das</button>
+      </div>
+      <p class="lede" id="feed" style="margin-top:12px"></p>
+    </div>`;
+  $("#back").onclick=()=>renderPlayHub();
+  app.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{
+    const ok=b.dataset.a===ART[noun];
+    $("#feed").innerHTML=ok?`<b>Sí. ${ART[noun]} ${noun}.</b>`:`<b>Es ${ART[noun]} ${noun}.</b>`;
+    if(ok){ S.xp+=2; save(); }
+    setTimeout(miniArt, 900);
+  });
+  nav();
+}
+function miniChips(v){
+  const de=v.now[0], need=tokens(de);
+  const decoy=shuffle(["der","die","das","ein","nicht"]).slice(0,2);
+  let got=[];
+  app.innerHTML=`<div class="qmeta"><button class="btn ghost" id="back" style="min-height:36px;padding:6px 10px">Play</button><span>${v.inf}</span></div>
+    <p class="lede">${line(v,"now",pivot())}</p>
+    <div class="build" id="built">…</div>
+    <div class="chipbox" id="box"></div>`;
+  $("#back").onclick=()=>{stopMini(); renderPlayHub();};
+  const box=$("#box");
+  shuffle(need.concat(decoy)).forEach(w=>{
+    const b=document.createElement("button"); b.className="btn ghost"; b.textContent=w;
+    b.onclick=()=>{
+      if(w===need[got.length]){
+        got.push(w); b.remove(); $("#built").textContent=got.join(" ");
+        if(got.length===need.length){ S.xp+=2; save(); speak(de); setTimeout(()=>miniChips(shuffle(V)[0]), 1000); }
+      } else b.style.background="#ffd4d0";
+    };
+    box.appendChild(b);
+  });
+  nav();
+}
+function miniRain(v){
+  const de=v.now[0], need=tokens(de);
+  const decoy=["der","die","das","ein"];
+  app.innerHTML=`<div class="qmeta"><button class="btn ghost" id="back" style="min-height:36px;padding:6px 10px">Play</button><span>lluvia lenta</span></div>
+    <p class="lede">${line(v,"now",pivot())} — toca la siguiente palabra.</p>
+    <div class="build" id="built">${need.map(()=>"·").join(" ")}</div>
+    <div class="arena" id="arena"></div>`;
+  $("#back").onclick=()=>{stopMini(); renderPlayHub();};
+  nav();
+  const arena=$("#arena");
+  let got=[], items=[], last=0;
+  const spawn=()=>{
+    if(items.length>=3) return;
+    const missing=need.slice(got.length);
+    const word = Math.random()<0.7 && missing.length ? missing[0] : decoy[Math.floor(Math.random()*decoy.length)];
+    const el=document.createElement("button");
+    el.type="button"; el.className="fall"; el.textContent=word;
+    el.style.left=(8+Math.random()*60)+"%"; el.style.top="-50px";
+    arena.appendChild(el);
+    const it={el,word,y:-50,sp:0.4};
+    items.push(it);
+    el.onclick=()=>{
+      if(word===need[got.length]){
+        got.push(word); $("#built").textContent=got.join(" ");
+        el.remove(); items=items.filter(x=>x!==it);
+        if(got.length===need.length){ stopMini(); S.xp+=2; save(); speak(de); setTimeout(()=>miniRain(shuffle(V)[0]), 900); }
+      } else el.style.background="#ffd4d0";
+    };
+  };
+  const loop=ts=>{
+    if(!last) last=ts;
+    if(ts-last>1700){ spawn(); last=ts; }
+    const H=arena.clientHeight||280;
+    items.forEach(it=>{ it.y+=it.sp; it.el.style.top=it.y+"px"; });
+    items=items.filter(it=>{ if(it.y>H-8){ it.el.remove(); return false;} return true; });
+    gameRAF=requestAnimationFrame(loop);
+  };
+  spawn(); gameRAF=requestAnimationFrame(loop);
+}
+
 function langs(){
   return `<div class="langs">${LOCALES.map(l=>`<button ${l.live?"":"disabled"} class="${l.live?(S.ui===l.id?"on":""):"off"}" data-l="${l.id}">${l.id==="pt-PT"?"PT":l.id.toUpperCase()}${l.live?"":" · "+t("soon")}</button>`).join("")}</div>`;
 }
