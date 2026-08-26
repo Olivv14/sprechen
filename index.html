@@ -350,9 +350,9 @@ const app=$("#app");
 let S=load();
 const Vmap=Object.fromEntries(V.map(v=>[v.inf,v]));
 
-function blank(){return {xp:0,ui:"en",seen:{},srs:{},q:null,queue:[],idx:0,total:0,locked:false,screen:"home",filter:"all",onboarded:false,floor:0,streak:0,lastDay:"",lastUnit:0,mood:12,combo:0,rooftop:false,user:""};}
+function blank(){return {xp:0,ui:"en",seen:{},srs:{},q:null,queue:[],idx:0,total:0,locked:false,screen:"home",filter:"all",onboarded:false,floor:0,streak:0,lastDay:"",lastUnit:0,mood:12,combo:0,rooftop:false,user:"",diff:"easy",partner:"off"};}
 function load(){try{return Object.assign(blank(),JSON.parse(localStorage.getItem(STORE)||"{}"));}catch(e){return blank();}}
-function payload(){return {xp:S.xp,ui:S.ui,seen:S.seen,srs:S.srs,onboarded:S.onboarded,floor:S.floor,streak:S.streak,lastDay:S.lastDay,lastUnit:S.lastUnit,mood:S.mood,combo:S.combo,rooftop:S.rooftop,user:S.user};}
+function payload(){return {xp:S.xp,ui:S.ui,seen:S.seen,srs:S.srs,onboarded:S.onboarded,floor:S.floor,streak:S.streak,lastDay:S.lastDay,lastUnit:S.lastUnit,mood:S.mood,combo:S.combo,rooftop:S.rooftop,user:S.user,diff:S.diff||"easy",partner:S.partner||"off"};}
 
 const ACCTS="sprechen.accts.v1", WHO="sprechen.who";
 async function sha(s){
@@ -470,13 +470,19 @@ function norm(s){return s.toLowerCase().replace(/ß/g,"ss").replace(/[¿?¡!.,]/
 function go(name){
   if(!who()){ renderLogin(); return; }
   document.body.classList.remove("login");
-  S.screen=name; nav(); if(name==="home")renderHome(); else if(name==="steps")renderSteps();
-  else if(name==="cards")renderCards(); else if(name==="speak"){ if(!S.q) startSession(); else renderQ(); }
-  else renderAtlas();}
+  S.screen=name; nav();
+  if(name==="home")renderHome();
+  else if(name==="learn")renderLearn();
+  else if(name==="set")renderSet();
+  else if(name==="steps")renderSteps();
+  else if(name==="cards")renderCards();
+  else if(name==="speak"){ if(!S.q) startSession(); else renderQ(); }
+  else renderAtlas();
+}
 
 function nav(){
-  const items=[["home","town"],["speak","train"],["atlas","dex"]];
-  $("#nav").innerHTML=items.map(([id,k])=>`<button data-go="${id}" class="${S.screen===id||(S.screen==="q"&&id==="speak")?"on":""}">${t(k)}</button>`).join("");
+  const items=[["home","Hoy"],["learn","Aprender"],["set","Ajustes"]];
+  $("#nav").innerHTML=items.map(([id,k])=>`<button data-go="${id}" class="${S.screen===id||S.screen==="speak"&&id==="learn"?"on":""}">${k}</button>`).join("");
   $("#nav").querySelectorAll("button").forEach(b=>b.onclick=()=>go(b.dataset.go));
 }
 function trainerLv(){return 1+Math.floor((S.xp||0)/80);}
@@ -578,77 +584,102 @@ function renderOnboard(){
 function renderHome(){
   if(!S.onboarded){ renderOnboard(); return; }
   tickStreak();
-  const m=mastered(); const due=dueCards().length;
   const rec=recommendedUnit();
   const recTitle=S.ui==="es"?UNITS[rec].title:S.ui==="de"?UNITS[rec].de:UNITS[rec].en;
-  const g=lvlStats();
-  const bars=["A1.1","A1.2","A2","A2+"].map(l=>{
-    const x=g[l]||{n:1,m:0}; const p=Math.round(100*x.m/x.n);
-    const col="var(--hp)";
-    return `<div class="bar"><span class="lvl ${LCLS(l)}">${l}</span><i><b style="width:${p}%;background:${col}"></b></i><span>${p}%</span></div>`;
-  }).join("");
-  const units=UNITS.map((u,i)=>{
-    const p=Math.round(100*unitMastery(i));
-    const title=S.ui==="es"?u.title:S.ui==="de"?u.de:u.en;
-    const open=unlocked(i);
-    const here=i===rec?' <span class="lvl A12">'+t("here")+"</span>":"";
-    const lede=open?(S.ui==="es"?u.lede:S.ui==="de"?u.deL:u.enL):t("locked");
-    return `<button class="unit node" data-u="${i}" ${open?"":"disabled"} style="${open?"":"opacity:.45"}"><span class="n">${i+1}</span><span><b>${title}${here}</b><div class="lede" style="margin:0">${lede}</div></span><span class="lvl ${LCLS(LVL(i))}">${p}%</span></button>`;
-  }).join("");
+  const partner=S.partner||"off";
+  const face=partner==="mara"?"img/mara.jpg":"img/lina.jpg";
   app.innerHTML=`
     <header class="top">
-      <div class="brand"><b>Sprechen</b><small>${who()}</small></div>
-      ${langs()}
+      <div class="brand"><b>Sprechen</b><small>${who()} · ${(S.diff||"easy")}</small></div>
     </header>
+    ${partner!=="off"?`<div class="card"><div class="hero"><img src="${face}" alt="">
+      <div><div class="hername">${partner==="mara"?"Mara":"Lina"}</div>
+      <div class="lede" style="margin:0">Hoy no hay examen. Primero miras las frases.</div>
+      <div class="mood"><i style="width:${Math.max(4,Math.min(100,S.mood||12))}%"></i></div></div></div></div>`:""}
     <div class="card">
-      <div class="hero">
-        <img src="img/lina.jpg" alt="Lina">
-        <div>
-          <div class="hername">${t("she")}</div>
-          <div class="lede" style="margin:0">${t("sheLede")}</div>
-          <div class="mood"><i style="width:${Math.max(4,Math.min(100,S.mood||12))}%"></i></div>
-        </div>
-      </div>
-      ${(S.mood||0)>=80?`<p class="react">${t("ig")}</p>`:""}
-      ${(S.rooftop)?`<button class="btn accent" id="roof">${t("roofCta")}</button>`:""}
-    </div>
-    <div class="hud">
-      <div class="stat"><b>LV ${trainerLv()}</b><div class="xpbar"><i style="width:${((S.xp||0)%80)/80*100}%"></i></div></div>
-      <div class="stat"><b>${S.streak||0} ${t("streak")}</b><div class="xpbar"><i style="width:${Math.min(100,m)}%"></i></div></div>
-    </div>
-    <div class="badges">${[0,1,2,3,4,5,6,7,8,9].map(i=>`<i class="badge ${unitMastery(i)>=0.7?"on":""}" title="${i+1}"></i>`).join("")}</div>
-    <div class="card">
-      <h2> ${t("nextStep")}</h2>
-      <p class="lede">${t("youAre")}: <b>${recTitle}</b> · ${t("quest")}</p>
+      <h2>Hoy</h2>
+      <p class="lede">Zona: <b>${recTitle}</b>. Primero las ves y las oyes. Después, si quieres, las dices.</p>
       <div class="rowbtns">
-        <button class="btn primary" id="start">${t("cont")}</button>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-          <button class="btn accent" id="cards">${t("cards")}</button>
-          <button class="btn ghost" id="steps">${t("steps")}</button>
-        </div>
-      </div>
-    </div>
-    <div class="overworld">${units}</div>
-    <div class="bars">${bars}</div>
-    <div class="card">
-      <h2>${t("copySave")}</h2>
-      <p class="lede">${t("saveNote")}</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        <button class="btn ghost" id="ex">${t("copySave")}</button>
-        <button class="btn ghost" id="im">${t("pasteSave")}</button>
+        <button class="btn primary" id="learn">Ver y oír las frases</button>
+        <button class="btn ghost" id="talk">Practicar (cuando ya las vi)</button>
       </div>
     </div>`;
+  $("#learn").onclick=()=>go("learn");
+  $("#talk").onclick=()=>startSession(false, rec);
+  nav();
+}
+
+function renderLearn(){
+  const rec=S.lastUnit||recommendedUnit();
+  S.lastUnit=rec; save();
+  const title=S.ui==="es"?UNITS[rec].title:UNITS[rec].en;
+  const verbs=V.filter(v=>v.u===rec);
+  app.innerHTML=`<header class="top"><div class="brand"><b>Aprender</b><small>${title}</small></div></header>
+    <p class="lede">Toca 🔊: oyes ESA frase. No es un vídeo lip-sync; es la voz alemana de esa línea.</p>
+    <div id="list"></div>
+    <button class="btn primary" id="talk" style="width:100%;margin-top:12px">Ya las vi — practicar</button>`;
+  $("#list").innerHTML=verbs.map((v,i)=>`
+    <div class="card">
+      <b class="de" style="font-size:1.1rem">${v.inf}</b>
+      <div class="eshint">${v.en} · ${v.es}</div>
+      ${["now","past","fut"].map(tn=>`
+        <div class="tenses"><div>
+          <b>${tn}</b>
+          <span style="flex:1">${v[tn][0]}</span>
+          <button type="button" class="speak" data-i="${V.indexOf(v)}" data-t="${tn}">🔊</button>
+        </div></div>`).join("")}
+    </div>`).join("");
+  $("#list").onclick=e=>{
+    const b=e.target.closest("[data-t]"); if(!b) return;
+    const v=V[+b.dataset.i]; if(v) speak(v[b.dataset.t][0]);
+  };
+  $("#talk").onclick=()=>startSession(false, rec);
+  nav();
+}
+
+function renderSet(){
+  const d=S.diff||"easy";
+  const p=S.partner||"off";
+  app.innerHTML=`<header class="top"><div class="brand"><b>Ajustes</b><small>sin pelea</small></div></header>
+    <div class="card">
+      <h2>Dificultad</h2>
+      <p class="lede">Fácil = solo presente, puedes oír antes de escribir. Difícil = 3 tiempos, oyes después.</p>
+      <div class="rowbtns">
+        <button class="btn ${d==="easy"?"primary":"ghost"}" data-d="easy">Fácil — presente</button>
+        <button class="btn ${d==="mid"?"primary":"ghost"}" data-d="mid">Medio — presente + pasado</button>
+        <button class="btn ${d==="hard"?"primary":"ghost"}" data-d="hard">Difícil — 3 tiempos</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Compañera</h2>
+      <p class="lede">Opcional. El café no es un examen.</p>
+      <div class="rowbtns">
+        <button class="btn ${p==="off"?"primary":"ghost"}" data-p="off">Nadie — solo frases</button>
+        <button class="btn ${p==="lina"?"primary":"ghost"}" data-p="lina">Lina</button>
+        <button class="btn ${p==="mara"?"primary":"ghost"}" data-p="mara">Mara</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Idioma de la app</h2>
+      ${langs()}
+    </div>
+    <div class="card">
+      <h2>Backup</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <button class="btn ghost" id="ex">Copiar backup</button>
+        <button class="btn ghost" id="im">Pegar backup</button>
+      </div>
+      <button class="btn ghost" id="lo" style="margin-top:8px;width:100%">Salir de la cuenta</button>
+    </div>
+    <div class="card">
+      <button class="btn ghost" id="dex">Lista 100 verbos</button>
+      <button class="btn ghost" id="st" style="margin-top:8px">Bases A1</button>
+    </div>`;
+  app.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{S.diff=b.dataset.d; save(); renderSet();});
+  app.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{S.partner=b.dataset.p; save(); renderSet();});
   app.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>setUi(b.dataset.l));
-  $("#start").onclick=()=>startSession(false, rec);
-    $("#cards").onclick=()=>go("cards");
-  $("#steps").onclick=()=>go("steps");
   $("#ex").onclick=exportSave; $("#im").onclick=importSave;
-  const rf=$("#roof"); if(rf) rf.onclick=()=>startSession(false, 0);
-  const lo=document.createElement("button"); lo.className="btn ghost"; lo.textContent=t("logout");
-  lo.onclick=logout; app.appendChild(lo);
-  app.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{
-    const i=+b.dataset.u; if(!unlocked(i)) return; startSession(false,i);
-  });
+  $("#lo").onclick=logout; $("#dex").onclick=()=>go("atlas"); $("#st").onclick=()=>go("steps");
   nav();
 }
 
@@ -758,7 +789,9 @@ function startSession(weak=false, unit=null){
   if(S.filter && S.filter!=="all") pool=pool.filter(v=>v.lvl===S.filter);
   if(!pool.length) pool=V;
   const pick=shuffle(pool).slice(0,8);
-  S.queue=pick.flatMap(v=>["now","past","fut"].map(tense=>({kind:"say",v,tense})));
+  const diff=S.diff||"easy";
+  const tenses=diff==="easy"?["now"]:diff==="mid"?["now","past"]:["now","past","fut"];
+  S.queue=pick.flatMap(v=>tenses.map(tense=>({kind:"say",v,tense})));
   S.idx=0; S.total=S.queue.length; S.locked=false; S.q=S.queue[0]; S.screen="speak";
   renderQ();
 }
@@ -770,19 +803,25 @@ function renderQ(){
   if(!S.q){renderDone(); return;}
   const q=S.q,v=q.v, pct=Math.round(100*S.idx/Math.max(1,S.total));
   const prompt=line(v,q.tense,pivot());
-  const body=`<div class="hero"><img src="img/lina.jpg" alt=""><div><div class="hername">${t("she")}</div><div class="mood"><i style="width:${Math.max(4,Math.min(100,S.mood||12))}%"></i></div></div></div>
-    <div class="bubble">${esc(prompt)}</div>
-    <p class="lede">${t("sayToHer")}</p>
+  const partner=S.partner||"off";
+  const face=partner==="mara"?"img/mara.jpg":"img/lina.jpg";
+  const easy=(S.diff||"easy")==="easy";
+  const whoFace=partner==="off"?"":`<div class="hero"><img src="${face}" alt=""><div><div class="hername">${partner==="mara"?"Mara":"Lina"}</div><div class="mood"><i style="width:${Math.max(4,Math.min(100,S.mood||12))}%"></i></div></div></div>`;
+  const body=`${whoFace}
+    <p class="lede">${easy?"Mismo sentido, en alemán. Puedes oírla antes.":"Alemán."}</p>
+    <p class="de">${esc(prompt)}</p>
     <input class="ans" id="ans" type="text" enterkeyhint="done" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="…">`;
-  app.innerHTML=`<div class="qmeta"><button class="btn ghost" id="toMap" style="min-height:36px;padding:6px 10px">${t("mapBack")}</button><span>${S.idx+1}/${S.total}</span><span class="lvl ${LCLS(v.lvl)}">${v.lvl}</span></div>
+  app.innerHTML=`<div class="qmeta"><button class="btn ghost" id="toMap" style="min-height:36px;padding:6px 10px">Hoy</button><span>${S.idx+1}/${S.total}</span></div>
     <div class="progress"><i style="width:${pct}%"></i></div>
     <div class="card">${body}<div id="feed"></div>
       <div style="display:flex;gap:8px;margin-top:14px">
         <button class="btn primary" id="check" style="flex:1">${t("check")}</button>
+        ${easy?`<button class="btn ghost" id="hearPre">${t("hear")}</button>`:""}
       </div></div>`;
   const inp=$("#ans");
   if(inp){ inp.focus(); inp.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); grade(); } }; }
   $("#check").onclick=grade; const tm=$("#toMap"); if(tm) tm.onclick=()=>{S.q=null;S.queue=[]; go("home");};
+  const hp=$("#hearPre"); if(hp) hp.onclick=()=>speak(v[q.tense][0]);
   nav();
 }
 function grade(){
