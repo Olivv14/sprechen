@@ -13,24 +13,20 @@
 <title>Sprechen</title>
 <style>
 :root{
-  --bg:#0c0a09; --ink:#f6efe4; --muted:#cbb9a4; --card:rgba(14,12,10,.78);
-  --line:rgba(255,220,180,.2); --red:#e23b4a; --hp:#3dd68c; --gold:#f0c14a;
-  --ok:#3dd68c; --bad:#e23b4a;
+  --bg:#161310; --ink:#f2ebe3; --muted:#a89888; --card:#221c18;
+  --line:#3a322c; --red:#c45c4a; --hp:#c4a574; --gold:#c4a574;
+  --ok:#8fbf88; --bad:#c45c4a;
 }
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   font-size:17px;line-height:1.4}
-body{
-  background:#0c0a09 url("img/cafe.jpg") center/cover no-repeat fixed;
-}
-body::before{content:"";position:fixed;inset:0;background:linear-gradient(180deg,rgba(8,6,5,.35),rgba(8,6,5,.82) 55%,#0c0a09);
-  pointer-events:none;z-index:0}
+body{background:var(--bg)}
+body::before{display:none}
 .wrap{max-width:430px;margin:0 auto;padding:16px 14px 118px;position:relative;z-index:1}
 button,input{font:inherit;color:inherit} button{cursor:pointer}
 .glass,.card,.stat,.unit,.step,.choice,.chip,.speak,.search,.face,.explain,.item{
-  background:rgba(14,12,10,.78); border:1px solid var(--line); border-radius:18px;
-  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  background:var(--card); border:1px solid var(--line); border-radius:14px;
 }
 .card{padding:16px;margin:10px 0}
 header.top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px}
@@ -47,8 +43,8 @@ h2,h3{margin:0 0 8px;font-size:1.05rem;font-weight:800}
 .lede{color:var(--muted);margin:0 0 10px}
 .rowbtns{display:flex;flex-direction:column;gap:8px}
 .btn{border:1px solid var(--line); border-radius:16px; padding:12px 14px; min-height:48px; font-weight:800; background:rgba(255,255,255,.06); text-align:left; color:var(--ink)}
-.btn.primary{background:#e23b4a; border-color:#e23b4a; color:#fff}
-.btn.accent{background:#f6efe4; color:#111}
+.btn.primary{background:#c4a574; border-color:#c4a574; color:#161310}
+.btn.accent{background:#c4a574; color:#161310}
 .btn.ghost{background:rgba(0,0,0,.28)}
 .btn.ok{background:var(--ok);color:#111}
 .btn.bad{background:var(--bad);color:#fff}
@@ -63,7 +59,7 @@ h2,h3{margin:0 0 8px;font-size:1.05rem;font-weight:800}
 .world,.overworld{display:flex;flex-direction:column;gap:8px;margin-top:8px}
 .node,.unit{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;padding:10px 12px;text-align:left;width:100%;margin:0}
 .n{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:800;background:rgba(0,0,0,.4);border:1px solid var(--line)}
-.de{font-weight:800;font-size:1.32rem;line-height:1.3;color:#fff}
+.de{font-weight:800;font-size:1.28rem;line-height:1.3;color:var(--ink)}
 .eshint{color:var(--muted);font-size:.92rem;margin-top:6px}
 .qmeta{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:.88rem;font-weight:700;margin-bottom:6px}
 .choices{display:flex;flex-direction:column;gap:8px;margin-top:10px}
@@ -79,13 +75,13 @@ body.login #nav{display:none !important}
 .lockscr{justify-content:flex-start;padding-top:8vh}
 .nav{
   position:fixed;bottom:0;left:0;right:0;z-index:5;
-  background:rgba(10,8,7,.92); border-top:1px solid var(--line);
-  display:grid;grid-template-columns:repeat(3,1fr);
+  background:#1c1814; border-top:1px solid var(--line);
+  display:grid;grid-template-columns:repeat(4,1fr);
   padding:8px 8px calc(10px + env(safe-area-inset-bottom));
   backdrop-filter:blur(18px);
 }
-.nav button{border:0;background:transparent;color:var(--muted);font-weight:800;font-size:.9rem;padding:10px 4px;border-radius:14px}
-.nav button.on{color:#111; background:#f6efe4}
+.nav button{border:0;background:transparent;color:var(--muted);font-weight:700;font-size:.72rem;padding:10px 2px;border-radius:12px}
+.nav button.on{color:#161310; background:#c4a574}
 .flip{min-height:180px;margin:8px 0 12px}
 .flip .inner{position:relative;min-height:180px}
 .face{min-height:180px;padding:16px;display:flex;flex-direction:column;justify-content:center}
@@ -395,9 +391,8 @@ function renderLogin(){
   document.body.classList.add("login");
   $("#nav").innerHTML="";
   app.innerHTML=`<div class="lockscr">
-    <p class="lede">Berlin · Nachtcafé</p>
     <h1>Sprechen</h1>
-    <p class="lede">Crea tu cuenta en este iPhone. El secreto lo inventas tú.</p>
+    <p class="lede">Cuenta en este iPhone. La contraseña la eliges tú.</p>
     <div class="card">
       <input class="ans" id="user" placeholder="Tu nombre" style="margin-top:0" autocomplete="username">
       <input class="ans" id="pass" type="password" placeholder="Contraseña (tú la eliges, 4+)" autocomplete="new-password">
@@ -474,6 +469,7 @@ function go(name){
   if(name==="home")renderHome();
   else if(name==="learn")renderLearn();
   else if(name==="set")renderSet();
+  else if(name==="boost")renderBoost();
   else if(name==="steps")renderSteps();
   else if(name==="cards")renderCards();
   else if(name==="speak"){ if(!S.q) startSession(); else renderQ(); }
@@ -481,7 +477,7 @@ function go(name){
 }
 
 function nav(){
-  const items=[["home","Hoy"],["learn","Aprender"],["set","Ajustes"]];
+  const items=[["home","Hoy"],["learn","Aprender"],["boost","Reforzar"],["set","Ajustes"]];
   $("#nav").innerHTML=items.map(([id,k])=>`<button data-go="${id}" class="${S.screen===id||S.screen==="speak"&&id==="learn"?"on":""}">${k}</button>`).join("");
   $("#nav").querySelectorAll("button").forEach(b=>b.onclick=()=>go(b.dataset.go));
 }
@@ -606,6 +602,42 @@ function renderHome(){
     </div>`;
   $("#learn").onclick=()=>go("learn");
   $("#talk").onclick=()=>startSession(false, rec);
+  nav();
+}
+
+
+const EGGS=[
+  {id:"kaffee", n:2, de:"Darf ich dich auf einen Kaffee einladen?", en:"May I invite you for a coffee?", es:"¿Te invito a un café?"},
+  {id:"bleib", n:5, de:"Bleib noch einen Moment.", en:"Stay a moment longer.", es:"Quédate un momento más."},
+  {id:"lachen", n:8, de:"Dein Lachen bleibt hängen.", en:"Your laugh lingers.", es:"Tu risa se queda."},
+  {id:"spaet", n:12, de:"Ist es zu spät für noch ein Glas?", en:"Too late for one more drink?", es:"¿Muy tarde para otra copa?"},
+  {id:"tanzen", n:16, de:"Tanzst du, oder nur schaust du zu?", en:"Do you dance, or only watch?", es:"¿Bailas o solo miras?"},
+  {id:"roof", n:20, de:"Kommst du mit nach oben? Nur reden.", en:"Come up to the roof? Just talk.", es:"¿Subes? Solo hablar."}
+];
+function renderBoost(){
+  const m=mastered();
+  const weak=V.filter(v=>mastery(v)>0&&mastery(v)<4).length;
+  app.innerHTML=`<header class="top"><div class="brand"><b>Reforzar</b><small>pesa · extra</small></div></header>
+    <div class="card">
+      <h2>Repaso</h2>
+      <p class="lede">${weak} verbos a medias. Aquí se refuerza, no se examina.</p>
+      <button class="btn primary" id="weak">Repasar flojos</button>
+    </div>
+    <div class="card">
+      <h2>Huevos</h2>
+      <p class="lede">Frases aparte. Se abren al dominar verbos. No salen en Hoy.</p>
+      ${EGGS.map(e=>{
+        const open=m>=e.n || (e.id==="roof"&&S.rooftop);
+        return `<div class="item" style="margin:0 0 8px">
+          ${open?`<b class="de" style="font-size:1.05rem">${e.de}</b>
+            <div class="eshint">${e.en} · ${e.es}</div>
+            <button type="button" class="btn ghost" data-say="${esc(e.de)}" style="margin-top:8px">🔊 oír</button>`
+          :`<p class="lede" style="margin:0">🔒 ${e.n} verbos dominados</p>`}
+        </div>`;
+      }).join("")}
+    </div>`;
+  $("#weak").onclick=()=>startSession(true);
+  app.querySelectorAll("[data-say]").forEach(b=>b.onclick=()=>speak(b.dataset.say));
   nav();
 }
 
