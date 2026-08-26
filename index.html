@@ -241,7 +241,7 @@ en:{
   due:"due", mastered:"ready to say",
   what:"What are you saying?", build:"Build the German line.",
   shift:"Same idea. Which line is spoken past?",
-  now:"NOW", past:"YESTERDAY (how people talk)", fut:"TOMORROW",
+  now:"", past:"", fut:"",
   check:"Check", hear:"Hear", next:"Next", againQ:"This line again",
   undo:"Undo last", done:"Session closed", again:"Another round", mapBtn:"See the map",
   ok:"That’s how you say it.", almost:"Almost. The line is:",
@@ -263,7 +263,7 @@ es:{
   due:"pendientes", mastered:"listos para la boca",
   what:"¿Qué estás diciendo?", build:"Arma la frase alemana.",
   shift:"Misma idea. ¿Cuál es el pasado hablado?",
-  now:"AHORA", past:"AYER (como se habla)", fut:"MAÑANA",
+  now:"", past:"", fut:"",
   check:"Comprobar", hear:"Oír", next:"Siguiente", againQ:"Otra vez esta frase",
   undo:"Quitar última", done:"Sesión cerrada", again:"Otra ronda", mapBtn:"Ver el mapa",
   ok:"Así se habla.", almost:"Casi. La frase es:",
@@ -285,7 +285,7 @@ de:{
   due:"fällig", mastered:"mundfertig",
   what:"Was sagst du gerade?", build:"Bau den deutschen Satz.",
   shift:"Dieselbe Idee. Welcher Satz ist die gesprochene Vergangenheit?",
-  now:"JETZT", past:"GESTERN (gesprochen)", fut:"MORGEN",
+  now:"", past:"", fut:"",
   check:"Prüfen", hear:"Hören", next:"Weiter", againQ:"Diesen Satz nochmal",
   undo:"Letztes weg", done:"Session zu", again:"Noch eine Runde", mapBtn:"Zur Karte",
   ok:"So sagt man das.", almost:"Fast. Der Satz ist:",
@@ -747,7 +747,7 @@ function renderQ(){
   } else if(q.kind==="build"){
     const de=v[q.tense][0], extra=shuffle(V.filter(x=>x.inf!==v.inf)).slice(0,2).flatMap(x=>tokens(x[q.tense][0]));
     const bank=shuffle([...tokens(de),...extra.slice(0,3)]);
-    body=`<span class="lvl ${LCLS(v.lvl)}">${v.lvl}</span> <span class="lvl A12">${t(q.tense)}</span>
+    body=`<span class="lvl ${LCLS(v.lvl)}">${v.lvl}</span>
       <p class="de" style="font-size:1.15rem;margin-top:8px">${line(v,q.tense,pivot())}</p>
       <p class="lede">${t("build")}</p>
       <div class="build" id="built"></div>
@@ -756,8 +756,8 @@ function renderQ(){
   } else {
     body=`<p class="lede">${t("shift")}</p>
       <p class="eshint">${line(v,"now",pivot())}</p>
-      <div class="choices">${[["now",t("now")],["past",t("past")],["fut",t("fut")]].map(([k,l])=>
-        `<button class="choice" data-k="${k}"><small>${l}</small><div class="de" style="font-size:1.12rem">${v[k][0]}</div></button>`).join("")}</div>`;
+      <div class="choices">${shuffle(["now","past","fut"]).map(k=>
+        `<button class="choice" data-k="${k}"><div class="de" style="font-size:1.12rem">${v[k][0]}</div></button>`).join("")}</div>`;
   }
   app.innerHTML=`<div class="qmeta"><span>${S.idx+1} · ${S.queue.length} left · ${v.inf}</span><span class="lvl ${LCLS(v.lvl)}">${v.lvl}</span></div>
     <div class="progress"><i style="width:${pct}%"></i></div>
