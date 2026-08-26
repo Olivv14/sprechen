@@ -75,6 +75,8 @@ h2,h3{margin:0 0 8px;font-size:1.05rem;font-weight:800}
 .build{min-height:58px;padding:10px;display:flex;flex-wrap:wrap;gap:6px;border:1px dashed var(--line);border-radius:16px;margin-top:8px}
 .speak{width:40px;height:40px;border-radius:50%}
 .explain{margin-top:10px;padding:12px;line-height:1.45}
+body.login #nav{display:none !important}
+.lockscr{justify-content:flex-start;padding-top:8vh}
 .nav{
   position:fixed;bottom:0;left:0;right:0;z-index:5;
   background:rgba(10,8,7,.92); border-top:1px solid var(--line);
@@ -354,9 +356,15 @@ function payload(){return {xp:S.xp,ui:S.ui,seen:S.seen,srs:S.srs,onboarded:S.onb
 
 const ACCTS="sprechen.accts.v1", WHO="sprechen.who";
 async function sha(s){
-  const b=new TextEncoder().encode(s);
-  const d=await crypto.subtle.digest("SHA-256",b);
-  return [...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,"0")).join("");
+  try{
+    if(crypto.subtle){
+      const b=new TextEncoder().encode(s);
+      const d=await crypto.subtle.digest("SHA-256",b);
+      return [...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,"0")).join("");
+    }
+  }catch(e){}
+  let h=0; for(let i=0;i<s.length;i++) h=((h<<5)-h)+s.charCodeAt(i)|0;
+  return "x"+Math.abs(h);
 }
 function accts(){try{return JSON.parse(localStorage.getItem(ACCTS)||"{}");}catch(e){return {};}}
 function setAccts(o){localStorage.setItem(ACCTS,JSON.stringify(o));}
@@ -371,36 +379,36 @@ const _saveBare=null;
 async function doLogin(create){
   const name=($("#user")&&$("#user").value||"").trim().toLowerCase();
   const pass=$("#pass")&&$("#pass").value||"";
-  if(name.length<2||pass.length<4){alert("Name 2+, secret 4+"); return;}
+  if(name.length<2||pass.length<4){alert("Nombre 2 letras. Contraseña 4 o más — la inventas tú."); return;}
   const A=accts(); const h=await sha(pass);
   if(create){
-    if(A[name]){alert("That name is taken on this phone."); return;}
+    if(A[name]){alert("Ese nombre ya existe en este iPhone. Usa Ya tengo cuenta."); return;}
     A[name]={h,data:Object.assign(blank(),{user:name,onboarded:false})};
   } else {
-    if(!A[name]||A[name].h!==h){alert("Wrong name or secret."); return;}
+    if(!A[name]||A[name].h!==h){alert("Nombre o contraseña mal."); return;}
   }
   setAccts(A); localStorage.setItem(WHO,name);
   S=Object.assign(blank(), A[name].data||{}); S.user=name; save(); go("home");
 }
 function logout(){localStorage.removeItem(WHO); S=blank(); renderLogin();}
 function renderLogin(){
+  document.body.classList.add("login");
   $("#nav").innerHTML="";
   app.innerHTML=`<div class="lockscr">
     <p class="lede">Berlin · Nachtcafé</p>
     <h1>Sprechen</h1>
-    <p class="lede">${t("login")}</p>
+    <p class="lede">Crea tu cuenta en este iPhone. El secreto lo inventas tú.</p>
     <div class="card">
-      <input class="ans" id="user" placeholder="${t("user")}" style="margin-top:0">
-      <input class="ans" id="pass" type="password" placeholder="${t("pass")}">
+      <input class="ans" id="user" placeholder="Tu nombre" style="margin-top:0" autocomplete="username">
+      <input class="ans" id="pass" type="password" placeholder="Contraseña (tú la eliges, 4+)" autocomplete="new-password">
       <div class="rowbtns" style="margin-top:12px">
-        <button class="btn primary" id="in">${t("enter")}</button>
-        <button class="btn ghost" id="up">${t("create")}</button>
+        <button class="btn primary" id="up">Crear cuenta</button>
+        <button class="btn ghost" id="in">Ya tengo cuenta</button>
       </div>
-      <p class="eshint">Stays on this iPhone. Not the company cloud.</p>
     </div>
   </div>`;
-  $("#in").onclick=()=>doLogin(false);
   $("#up").onclick=()=>doLogin(true);
+  $("#in").onclick=()=>doLogin(false);
 }
 
 
@@ -461,6 +469,7 @@ function tokens(s){return s.replace(/[¿?¡!.,]/g," ").split(/\s+/).filter(Boole
 function norm(s){return s.toLowerCase().replace(/ß/g,"ss").replace(/[¿?¡!.,]/g,"").replace(/\s+/g," ").trim();}
 function go(name){
   if(!who()){ renderLogin(); return; }
+  document.body.classList.remove("login");
   S.screen=name; nav(); if(name==="home")renderHome(); else if(name==="steps")renderSteps();
   else if(name==="cards")renderCards(); else if(name==="speak"){ if(!S.q) startSession(); else renderQ(); }
   else renderAtlas();}
