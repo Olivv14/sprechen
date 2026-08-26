@@ -368,7 +368,7 @@ async function doLogin(create){
   const A=accts(); const h=await sha(pass);
   if(create){
     if(A[name]){alert("Ese nombre ya existe en este iPhone. Usa Ya tengo cuenta."); return;}
-    A[name]={h,data:Object.assign(blank(),{user:name,onboarded:false})};
+    A[name]={h,data:Object.assign(blank(),{user:name,onboarded:true,floor:0})};
   } else {
     if(!A[name]||A[name].h!==h){alert("Nombre o contraseña mal."); return;}
   }
@@ -459,14 +459,15 @@ function go(name){
   document.body.classList.remove("login");
   stopGame();
   S.screen=name; nav();
-  if(name==="home")renderHome();
+  if(name==="home"){ S.q=null; S.queue=[]; renderHome(); }
   else if(name==="learn")renderLearn();
+  else if(name==="play")renderPlay();
   else if(name==="set")renderSet();
   else if(name==="boost")renderBoost();
   else if(name==="steps")renderSteps();
   else if(name==="cards")renderCards();
-  else if(name==="speak"){ if(!S.q) startSession(); else renderQ(); }
-  else renderAtlas();
+  else if(name==="speak"){ if(!S.q) renderPlay(); else renderQ(); }
+  else renderHome();
 }
 
 function ico(n){
@@ -581,17 +582,38 @@ function cityOfUnit(u){return CITIES.find(c=>c.units.includes(u))||CITIES[0];}
 function recCity(){return cityOfUnit(recommendedUnit());}
 const ART={"Mann":"der","Frau":"die","Kind":"das","Zeit":"die","Kaffee":"der","Bus":"der","Film":"der","Schlüssel":"der","Zug":"der","Bahn":"die","Tür":"die","Nacht":"die","Bier":"das","Glas":"das","Haus":"das","Auto":"das","Problem":"das","Wahrheit":"die"};
 
-function startGames(weak, unit){
+function startGames(weak, unit, kind){
   tickStreak();
+  if(!kind){ renderPlay(); return; }
   if(unit==null && !weak) unit=recommendedUnit();
   S.lastUnit=unit==null?S.lastUnit:unit; save();
   let pool=unit!=null? V.filter(v=>v.u===unit): weak? V.filter(v=>mastery(v)>0&&mastery(v)<4): V;
   if(!pool.length) pool=V;
-  const pick=shuffle(pool).slice(0,6);
-  const games=["chips","article","smash","say"];
-  S.queue=pick.map((v,i)=>({kind:games[i%games.length], v, tense:(S.diff||"easy")==="easy"?"now":(i%2?"past":"now")}));
+  const pick=shuffle(pool).slice(0,5);
+  const tense=(S.diff||"easy")==="easy"?"now":"past";
+  S.queue=pick.map(v=>({kind, v, tense}));
   S.idx=0; S.total=S.queue.length; S.locked=false; S.q=S.queue[0]; S.screen="speak";
   renderQ();
+}
+function renderPlay(){
+  const rec=S.lastUnit||recommendedUnit();
+  const city=cityOfUnit(rec);
+  setAmb(city.img, false);
+  app.innerHTML=`<header class="top"><div class="brand"><b>Jugar</b><small>${city.name} · tú eliges</small></div></header>
+    <p class="lede">Nada se lanza solo. Principiante: primero oír, luego un modo.</p>
+    <div class="rowbtns">
+      <button class="btn accent" data-k="learn">Ver y oír — sin examen</button>
+      <button class="btn ghost" data-k="chips">Orden — toca las palabras</button>
+      <button class="btn ghost" data-k="article">der / die / das</button>
+      <button class="btn ghost" data-k="say">Escribir la frase</button>
+      <button class="btn ghost" data-k="smash">Lluvia — arcade</button>
+    </div>
+    <p class="lede" style="margin-top:14px">La lluvia es extra, no el camino.</p>`;
+  app.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{
+    if(b.dataset.k==="learn") go("learn");
+    else startGames(false, rec, b.dataset.k);
+  });
+  nav();
 }
 
 function renderOnboard(){
@@ -610,7 +632,7 @@ function renderOnboard(){
   nav();
 }
 function renderHome(){
-  if(!S.onboarded){ renderOnboard(); return; }
+  S.onboarded=true;
   tickStreak();
   const rec=recommendedUnit();
   const city=cityOfUnit(rec);
@@ -634,12 +656,12 @@ function renderHome(){
       <p class="lede">${city.lede}</p>
       <div class="rowbtns">
         <button class="btn accent" id="learn">Ver y oír esta noche</button>
-        <button class="btn ghost" id="talk">Ya lo viví — jugar</button>
+        <button class="btn ghost" id="play">Elegir un juego</button>
       </div>
     </div>`;
   setAmb("img/night.mp4", true);
   $("#learn").onclick=()=>go("learn");
-  $("#talk").onclick=()=>startGames(false, rec);
+  $("#play").onclick=()=>go("play");
   app.querySelectorAll(".pin").forEach(b=>b.onclick=()=>{
     const c=CITIES.find(x=>x.id===b.dataset.id); if(!c||!c.live) return;
     S.lastUnit=c.units[0]; save(); go("learn");
@@ -676,7 +698,7 @@ function renderBoost(){
         </div>`;
       }).join("")}
     </div>`;
-  $("#weak").onclick=()=>startGames(true);
+  $("#weak").onclick=()=>go("play");
   app.querySelectorAll("[data-say]").forEach(b=>b.onclick=()=>speak(b.dataset.say));
   nav();
 }
@@ -689,7 +711,7 @@ function renderLearn(){
   app.innerHTML=`<header class="top"><div class="brand"><b>${city.scene}</b></div><span class="chip">${city.name}</span></header>
     <p class="lede">${city.lede} Primero las oyes. Luego las tumbas jugando.</p>
     <div class="card" id="list"></div>
-    <button class="btn accent" id="talk" style="width:100%;margin-top:12px">Ya las oí — jugar</button>`;
+    <button class="btn accent" id="talk" style="width:100%;margin-top:12px">Elegir un juego</button>`;
   $("#list").innerHTML=verbs.map(v=>`
     <div class="linecard">
       <div style="flex:1">
@@ -703,7 +725,7 @@ function renderLearn(){
     const v=V[+b.dataset.i]; if(v) speak(v.now[0]);
   };
   setAmb(city.img, false);
-  $("#talk").onclick=()=>startGames(false, rec);
+  $("#talk").onclick=()=>go("play");
   nav();
 }
 
@@ -1048,7 +1070,7 @@ function renderDone(){
     <p class="lede">${mastered()} / 100 ${t("mastered")}</p>
     <div class="rowbtns"><button class="btn primary" id="again">${t("again")}</button>
     <button class="btn ghost" id="home">${t("mapBtn")}</button></div></div>`;
-  $("#again").onclick=()=>startGames(true); $("#home").onclick=()=>go("home"); nav();
+  $("#again").onclick=()=>go("play"); $("#home").onclick=()=>go("home"); nav();
 }
 function renderAtlas(){
   app.innerHTML=`<header class="top"><div class="brand"><b>100</b><small>EN · ES · DE</small></div>${langs()}</header>
