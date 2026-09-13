@@ -421,8 +421,9 @@ function shuffle(a){a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floo
 function tokens(s){return s.replace(/[¿?¡!.,]/g," ").split(/\s+/).filter(Boolean);}
 function norm(s){return s.toLowerCase().replace(/ß/g,"ss").replace(/[¿?¡!.,]/g,"").replace(/\s+/g," ").trim();}
 function go(name){S.screen=name; nav(); if(name==="home")renderHome(); else if(name==="steps")renderSteps();
-  else if(name==="cards")renderCards(); else if(name==="speak"){ if(!S.q) startSession(); else renderQ(); }
+  else if(name==="cards")renderCards(); else if(name==="speak"){ if(S.q) renderQ(); else renderTrainHub(); }
   else if(name==="play") renderPlayHub();
+  else if(name==="build") renderConstruir();
   else renderAtlas();}
 
 function trainerLv(){return 1+Math.floor((S.xp||0)/80);}
@@ -553,6 +554,98 @@ function miniRain(v){
   spawn(); gameRAF=requestAnimationFrame(loop);
 }
 
+
+function renderTrainHub(){
+  S.screen="speak";
+  app.innerHTML=`<header class="top"><div class="mark"><div class="ball"></div><div class="brand"><b>Train</b><small>tú estructuras</small></div></div>${langs()}</header>
+    <div class="card">
+      <h2>Construir</h2>
+      <p class="lede">Quién + verbo + qué + dónde. Tú armas la frase. No hay NOW / YESTERDAY.</p>
+      <button class="btn primary" id="b">Empezar a construir</button>
+    </div>
+    <div class="card">
+      <h2>Curso de verbos</h2>
+      <p class="lede">${t("sessionLede")}</p>
+      <button class="btn ghost" id="c">8 frases · el camino de siempre</button>
+    </div>`;
+  app.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>setUi(b.dataset.l));
+  $("#b").onclick=()=>go("build");
+  $("#c").onclick=()=>startSession();
+  nav();
+}
+const WHO_S=["ich","du","wir","er"];
+const OBJS=["","Kaffee","Zeit","das"];
+const PLACES=["","nach Hause","nach Berlin","ins Büro","hier"];
+function vForm(v,p){return p==="ich"?v.ich:p==="du"?v.du:p==="er"?v.er:v.wir;}
+function cap1(s){return s?s.charAt(0).toUpperCase()+s.slice(1):s;}
+function buildLine(p,v,obj,place){
+  const bits=[cap1(p), vForm(v,p)];
+  if(obj) bits.push(obj);
+  if(place) bits.push(place);
+  return bits.join(" ")+".";
+}
+function askLine(v,obj,place){
+  const bits=[cap1(vForm(v,"du")),"du"];
+  if(obj) bits.push(obj);
+  if(place) bits.push(place);
+  return bits.join(" ")+"?";
+}
+function pickBuild(){
+  const pool=V.filter(v=>!v.sep);
+  const v=shuffle(pool)[0];
+  let obj=OBJS[Math.floor(Math.random()*OBJS.length)];
+  let place=PLACES[Math.floor(Math.random()*PLACES.length)];
+  if(!obj && !place) place="hier";
+  const p=WHO_S[Math.floor(Math.random()*WHO_S.length)];
+  return {p,v,obj,place,phase:"make"};
+}
+function renderConstruir(){
+  S.screen="build";
+  if(!S.build) S.build=pickBuild();
+  const B=S.build, v=B.v;
+  const target=B.phase==="ask"?askLine(v,B.obj,B.place):buildLine(B.p,v,B.obj,B.place);
+  const slots=`<div class="chipbox">
+      <button class="btn ghost" disabled>${B.p}</button>
+      <button class="btn ghost" disabled>${v.inf}</button>
+      <button class="btn ghost" disabled>${B.obj||"—"}</button>
+      <button class="btn ghost" disabled>${B.place||"—"}</button>
+    </div>`;
+  const prompt=B.phase==="ask"
+    ? (S.ui==="es"?"Ahora: pregunta a <b>du</b>. Verbo primero.":"Now: ask <b>du</b>. Verb first.")
+    : (S.ui==="es"?"Arma la frase. Conjuga el verbo. Sin pistas de tiempo.":"Build the line. Conjugate the verb. No time labels.");
+  app.innerHTML=`<header class="top"><div class="brand"><b>Construir</b><small>${B.phase==="ask"?"transformar":"generar"}</small></div></header>
+    <p class="lede">${prompt}</p>
+    ${slots}
+    <input class="ans" id="ans" autocapitalize="off" autocomplete="off" placeholder="${S.ui==="es"?"escribe en alemán":"type German"}">
+    <button class="btn primary" id="check">${t("check")}</button>
+    <div id="feed"></div>
+    <p class="lede" style="margin-top:12px">${v.en} · ${v.es}</p>`;
+  const inp=$("#ans"); if(inp) inp.focus();
+  $("#check").onclick=()=>{
+    const ok=norm(inp.value)===norm(target);
+    if(ok){
+      S.xp+=8; save();
+      speak(target);
+      if(B.phase==="make"){
+        S.build.phase="ask";
+        $("#feed").innerHTML=`<div class="explain"><b>${target}</b><div class="lede">Bien. Ahora la pregunta.</div></div>`;
+        setTimeout(renderConstruir, 900);
+      } else {
+        S.build=null;
+        $("#feed").innerHTML=`<div class="explain"><b>${target}</b></div><button class="btn accent" id="again">Otra</button>`;
+        $("#again").onclick=()=>{ S.build=pickBuild(); renderConstruir(); };
+      }
+    } else {
+      B.fails=(B.fails||0)+1;
+      $("#feed").innerHTML=B.fails>=2
+        ? `<div class="explain">${target}</div>`
+        : `<div class="explain">${S.ui==="es"?"Aún no. Piensa la conjugación.":"Not yet. Conjugate it."}</div>`;
+    }
+  };
+  inp.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); $("#check").click(); } };
+  nav();
+}
+
 function langs(){
   return `<div class="langs">${LOCALES.map(l=>`<button ${l.live?"":"disabled"} class="${l.live?(S.ui===l.id?"on":""):"off"}" data-l="${l.id}">${l.id==="pt-PT"?"PT":l.id.toUpperCase()}${l.live?"":" · "+t("soon")}</button>`).join("")}</div>`;
 }
@@ -607,7 +700,8 @@ function renderHome(){
       <p class="lede">${t("sessionLede")}</p>
       <div class="rowbtns">
         <button class="btn primary" id="start">${t("start")}</button>
-        <button class="btn accent" id="cards">${t("cardsCta")} · ${due}</button>
+        <button class="btn accent" id="build">Construir</button>
+        <button class="btn ghost" id="cards">${t("cardsCta")} · ${due}</button>
         <button class="btn ghost" id="steps">${t("stepsCta")}</button>
         <button class="btn ghost" id="weak">${t("review")}</button>
       </div>
@@ -617,6 +711,7 @@ function renderHome(){
     <div class="units">${units}</div>`;
   app.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>setUi(b.dataset.l));
   $("#start").onclick=()=>startSession();
+  if($("#build")) $("#build").onclick=()=>go("build");
   $("#weak").onclick=()=>startSession(true);
   $("#cards").onclick=()=>go("cards");
   $("#steps").onclick=()=>go("steps");
