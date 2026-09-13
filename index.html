@@ -115,6 +115,8 @@ h2,h3{margin:0 0 8px;font-size:1.05rem;font-weight:800}
 @media (prefers-reduced-motion:reduce){.btn{transition:none}}
 
 .ans{width:100%;padding:12px;border:3px solid var(--ink);border-radius:14px;margin:8px 0}
+.heat{height:10px;border:2px solid var(--ink);border-radius:99px;overflow:hidden;margin:8px 0;background:#fff}
+.heat>i{display:block;height:100%;width:100%;background:var(--red);transform-origin:left center}
 
 </style>
 </head>
@@ -420,11 +422,20 @@ function esc(s){return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").re
 function shuffle(a){a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a;}
 function tokens(s){return s.replace(/[¿?¡!.,]/g," ").split(/\s+/).filter(Boolean);}
 function norm(s){return s.toLowerCase().replace(/ß/g,"ss").replace(/[¿?¡!.,]/g,"").replace(/\s+/g," ").trim();}
-function go(name){S.screen=name; nav(); if(name==="home")renderHome(); else if(name==="steps")renderSteps();
-  else if(name==="cards")renderCards(); else if(name==="speak"){ if(S.q) renderQ(); else renderTrainHub(); }
+let drillT=null;
+function stopDrillT(){ if(drillT){ clearInterval(drillT); drillT=null; } }
+function go(name){
+  stopDrillT();
+  S.screen=name; nav();
+  if(name==="home")renderHome();
+  else if(name==="steps")renderSteps();
+  else if(name==="cards")renderCards();
+  else if(name==="speak"){ if(S.q) renderQ(); else renderTrainHub(); }
   else if(name==="play") renderPlayHub();
   else if(name==="build") renderConstruir();
-  else renderAtlas();}
+  else if(name==="drill") renderDrill();
+  else renderAtlas();
+}
 
 function trainerLv(){return 1+Math.floor((S.xp||0)/80);}
 function unitMastery(i){const vs=V.filter(v=>v.u===i); if(!vs.length) return 0; return vs.reduce((a,v)=>a+mastery(v),0)/(vs.length*4);}
@@ -555,13 +566,94 @@ function miniRain(v){
 }
 
 
+
+function startDrill(){
+  const v=shuffle(V.filter(x=>!x.sep))[0];
+  const p=WHO_S[Math.floor(Math.random()*WHO_S.length)];
+  let obj=OBJS[Math.floor(Math.random()*OBJS.length)];
+  let place=PLACES[Math.floor(Math.random()*PLACES.length)];
+  if(!obj && !place) place="hier";
+  S.drill={v,p,obj,place,phase:0,n:0,repeat:null};
+  S.screen="drill";
+  renderDrill();
+}
+function drillGloss(D){
+  const who=S.ui==="es"?{ich:"yo",du:"tú",wir:"nosotros",er:"él"}:{ich:"I",du:"you",wir:"we",er:"he"};
+  const bits=[who[D.p], D.v.es];
+  if(D.obj) bits.push(D.obj);
+  if(D.place) bits.push(D.place);
+  return bits.join(" · ");
+}
+function drillDE(D){ return buildLine(D.p,D.v,D.obj,D.place); }
+function drillAsk(D){ return askLine(D.v,D.obj,D.place); }
+function renderDrill(){
+  stopDrillT();
+  const D=S.drill; if(!D){ startDrill(); return; }
+  S.screen="drill";
+  const de=drillDE(D), l1=drillGloss(D), ask=drillAsk(D);
+  const phases=[
+    {tag:"IDA", hint:S.ui==="es"?"Oye. ¿Qué dice? En español.":"Hear it. What does it say?", target:l1, hear:de, show:null},
+    {tag:"VUELTA", hint:S.ui==="es"?"Ahora al alemán. Sin mirar.":"Back into German.", target:de, hear:null, show:l1},
+    {tag:"SUSTITUYE", hint:S.ui==="es"?"Misma frase, otra persona. Conjuga.":"Same line, new person. Conjugate.", target:de, hear:null, show:D.p+" · "+D.v.inf+" · "+(D.obj||"—")+" · "+(D.place||"—")},
+    {tag:"PREGUNTA", hint:S.ui==="es"?"Pregunta a du. Verbo primero.":"Ask du. Verb first.", target:ask, hear:null, show:de}
+  ];
+  const P=phases[D.phase];
+  const force=D.repeat;
+  const target=force||P.target;
+  app.innerHTML=`<header class="top"><div class="brand"><b>${P.tag}</b><small>${D.n+1} · ${D.v.inf}</small></div></header>
+    <div class="heat"><i id="heat"></i></div>
+    <p class="lede">${force?(S.ui==="es"?"Mal. Escríbela igual.":"Wrong. Type it exactly."):P.hint}</p>
+    ${P.show?`<p class="de" style="font-size:1.15rem">${P.show}</p>`:""}
+    ${P.hear?`<button class="btn ghost" id="hear">🔊</button>`:""}
+    <input class="ans" id="ans" autocapitalize="off" autocomplete="off">
+    <button class="btn primary" id="go">OK</button>
+    <div id="feed"></div>`;
+  if(P.hear){ $("#hear").onclick=()=>speak(P.hear); speak(P.hear); }
+  const inp=$("#ans"); if(inp) inp.focus();
+  const finish=ok=>{
+    stopDrillT();
+    if(!ok){
+      D.repeat=target;
+      $("#feed").innerHTML=`<div class="explain"><b>Mal.</b> ${target}</div>`;
+      setTimeout(renderDrill, 700);
+      return;
+    }
+    D.repeat=null;
+    S.xp+=6; save();
+    D.phase++;
+    if(D.phase>3){
+      D.n++; D.phase=0;
+      const v=shuffle(V.filter(x=>!x.sep))[0];
+      D.v=v; D.p=WHO_S[Math.floor(Math.random()*WHO_S.length)];
+      D.obj=OBJS[Math.floor(Math.random()*OBJS.length)];
+      D.place=PLACES[Math.floor(Math.random()*PLACES.length)];
+      if(!D.obj && !D.place) D.place="hier";
+    }
+    renderDrill();
+  };
+  $("#go").onclick=()=>finish(norm(inp.value)===norm(target));
+  inp.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); $("#go").click(); } };
+  let left=100;
+  drillT=setInterval(()=>{
+    left-=100/120;
+    const el=$("#heat"); if(el) el.style.width=Math.max(0,left)+"%";
+    if(left<=0){ finish(false); }
+  },100);
+  nav();
+}
+
 function renderTrainHub(){
   S.screen="speak";
   app.innerHTML=`<header class="top"><div class="mark"><div class="ball"></div><div class="brand"><b>Train</b><small>tú estructuras</small></div></div>${langs()}</header>
     <div class="card">
+      <h2>Drill a presión</h2>
+      <p class="lede">Ida · vuelta · sustituye · pregunta. Una frase, cuatro pases. Te cortan al fallar.</p>
+      <button class="btn primary" id="d">Dale</button>
+    </div>
+    <div class="card">
       <h2>Construir</h2>
-      <p class="lede">Quién + verbo + qué + dónde. Tú armas la frase. No hay NOW / YESTERDAY.</p>
-      <button class="btn primary" id="b">Empezar a construir</button>
+      <p class="lede">Quién + verbo + qué + dónde. Sin pistas de tiempo.</p>
+      <button class="btn accent" id="b">Construir</button>
     </div>
     <div class="card">
       <h2>Curso de verbos</h2>
@@ -569,6 +661,7 @@ function renderTrainHub(){
       <button class="btn ghost" id="c">8 frases · el camino de siempre</button>
     </div>`;
   app.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>setUi(b.dataset.l));
+  $("#d").onclick=()=>startDrill();
   $("#b").onclick=()=>go("build");
   $("#c").onclick=()=>startSession();
   nav();
