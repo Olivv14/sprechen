@@ -95,6 +95,32 @@ h2,h3{margin:0 0 8px;font-size:1.05rem;font-weight:700;color:var(--gold)}
 .build{min-height:52px;padding:10px;border:1px dashed var(--line);border-radius:12px;margin-top:8px}
 .unit{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;padding:10px 12px;width:100%;text-align:left;background:transparent;color:var(--ink)}
 .n{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line)}
+
+.stage{display:flex;flex-direction:column;align-items:center;margin:4px 0 10px}
+.npc{width:108px;height:128px;display:block}
+.npc .eye{transform-box:fill-box;transform-origin:center}
+.npc.idle .eye{animation:blink 3.4s infinite}
+.npc.talk{animation:bob .7s ease-in-out infinite}
+.npc.yes{animation:pop .45s cubic-bezier(.2,1.4,.3,1)}
+.npc.no{animation:shake .4s ease}
+.npc.win{animation:pop .5s cubic-bezier(.2,1.4,.3,1)}
+@keyframes blink{0%,88%,100%{transform:scaleY(1)}92%{transform:scaleY(.08)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.12) rotate(-4deg)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@keyframes pulse-node{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+.node-lvl.open{animation:pulse-node 1.5s ease-in-out infinite}
+.chest:not(.lock){animation:pulse-node 1.3s ease-in-out infinite;cursor:pointer}
+.bub{
+  position:relative;background:#e7e2d4;color:#10160f;border-radius:16px 16px 16px 4px;
+  padding:12px 14px;margin:6px 0 4px;font-weight:700;max-width:100%;
+  animation:pop .35s ease;
+}
+.bub:after{content:"";position:absolute;left:18px;top:-7px;border:8px solid transparent;border-bottom-color:#e7e2d4;border-top:0}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:20}
+@media (prefers-reduced-motion:reduce){
+  .npc,.npc .eye,.node-lvl.open,.chest,.bub{animation:none}
+}
 @media (prefers-reduced-motion:reduce){.btn{transition:none}}
 
 </style>
@@ -784,6 +810,35 @@ const AREAS=[
    verbs:["sprechen","sagen","fragen","arbeiten","verstehen","kennen","heißen","treffen"],
    levels:[{es:"Hallo",en:"Hallo"},{es:"Trabajo",en:"Work"},{es:"Entender",en:"Understand"},{es:"Quedar",en:"Meet"},{es:"Hasta luego",en:"See you"}]}
 ];
+
+function npcSvg(id, mood){
+  const hair={air:"#1e1e1e",train:"#3a2418",ask:"#6b3a22",give:"#4a3020",cafe:"#c45c3e",talk:"#121212"}[id]||"#222";
+  const shirt={air:"#3d5a80",train:"#6a3030",ask:"#2f4a38",give:"#2f4a38",cafe:"#8a2e2e",talk:"#243044"}[id]||"#2f4a38";
+  return `<svg class="npc ${mood||"idle"}" id="npc" viewBox="0 0 80 96" aria-hidden="true">
+    <ellipse cx="40" cy="91" rx="16" ry="3.5" fill="#000" opacity=".22"/>
+    <rect x="27" y="50" width="26" height="32" rx="9" fill="${shirt}"/>
+    <circle cx="40" cy="32" r="15" fill="#e6c4a4"/>
+    <path d="M25 32 Q40 10 55 32 L54 28 Q40 12 26 28 Z" fill="${hair}"/>
+    <ellipse class="eye" cx="34" cy="33" rx="2.1" ry="2.6" fill="#1a1a1a"/>
+    <ellipse class="eye" cx="46" cy="33" rx="2.1" ry="2.6" fill="#1a1a1a"/>
+    <path d="M34 41 Q40 45 46 41" fill="none" stroke="#8a4030" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>`;
+}
+function npcSet(m){ const n=$("#npc"); if(!n) return; n.setAttribute("class","npc "+m); }
+function confetti(){
+  const c=document.createElement("canvas"); c.id="fx";
+  document.body.appendChild(c);
+  const x=c.getContext("2d"), dpr=window.devicePixelRatio||1;
+  const W=innerWidth, H=innerHeight; c.width=W*dpr; c.height=H*dpr; c.style.width=W+"px"; c.style.height=H+"px"; x.scale(dpr,dpr);
+  const bits=Array.from({length:70},()=>({x:Math.random()*W,y:-20-Math.random()*H,s:4+Math.random()*6,v:2+Math.random()*3,c:["#d4b45a","#e7e2d4","#c45c3e","#5a9a6a"][Math.floor(Math.random()*4)]}));
+  let n=0;
+  (function tick(){
+    x.clearRect(0,0,W,H);
+    bits.forEach(b=>{ b.y+=b.v; b.x+=Math.sin(b.y/20); x.fillStyle=b.c; x.fillRect(b.x,b.y,b.s,b.s*0.6); });
+    n++; if(n<90) requestAnimationFrame(tick); else c.remove();
+  })();
+}
+
 function loc(obj){ if(!obj) return ""; return obj[S.ui]||obj.es||obj.en||""; }
 function pathOf(id){ S.path=S.path||{}; if(!S.path[id]) S.path[id]={s:[0,0,0,0,0],chest:false,ready:false}; return S.path[id]; }
 function areaUnlocked(i){
@@ -820,6 +875,7 @@ function awardPath(){
   S.pathRun=null;
   app.innerHTML=`<div class="card" style="text-align:center">
     <h2>${loc(a.n)}</h2>
+    ${npcSvg(a.id, stars===3?"win":"yes")}
     <p class="stars" style="font-size:1.4rem">${"★".repeat(stars)}${"☆".repeat(3-stars)}</p>
     <p class="lede">${R.wrong} fallos · rejugable</p>
     ${p.ready&&!p.chest?'<p class="lede">Toca el cofre en el mapa para abrir la siguiente zona.</p>':""}
@@ -828,6 +884,7 @@ function awardPath(){
       <button class="btn ghost" id="again">Repetir</button>
     </div>
   </div>`;
+  if(stars===3) confetti();
   $("#map").onclick=()=>go("home");
   $("#again").onclick=()=>startPathLesson(a,R.li);
   nav();
@@ -999,13 +1056,13 @@ function renderQ(){
       <p class="lede">${t("what")}</p>
       <div class="choices">${opts.map(o=>`<button class="choice" data-val="${esc(o)}">${o}</button>`).join("")}</div>`;
   } else if(q.kind==="model"){
-    body=`<p class="lede">Oye esta. Luego la dices tú.</p>
-      <p class="de">${v.now[0]}</p>
+    const area=S.pathRun?AREAS.find(x=>x.id===S.pathRun.areaId):null;
+    body=`<div class="stage">${npcSvg(area?area.id:"talk","talk")}<div class="bub">${v.now[0]}</div></div>
       <p class="eshint">${line(v,"now",pivot())}</p>`;
   } else if(q.kind==="say"){
     const area=S.pathRun?AREAS.find(x=>x.id===S.pathRun.areaId):null;
-    body=`<p class="lede">${area?loc(area.lede):""} Di esto en alemán.</p>
-      <p class="de" style="font-size:1.12rem">${line(v,"now",pivot())}</p>
+    body=`<div class="stage">${npcSvg(area?area.id:"talk","idle")}<div class="bub">${line(v,"now",pivot())}</div></div>
+      <p class="lede">Responde en alemán.</p>
       <input class="ans" id="ans" autocapitalize="off" autocomplete="off" placeholder="Deutsch…">`;
   } else if(q.kind==="build"){
     const de=v[q.tense][0], extra=shuffle(V.filter(x=>x.inf!==v.inf)).slice(0,2).flatMap(x=>tokens(x[q.tense][0]));
@@ -1061,13 +1118,13 @@ function grade(){
     const right=S.ui==="es"?v.es:v.en; ok=q.pick===right; correct=right; why=`${v.inf} = ${v.en}${S.ui==="en"?`<div class="eshint">${v.es}</div>`:""}`;
     if(ok) mark(v.inf,"mean");
   } else if(q.kind==="model"){
-    body=`<p class="lede">Oye esta. Luego la dices tú.</p>
-      <p class="de">${v.now[0]}</p>
+    const area=S.pathRun?AREAS.find(x=>x.id===S.pathRun.areaId):null;
+    body=`<div class="stage">${npcSvg(area?area.id:"talk","talk")}<div class="bub">${v.now[0]}</div></div>
       <p class="eshint">${line(v,"now",pivot())}</p>`;
   } else if(q.kind==="say"){
     const area=S.pathRun?AREAS.find(x=>x.id===S.pathRun.areaId):null;
-    body=`<p class="lede">${area?loc(area.lede):""} Di esto en alemán.</p>
-      <p class="de" style="font-size:1.12rem">${line(v,"now",pivot())}</p>
+    body=`<div class="stage">${npcSvg(area?area.id:"talk","idle")}<div class="bub">${line(v,"now",pivot())}</div></div>
+      <p class="lede">Responde en alemán.</p>
       <input class="ans" id="ans" autocapitalize="off" autocomplete="off" placeholder="Deutsch…">`;
   } else if(q.kind==="build"){
     const de=v[q.tense][0]; ok=norm((q.built||[]).join(" "))===norm(de); correct=de;
@@ -1096,7 +1153,7 @@ function grade(){
       :`Everyone else: Perfekt. ${v.aux} + ${v.part}.`;
     if(ok) mark(v.inf,"past");
   }
-  S.locked=true;
+  S.locked=true; npcSet(ok?"yes":"no");
   $("#feed").innerHTML=`<div class="explain"><b>${ok?t("ok"):t("almost")}</b>
     <div class="de" style="font-size:1.18rem;margin-top:6px">${correct}</div><div style="margin-top:6px">${why}</div></div>`;
   if(ok){S.xp+=10; save(); speak(correct);} else {S.queue.push(q); speak(correct);}
