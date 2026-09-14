@@ -785,17 +785,18 @@ const AREAS=[
    levels:[{es:"Hallo",en:"Hallo"},{es:"Trabajo",en:"Work"},{es:"Entender",en:"Understand"},{es:"Quedar",en:"Meet"},{es:"Hasta luego",en:"See you"}]}
 ];
 function loc(obj){ if(!obj) return ""; return obj[S.ui]||obj.es||obj.en||""; }
-function pathOf(id){ S.path=S.path||{}; if(!S.path[id]) S.path[id]={s:[0,0,0,0,0],chest:false}; return S.path[id]; }
+function pathOf(id){ S.path=S.path||{}; if(!S.path[id]) S.path[id]={s:[0,0,0,0,0],chest:false,ready:false}; return S.path[id]; }
 function areaUnlocked(i){
   if(i<=0) return true;
-  const prev=AREAS[i-1]; const p=pathOf(prev.id);
-  return p.s.every(x=>x>=1);
+  return !!pathOf(AREAS[i-1].id).chest;
 }
 function startPathLesson(area, li){
   const vs=area.verbs.map(inf=>V.find(v=>v.inf===inf)).filter(Boolean);
   const pick=shuffle(vs).slice(0,4);
-  S.pathRun={areaId:area.id, li, wrong:0};
-  S.queue=pick.map(v=>({kind:"say", v, tense:"now"}));
+  const replay=(pathOf(area.id).s[li]||0)>=1;
+  S.pathRun={areaId:area.id, li, wrong:0, replay};
+  const q=pick.map(v=>({kind:"say", v, tense:"now"}));
+  S.queue= replay ? q : [{kind:"model", v:pick[0], tense:"now"}, ...q];
   S.idx=0; S.total=S.queue.length; S.locked=false; S.q=S.queue[0]; S.screen="speak";
   renderQ();
 }
@@ -813,8 +814,7 @@ function awardPath(){
   const p=pathOf(R.areaId);
   if(stars>p.s[R.li]) p.s[R.li]=stars;
   S.xp+=10*stars;
-  let chestNow=false;
-  if(p.s.every(x=>x>=1) && !p.chest){ p.chest=true; chestNow=true; S.xp+=40; }
+  if(p.s.every(x=>x>=1) && !p.chest) p.ready=true;
   save();
   const a=AREAS.find(x=>x.id===R.areaId);
   S.pathRun=null;
@@ -822,7 +822,7 @@ function awardPath(){
     <h2>${loc(a.n)}</h2>
     <p class="stars" style="font-size:1.4rem">${"★".repeat(stars)}${"☆".repeat(3-stars)}</p>
     <p class="lede">${R.wrong} fallos · rejugable</p>
-    ${chestNow?'<div class="chest" style="margin:12px auto"></div><p class="lede">Cofre de zona.</p>':""}
+    ${p.ready&&!p.chest?'<p class="lede">Toca el cofre en el mapa para abrir la siguiente zona.</p>':""}
     <div class="rowbtns">
       <button class="btn primary" id="map">Mapa</button>
       <button class="btn ghost" id="again">Repetir</button>
@@ -844,6 +844,7 @@ function renderHome(){
       <div class="stat"><b>${m}/100</b><div class="xpbar"><i style="width:${m}%"></i></div></div>
     </div>
     <div class="path" id="path"></div>
+    <button class="btn primary" id="cont" style="width:100%;margin:8px 0">Continuar ruta</button>
     <div class="soon">Français · bientôt</div>
     <div class="soon">Português · em breve</div>`;
   const box=$("#path");
@@ -862,13 +863,17 @@ function renderHome(){
       b.onclick=()=>{ if(open) startPathLesson(a,j); };
       trail.appendChild(b);
     });
-    const ch=document.createElement("div");
-    ch.className="chest"+(p.chest?"":" lock");
+    const ch=document.createElement("button");
+    ch.className="chest"+(p.chest?"":(p.ready?"":" lock"));
     ch.title="cofre";
+    if(p.ready && !p.chest){
+      ch.onclick=()=>{ p.chest=true; S.xp+=40; save(); go("home"); };
+    }
     trail.appendChild(ch);
     box.appendChild(el);
   });
   app.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>setUi(b.dataset.l));
+  if($("#cont")) $("#cont").onclick=()=>startNextPath();
   nav();
 }
 
@@ -993,6 +998,10 @@ function renderQ(){
       <button class="speak" data-say="${esc(v.now[0])}">🔊</button></div>
       <p class="lede">${t("what")}</p>
       <div class="choices">${opts.map(o=>`<button class="choice" data-val="${esc(o)}">${o}</button>`).join("")}</div>`;
+  } else if(q.kind==="model"){
+    body=`<p class="lede">Oye esta. Luego la dices tú.</p>
+      <p class="de">${v.now[0]}</p>
+      <p class="eshint">${line(v,"now",pivot())}</p>`;
   } else if(q.kind==="say"){
     const area=S.pathRun?AREAS.find(x=>x.id===S.pathRun.areaId):null;
     body=`<p class="lede">${area?loc(area.lede):""} Di esto en alemán.</p>
@@ -1034,10 +1043,14 @@ function renderQ(){
     $("#undo").onclick=()=>{const tok=q.built.pop(); if(!tok)return;
       const b=document.createElement("button"); b.className="chip"; b.dataset.tok=tok; b.textContent=tok;
       b.onclick=()=>{q.built.push(tok); b.remove(); paint();}; bank.appendChild(b); paint();};
+  } else if(q.kind==="model"){
+    body=`<p class="lede">Oye esta. Luego la dices tú.</p>
+      <p class="de">${v.now[0]}</p>
+      <p class="eshint">${line(v,"now",pivot())}</p>`;
   } else if(q.kind==="say"){
     const inp=$("#ans");
     if(inp){ inp.focus(); inp.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); grade(); } }; }
-  }
+  } else if(q.kind==="model"){ speak(v.now[0]); }
   $("#check").onclick=grade;
   nav();
 }
@@ -1047,6 +1060,10 @@ function grade(){
   if(q.kind==="mean"){
     const right=S.ui==="es"?v.es:v.en; ok=q.pick===right; correct=right; why=`${v.inf} = ${v.en}${S.ui==="en"?`<div class="eshint">${v.es}</div>`:""}`;
     if(ok) mark(v.inf,"mean");
+  } else if(q.kind==="model"){
+    body=`<p class="lede">Oye esta. Luego la dices tú.</p>
+      <p class="de">${v.now[0]}</p>
+      <p class="eshint">${line(v,"now",pivot())}</p>`;
   } else if(q.kind==="say"){
     const area=S.pathRun?AREAS.find(x=>x.id===S.pathRun.areaId):null;
     body=`<p class="lede">${area?loc(area.lede):""} Di esto en alemán.</p>
@@ -1059,11 +1076,20 @@ function grade(){
       :`ich ${v.ich} · du ${v.du} · er ${v.er}`;
     if(S.ui==="en") why+=`<div class="eshint">${v.es}</div>`;
     if(ok) mark(v.inf,q.tense);
+  } else if(q.kind==="model"){
+    body=`<p class="lede">Oye esta. Luego la dices tú.</p>
+      <p class="de">${v.now[0]}</p>
+      <p class="eshint">${line(v,"now",pivot())}</p>`;
+  } else if(q.kind==="model"){
+    ok=true; correct=v.now[0]; why="";
   } else if(q.kind==="say"){
     const de=v.now[0]; ok=norm(($("#ans")&&$("#ans").value)||"")===norm(de); correct=de;
     why=`${v.inf} · ich ${v.ich}`;
     if(ok) mark(v.inf,"now");
-    if(!ok && S.pathRun) S.pathRun.wrong=(S.pathRun.wrong||0)+1;
+    if(!ok){
+      if(S.pathRun) S.pathRun.wrong=(S.pathRun.wrong||0)+1;
+      S.queue.push(q);
+    }
   } else {
     ok=q.pick==="past"; correct=v.past[0];
     why=v.pk==="pret"?`sein / haben / modals stay Präteritum: ich ${v.pret}.`
