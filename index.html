@@ -220,20 +220,238 @@ flirt:[
 ]
 };
 
+/** Sprechen COURSE schema — pack 2026-09-15-schema
+ *  Paso 1: structure only. lessons[] stay empty until pasos 3–10.
+ *  Item shape (later): { hear, say, en, es, ph, why, lang }
+ *  Lesson shape: { id, title, es, npc, kind: "new"|"review"|"chest", items: [] }
+ */
+const COURSE = {
+  pack: "2026-09-15-schema",
+  tracks: [
+    {
+      id: "de",
+      name: "Deutschland",
+      live: true,
+      sections: [
+        {
+          cefr: "A1",
+          units: [
+            { id: "mouth", title: "Mouth", es: "Boca", guide: ["Hallo / bitte / danke.", "Ich verstehe nicht. Nochmal, bitte.", "ich = ij."], lessons: [] },
+            { id: "help", title: "You help", es: "Ayudas con el camino", guide: ["Sie with strangers.", "geradeaus / links / rechts.", "zu Fuß."], lessons: [] },
+            { id: "ask", title: "You ask", es: "Tú pides camino", guide: ["Entschuldigung.", "wo ist + article.", "welche Linie."], lessons: [] },
+            { id: "ticket", title: "Ticket / platform", es: "Ticket / andén", guide: ["Gleis.", "Umsteigen.", "Verspätung."], lessons: [] },
+            { id: "cafe", title: "Café · guest", es: "Café · te atienden", guide: ["Ich hätte gern.", "bitte stays.", "Die Rechnung."], lessons: [] },
+            { id: "shop", title: "Shop / bill", es: "Tienda / cuenta", guide: ["Was kostet das?", "Mit Karte.", "Stimmt so."], lessons: [] },
+            { id: "hotel", title: "Hotel", es: "Hotel", guide: ["Reservierung.", "WLAN.", "Sie at the desk."], lessons: [] },
+            { id: "time", title: "When / which platform", es: "Hora / andén", guide: ["Wann fährt…?", "Gleis + number.", "Nächste."], lessons: [] }
+          ]
+        },
+        {
+          cefr: "A2",
+          units: [
+            { id: "waiter", title: "You wait tables", es: "Eres camarero", guide: ["Ihnen / Sie with guests.", "Noch etwas?", "Passt alles?"], lessons: [] },
+            { id: "bar", title: "Bar · du", es: "Bar · du", guide: ["du with peers.", "Ist hier frei?", "Ich nehme…"], lessons: [] },
+            { id: "change", title: "Change trains", es: "Transbordo", guide: ["umsteigen.", "Richtung.", "Nächste Station."], lessons: [] },
+            { id: "delay", title: "Delay / complaint", es: "Retraso / queja", guide: ["Es hat Verspätung.", "Wie lange?", "Wohin jetzt?"], lessons: [] },
+            { id: "late", title: "Running late", es: "Llego tarde", guide: ["Bin gleich da.", "5 Minuten.", "WhatsApp-short."], lessons: [] },
+            { id: "saikan", title: "Saikan small talk", es: "Saikan", guide: ["Ich arbeite bei Saikan.", "Kannst du…?", "Call / join."], lessons: [] }
+          ]
+        },
+        {
+          cefr: "B1",
+          units: [
+            { id: "join", title: "Can you join?", es: "¿Te unes?", guide: ["Könntest du…?", "Der Kunde wartet.", "Ich bin in einem Call."], lessons: [] },
+            { id: "dinner", title: "Investor dinner", es: "Cena inversores", guide: ["Was machst du?", "Wir bauen…", "Prost, but keep it."], lessons: [] },
+            { id: "split", title: "Split the bill", es: "Cuenta separada", guide: ["Getrennt / zusammen.", "Ich lade dich ein.", "Kein Stress."], lessons: [] },
+            { id: "story", title: "Tell the trip", es: "Contar el viaje", guide: ["Perfekt vs Präteritum spoken.", "Dann / danach.", "Ehrlich."], lessons: [] },
+            { id: "phone", title: "On the phone", es: "Teléfono", guide: ["Wer spricht?", "Kann ich zurückrufen?", "Schlechte Verbindung."], lessons: [] }
+          ]
+        },
+        {
+          cefr: "B2",
+          units: [
+            { id: "deal", title: "Negotiate", es: "Negociar", guide: ["Wäre es möglich…?", "Aus unserer Sicht.", "Lassen Sie uns…"], lessons: [] },
+            { id: "irony", title: "Irony", es: "Ironía", guide: ["Ja, klar.", "Nicht wirklich.", "Tone > words."], lessons: [] },
+            { id: "advice", title: "Advice", es: "Consejo", guide: ["An deiner Stelle…", "Du könntest…", "Musst du nicht."], lessons: [] },
+            { id: "disagree", title: "Polite disagreement", es: "Desacuerdo educado", guide: ["Da sehe ich das anders.", "Verstehe, aber…", "Können wir…?"], lessons: [] }
+          ]
+        }
+      ]
+    },
+    {
+      id: "fr",
+      name: "France",
+      live: true,
+      sections: [
+        {
+          cefr: "A1",
+          units: [
+            { id: "help", title: "Aider", es: "Ayudar", guide: ["tout droit.", "Pardon.", "Vous."], lessons: [] },
+            { id: "ask", title: "Demander", es: "Pedir camino", guide: ["Où est…?", "s'il vous plaît.", "Je m'appelle Oliver."], lessons: [] }
+          ]
+        }
+      ]
+    },
+    {
+      id: "it",
+      name: "Italia",
+      live: false,
+      sections: []
+    },
+    {
+      id: "pt",
+      name: "Portugal",
+      live: false,
+      sections: []
+    },
+    {
+      id: "flirt",
+      name: "Ragazzas",
+      live: true,
+      egg: true,
+      sections: [
+        {
+          cefr: "mix",
+          units: [
+            { id: "table-pt", title: "Table · PT", es: "Mesa PT", guide: ["Boa noite.", "Não entra no menu.", "Brincadeira."], lessons: [] },
+            { id: "table-it", title: "Table · IT", es: "Mesa IT", guide: ["Signorina.", "gli occhi.", "Domani."], lessons: [] },
+            { id: "table-fr", title: "Table · FR", es: "Mesa FR", guide: ["Vous.", "toits.", "Je plaisante."], lessons: [] },
+            { id: "table-de", title: "Table · DE", es: "Mesa DE", guide: ["du.", "versprochen.", "Rechnung getrennt."], lessons: [] },
+            { id: "bar", title: "Bar", es: "Bar", guide: ["Ist frei?", "Was trinkst du?", "Kein Stress."], lessons: [] },
+            { id: "metro", title: "Metro", es: "Metro", guide: ["Ist das frei?", "Falsche Linie.", "Wir steigen da aus."], lessons: [] },
+            { id: "beach", title: "Beach", es: "Playa", guide: ["Handtuch frei?", "Kalt, oder?", "Sonnencreme."], lessons: [] },
+            { id: "rain", title: "Rain / umbrella", es: "Lluvia", guide: ["Willst du mit unter?", "Es gießt.", "Wohin jetzt?"], lessons: [] },
+            { id: "queue", title: "Club queue", es: "Cola club", guide: ["Lange Schlange.", "Kommst du oft?", "Techno oder Bar?"], lessons: [] },
+            { id: "counter", title: "Café counter", es: "Mostrador", guide: ["Was darf's sein?", "Für hier.", "Noch einen?"], lessons: [] },
+            { id: "dawn", title: "Viewpoint morning", es: "Mirador mañana", guide: ["Du bist gekommen.", "Kaffee?", "Berlin zeigen."], lessons: [] },
+            { id: "misc", title: "Súper / taxi / park / lobby", es: "Súper / taxi / parque / lobby", guide: ["Ist das deins?", "Teilen wir?", "Darf ich mich setzen?"], lessons: [] }
+          ]
+        }
+      ]
+    }
+  ]
+};
+
+function courseLessonCount(course) {
+  let n = 0;
+  for (const tr of course.tracks) {
+    for (const sec of tr.sections || []) {
+      for (const u of sec.units || []) n += (u.lessons || []).length;
+    }
+  }
+  return n;
+}
+
+function courseUnitCount(course) {
+  let n = 0;
+  for (const tr of course.tracks) {
+    for (const sec of tr.sections || []) n += (sec.units || []).length;
+  }
+  return n;
+}
+
+
 const STORE="sprechen.v3";
 const T={
   en:{today:"Today", map:"Map", cal:"Calendar", you:"You", cont:"Continue", daily:"Daily quest: finish one lesson",
       setup:"Setup", name:"Your name", secret:"Secret (min 4)", go:"Enter", ui:"Interface", goal:"Minutes / day",
       backup:"Backup", exp:"Export", imp:"Import", skins:"Themes", mascots:"Companions", streak:"streak",
       type:"Type it. Or hold mic.", hard:"Hard replay — no phonetic until you miss.", next:"Next", check:"Check",
-      yes:"Yes.", no:"Not yet.", island:"Island", mapb:"Map", du:"du = young / peers. Sie = older, guests, desk."},
+      yes:"Yes.", no:"Not yet.", island:"Island", mapb:"Map", du:"du = young / peers. Sie = older, guests, desk.",
+      left:"left", soon:"Soon", sec:"Section"},
   es:{today:"Hoy", map:"Mapa", cal:"Calendario", you:"Tú", cont:"Seguir", daily:"Misión: termina una lección",
       setup:"Setup", name:"Tu nombre", secret:"Secreto (mín. 4)", go:"Entrar", ui:"Interfaz", goal:"Minutos / día",
       backup:"Copia", exp:"Exportar", imp:"Importar", skins:"Temas", mascots:"Compañeros", streak:"racha",
       type:"Escríbela. O el mic.", hard:"Replay duro — sin fonética hasta fallar.", next:"Siguiente", check:"Comprobar",
-      yes:"Sí.", no:"Aún no.", island:"Isla", mapb:"Mapa", du:"du = jóvenes / colegas. Sie = señores, clientes, recepción."}
+      yes:"Sí.", no:"Aún no.", island:"Isla", mapb:"Mapa", du:"du = jóvenes / colegas. Sie = señores, clientes, recepción.",
+      left:"quedan", soon:"Pronto", sec:"Sección"}
 };
 function t(k){ return (T[S.ui]||T.en)[k]||k; }
+const BRIDGE={
+  de:{help:"help",ask:"ask",cafe:"guest",hotel:"hotel",waiter:"waiter",bar:"bar"},
+  fr:{help:"help"},
+  flirt:{"table-pt":"pt","table-it":"it","table-fr":"fr","table-de":"de",dawn:"dawn"}
+};
+function trackOf(id){ return (typeof COURSE!=="undefined" && COURSE.tracks||[]).find(x=>x.id===id); }
+function themeLesson(track, themeId){
+  return (typeof THEMES!=="undefined" && THEMES[track]||[]).find(x=>x.id===themeId);
+}
+function lessonsFor(trackId, unitId){
+  const out=[];
+  const tr=trackOf(trackId); if(!tr) return out;
+  for(const sec of tr.sections||[]){
+    const u=(sec.units||[]).find(x=>x.id===unitId);
+    if(u){ for(const L of u.lessons||[]) out.push(L); }
+  }
+  const bid=(BRIDGE[trackId]||{})[unitId];
+  const tm=bid && themeLesson(trackId, bid);
+  if(tm && !out.some(x=>x.id===tm.id)) out.push(tm);
+  if(trackId==="flirt" && unitId==="table-de"){
+    const looks=themeLesson("flirt","looks");
+    if(looks && !out.some(x=>x.id==="looks")) out.push(looks);
+  }
+  if(trackId==="de" && unitId==="bar"){
+    const v=themeLesson("de","view");
+    if(v && !out.some(x=>x.id==="view")) out.push(v);
+  }
+  return out;
+}
+function starsOf(track, lessonId){ return (S.sit&&S.sit[track+"."+lessonId]&&S.sit[track+"."+lessonId].stars)||0; }
+function unitDone(trackId, unitId){
+  const ls=lessonsFor(trackId, unitId);
+  if(!ls.length) return false;
+  return ls.every(L=>starsOf(trackId, L.id)>=1);
+}
+function liveUnits(trackId, cefr){
+  const tr=trackOf(trackId); if(!tr) return [];
+  const sec=(tr.sections||[]).find(s=>s.cefr===cefr);
+  return (sec&&sec.units||[]).filter(u=>lessonsFor(trackId,u.id).length);
+}
+function sectionOpen(trackId, cefr){
+  const tr=trackOf(trackId); if(!tr||!tr.live) return false;
+  const secs=tr.sections||[];
+  const i=secs.findIndex(s=>s.cefr===cefr);
+  if(i<=0) return true;
+  const prev=secs[i-1];
+  const units=liveUnits(trackId, prev.cefr);
+  if(!units.length) return false;
+  const ok=units.filter(u=>unitDone(trackId,u.id)).length;
+  return ok/units.length>=0.8;
+}
+function unitOpen(trackId, cefr, unitId){
+  if(!sectionOpen(trackId, cefr)) return false;
+  const units=liveUnits(trackId, cefr);
+  const i=units.findIndex(u=>u.id===unitId);
+  if(i<=0) return true;
+  return unitDone(trackId, units[i-1].id);
+}
+function lessonOpen(trackId, cefr, unitId, lessonId){
+  if(!unitOpen(trackId, cefr, unitId)) return false;
+  const ls=lessonsFor(trackId, unitId);
+  const i=ls.findIndex(L=>L.id===lessonId);
+  if(i<=0) return true;
+  return starsOf(trackId, ls[i-1].id)>=1;
+}
+function packStats(){
+  let total=0, done=0;
+  for(const tr of (typeof COURSE!=="undefined" && COURSE.tracks)||[]){
+    for(const sec of tr.sections||[]){
+      for(const u of sec.units||[]){
+        const ls=lessonsFor(tr.id, u.id);
+        total+=ls.length;
+        done+=ls.filter(L=>starsOf(tr.id,L.id)>=1).length;
+      }
+    }
+  }
+  if(!total && typeof THEMES!=="undefined"){
+    for(const k of Object.keys(THEMES)){
+      const arr=THEMES[k]||[];
+      total+=arr.length;
+      done+=arr.filter(tm=>starsOf(k,tm.id)>=1).length;
+    }
+  }
+  return {total, done, left:Math.max(0,total-done)};
+}
 function xpForLevel(n){ if(n<=1) return 0; return Math.round(50*Math.pow(n,1.6)); }
 function levelOf(xp){ let l=1; while(xpForLevel(l+1)<=xp && l<99) l++; return l; }
 function prog(xp){ const l=levelOf(xp), a=xpForLevel(l), b=xpForLevel(l+1); return {l, pct: Math.round(100*(xp-a)/Math.max(1,b-a))}; }
@@ -327,13 +545,15 @@ function renderHub(){
   tickDay();
   const p=prog(S.xp||0);
   const cont=lastSit();
+  const st=packStats();
   app().innerHTML=`<header class="top"><div class="brand"><b>${greet()}</b><small>Lv ${p.l} · ${S.streak||0} ${t("streak")}</small></div></header>
     <div class="hud">
       <div class="stat"><b>${S.xp||0}</b><span class="lede" style="margin:0">XP</span></div>
       <div class="stat"><b>${S.goal||10}</b><span class="lede" style="margin:0">min</span></div>
-      <div class="stat"><b>${S.streak||0}</b><span class="lede" style="margin:0">🔥</span></div>
+      <div class="stat"><b>${st.left}</b><span class="lede" style="margin:0">${t("left")}</span></div>
     </div>
     <div class="xpbar"><i style="width:${p.pct}%"></i></div>
+    <p class="ph">${st.done} / ${st.total} lessons</p>
     <div class="card"><p class="lede">${t("daily")}</p>
       <button class="btn primary" id="cont">${t("cont")} · ${(()=>{const [a,b]=cont.split("."); const tm=(THEMES[a]||[]).find(x=>x.id===b); return tm?(S.ui==="es"?tm.es:tm.title):cont;})()}</button>
     </div>
@@ -345,15 +565,92 @@ function renderHub(){
     const b=document.createElement("button");
     b.style.setProperty("--tint", w.tint);
     b.disabled=!w.live;
-    b.innerHTML=`<b>${w.egg?"♥ ":""}${w.name}</b><span>${w.live?w.blurb:"Locked"}</span>`;
-    if(w.live) b.onclick=()=>renderIsland(w.id);
+    const n=packStatsTrack(w.id);
+    b.innerHTML=`<b>${w.egg?"♥ ":""}${w.name}</b><span>${w.live?(n.total?n.done+" / "+n.total+" · "+w.blurb:w.blurb):"Locked"}</span>`;
+    if(w.live) b.onclick=()=>renderTrack(w.id);
     box.appendChild(b);
   });
   $("#cont").onclick=()=>{ const [a,b]=cont.split("."); startSit(a,b,false); };
   nav("today");
 }
+function packStatsTrack(id){
+  let total=0, done=0;
+  const tr=trackOf(id);
+  if(tr){
+    for(const sec of tr.sections||[]){
+      for(const u of sec.units||[]){
+        const ls=lessonsFor(id,u.id);
+        total+=ls.length;
+        done+=ls.filter(L=>starsOf(id,L.id)>=1).length;
+      }
+    }
+  }
+  return {total, done};
+}
 function renderWorld(){ renderHub(); nav("map"); }
-function renderIsland(id){
+function renderTrack(id){
+  const tr=trackOf(id);
+  const w=WORLD.find(x=>x.id===id);
+  if(!tr){ renderIslandLegacy(id); return; }
+  app().innerHTML=`<header class="top"><div class="brand"><b>${w?w.name:tr.name}</b><small>${t("sec")}</small></div>
+    <button class="btn ghost" id="back" style="width:auto;min-height:40px">${t("mapb")}</button></header>
+    <p class="lede">${w?w.blurb:""}</p><div class="row" id="th"></div><nav class="nav"></nav>`;
+  $("#back").onclick=renderHub;
+  (tr.sections||[]).forEach(sec=>{
+    const open=sectionOpen(id, sec.cefr);
+    const units=liveUnits(id, sec.cefr);
+    const all=(sec.units||[]).length;
+    const b=document.createElement("button");
+    b.className="btn";
+    b.disabled=!open;
+    b.innerHTML=`<b>${sec.cefr}</b><div class="ph">${open?(units.length+" live / "+all+" units"):t("soon")}</div>`;
+    if(open) b.onclick=()=>renderSection(id, sec.cefr);
+    $("#th").appendChild(b);
+  });
+  nav("map");
+}
+function renderSection(id, cefr){
+  const tr=trackOf(id);
+  const sec=(tr.sections||[]).find(s=>s.cefr===cefr);
+  app().innerHTML=`<header class="top"><div class="brand"><b>${tr.name} · ${cefr}</b><small>units</small></div>
+    <button class="btn ghost" id="back" style="width:auto;min-height:40px">${tr.name}</button></header>
+    <div class="row" id="th"></div><nav class="nav"></nav>`;
+  $("#back").onclick=()=>renderTrack(id);
+  (sec.units||[]).forEach(u=>{
+    const ls=lessonsFor(id,u.id);
+    const open=ls.length && unitOpen(id, cefr, u.id);
+    const st=ls.length?Math.min(...ls.map(L=>starsOf(id,L.id))):0;
+    const b=document.createElement("button");
+    b.className="btn";
+    b.disabled=!open;
+    b.innerHTML=`<b>${S.ui==="es"?u.es:u.title}</b><div class="ph">${ls.length?("★".repeat(Math.min(3,st))+" · "+ls.length+" lessons"):t("soon")}</div>`;
+    if(open) b.onclick=()=>renderUnit(id, cefr, u.id);
+    $("#th").appendChild(b);
+  });
+  nav("map");
+}
+function renderUnit(id, cefr, unitId){
+  const tr=trackOf(id);
+  const u=(tr.sections.find(s=>s.cefr===cefr).units||[]).find(x=>x.id===unitId);
+  const ls=lessonsFor(id, unitId);
+  app().innerHTML=`<header class="top"><div class="brand"><b>${S.ui==="es"?u.es:u.title}</b><small>${(u.guide||[]).join(" · ")}</small></div>
+    <button class="btn ghost" id="back" style="width:auto;min-height:40px">${cefr}</button></header>
+    <div class="row" id="th"></div><nav class="nav"></nav>`;
+  $("#back").onclick=()=>renderSection(id, cefr);
+  ls.forEach(tm=>{
+    const st=starsOf(id, tm.id);
+    const open=lessonOpen(id, cefr, unitId, tm.id);
+    const b=document.createElement("button");
+    b.className="btn";
+    b.disabled=!open;
+    b.innerHTML=`${tm.npc||""} <b>${S.ui==="es"?tm.es:tm.title}</b><div class="ph">${open?("★".repeat(st)+"☆".repeat(Math.max(0,3-st))+" · "+(tm.items||[]).length):t("soon")}</div>`;
+    if(open) b.onclick=()=>startSit(id, tm.id, st>=3);
+    $("#th").appendChild(b);
+  });
+  nav("map");
+}
+function renderIsland(id){ renderTrack(id); }
+function renderIslandLegacy(id){
   const list=THEMES[id]||[];
   const w=WORLD.find(x=>x.id===id);
   app().innerHTML=`<header class="top"><div class="brand"><b>${w.name}</b><small>${list.length} lessons</small></div>
@@ -361,7 +658,7 @@ function renderIsland(id){
     <p class="lede">${w.blurb}</p><div class="row" id="th"></div><nav class="nav"></nav>`;
   $("#back").onclick=renderHub;
   list.forEach(tm=>{
-    const st=(S.sit[id+"."+tm.id]&&S.sit[id+"."+tm.id].stars)||0;
+    const st=starsOf(id, tm.id);
     const b=document.createElement("button");
     b.className="btn";
     b.innerHTML=`${tm.npc||""} <b>${S.ui==="es"?tm.es:tm.title}</b><div class="ph">${"★".repeat(st)}${"☆".repeat(Math.max(0,3-st))} · ${tm.items.length}</div>`;
