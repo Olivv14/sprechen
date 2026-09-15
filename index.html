@@ -409,9 +409,9 @@ const app=$("#app");
 let S=load();
 const Vmap=Object.fromEntries(V.map(v=>[v.inf,v]));
 
-function blank(){return {xp:0,ui:"es",seen:{},srs:{},q:null,queue:[],idx:0,total:0,locked:false,screen:"home",filter:"all",path:{}};}
+function blank(){return {xp:0,ui:"en",seen:{},srs:{},q:null,queue:[],idx:0,total:0,locked:false,screen:"home",filter:"all",path:{},sit:{},goal:10,streak:0};}
 function load(){try{return Object.assign(blank(),JSON.parse(localStorage.getItem(STORE)||"{}"));}catch(e){return blank();}}
-function save(){localStorage.setItem(STORE,JSON.stringify({xp:S.xp,ui:S.ui,seen:S.seen,srs:S.srs,path:S.path||{}}));}
+function save(){localStorage.setItem(STORE,JSON.stringify({xp:S.xp,ui:S.ui,seen:S.seen,srs:S.srs,path:S.path||{},sit:S.sit||{},goal:S.goal||10,streak:S.streak||0}));}
 function t(k){return (I18N[S.ui]||I18N.en)[k]||I18N.en[k]||k;}
 function pivot(){return S.ui==="es"?2:1;} // learn via EN unless UI is ES
 function line(v,tense,langIdx){return v[tense][langIdx];}
@@ -811,6 +811,110 @@ const AREAS=[
    levels:[{es:"Hallo",en:"Hallo"},{es:"Trabajo",en:"Work"},{es:"Entender",en:"Understand"},{es:"Quedar",en:"Meet"},{es:"Hasta luego",en:"See you"}]}
 ];
 
+const WORLD=[
+  {id:"de", name:"Deutschland", live:true},
+  {id:"fr", name:"France", live:true},
+  {id:"it", name:"Italia", live:false},
+  {id:"pt", name:"Portugal", live:false},
+  {id:"flirt", name:"Ragazzas", live:true, egg:true}
+];
+const THEMES={
+de:[
+  {id:"help", title:"Help with the way", es:"Ayudas a alguien", npc:"bag",
+   lede:"A tourist is lost. You get them to the U-Bahn.",
+   items:[
+    {hear:"Entschuldigung, wo ist die U-Bahn?", say:"Die U-Bahn ist da vorne.", en:"The U-Bahn is just up there.", es:"El metro está ahí delante.",
+     ph:"dee OO-bahn ist da FOR-nuh", why:"U-Bahn: long U. vorne: o like 'for'."},
+    {hear:"Ist es weit?", say:"Nein, nur fünf Minuten zu Fuß.", en:"No, just five minutes on foot.", es:"No, solo cinco minutos a pie.",
+     ph:"nine, noor fuenf mi-NOO-ten tsoo foos", why:"Fuß: ß = ss. zu Fuß = on foot."},
+    {hear:"Und welcher Ausgang?", say:"Gehen Sie einfach geradeaus.", en:"Just go straight ahead.", es:"Siga todo recto.",
+     ph:"GAY-en zee INE-fakh ge-RAH-de-aus", why:"Sie = formal (older / stranger). geradeaus: au like 'house'."}
+   ]},
+  {id:"ask", title:"You ask the way", es:"Tú pides camino", npc:"you",
+   lede:"You're Oliver, new in Berlin. You need the metro.",
+   items:[
+    {hear:null, say:"Entschuldigung, wo ist die U-Bahn?", en:"Excuse me, where's the U-Bahn?", es:"Perdona, ¿dónde está el metro?",
+     ph:"ent-SHOOL-di-goong, vo ist dee OO-bahn", why:"Entschuldigung: gung not 'shun'. ch in ich/nicht is soft."},
+    {hear:null, say:"Ist das weit von hier?", en:"Is that far from here?", es:"¿Queda lejos?",
+     ph:"ist das vite fon heer", why:"weit: ei like 'eye'."},
+    {hear:null, say:"Vielen Dank, ich arbeite bei Saikan.", en:"Thanks a lot, I work at Saikan.", es:"Mil gracias, trabajo en Saikan.",
+     ph:"FEE-len dangk, ij ar-BYE-tuh bye ZAI-kan", why:"ich = ij (soft ch). bei = by."}
+   ]},
+  {id:"waiter", title:"You are the waiter", es:"Eres el camarero", npc:"tray",
+   lede:"Service. Short, useful, a bit warm.",
+   items:[
+    {hear:null, say:"Guten Abend, was darf ich Ihnen bringen?", en:"Good evening, what may I bring you?", es:"Buenas, ¿qué les pongo?",
+     ph:"GOO-ten AH-bent, vas darf ij EE-nen BRING-en", why:"Ihnen / Sie = formal with guests."},
+    {hear:"Einmal die Karte, bitte.", say:"Natürlich, einen Moment.", en:"Of course, one moment.", es:"Claro, un momento.",
+     ph:"na-TUER-likh, EYE-nen mo-MENT", why:"ü in natürlich: purse your lips."},
+    {hear:null, say:"Noch etwas zu trinken?", en:"Anything else to drink?", es:"¿Algo más de beber?",
+     ph:"nokh ET-vas tsoo TRINK-en", why:"ch in noch = like Scottish loch, not k."}
+   ]},
+  {id:"guest", title:"You are the guest", es:"Te atienden", npc:"sit",
+   lede:"You sit down in Berlin. Order like a person.",
+   items:[
+    {hear:"Haben Sie reserviert?", say:"Ja, auf den Namen Oliver.", en:"Yes, under Oliver.", es:"Sí, a nombre de Oliver.",
+     ph:"ya, auf den NAH-men Oliver", why:"Ja = ya. Namen: long a."},
+    {hear:null, say:"Ich hätte gern ein Wasser, bitte.", en:"I'd like a water, please.", es:"Querría un agua, por favor.",
+     ph:"ij HET-te gern ine VAS-ser bitte", why:"hätte: ä like 'e' in bed, not a."},
+    {hear:null, say:"Die Rechnung, bitte.", en:"The bill, please.", es:"La cuenta, por favor.",
+     ph:"dee REKH-noong bitte", why:"ch in Rechnung = loch. -ung like 'oong'."}
+   ]},
+  {id:"hotel", title:"Hotel", es:"Hotel", npc:"key",
+   lede:"Check-in. Wi-Fi. You're Oliver from Saikan.",
+   items:[
+    {hear:null, say:"Ich habe eine Reservierung auf Oliver.", en:"I have a reservation under Oliver.", es:"Tengo reserva a nombre de Oliver.",
+     ph:"ij HAH-be EYE-ne re-zer-VEE-roong auf Oliver", why:"Reservierung: -ung. v in German = f."},
+    {hear:null, say:"Wie ist das WLAN-Passwort?", en:"What's the Wi-Fi password?", es:"¿Cuál es el wifi?",
+     ph:"vee ist das VEH-lan PASS-vort", why:"Wie = vee. WLAN said as letters plus lan."},
+    {hear:null, say:"Das Frühstück ist bis wann?", en:"Breakfast is until when?", es:"¿El desayuno hasta cuándo?",
+     ph:"das FRUE-shtuek ist bis van", why:"ü in Frühstück twice. Stück: ü + ck."}
+   ]},
+  {id:"bar", title:"Bar", es:"Bar", npc:"glass",
+   lede:"Casual, young. du, not Sie.",
+   items:[
+    {hear:null, say:"Hey, ist hier noch frei?", en:"Hey, is this seat free?", es:"¿Está libre?",
+     ph:"hai, ist heer nokh fry", why:"Young: du/hier. frei: ei = eye."},
+    {hear:null, say:"Ich nehme ein Berliner Pils, bitte.", en:"I'll take a Berliner Pils.", es:"Un pils de Berlín.",
+     ph:"ij NAY-me ine ber-LEE-ner pils bitte", why:"nehme: eh. Informal still bitte — not rude."},
+    {hear:null, say:"Ich muss morgen früh zu Saikan.", en:"I have to be at Saikan early tomorrow.", es:"Mañana temprano en Saikan.",
+     ph:"ij muss MOR-gen frue tsoo ZAI-kan", why:"muss not 'mus'. früh: ü."}
+   ]},
+  {id:"view", title:"The viewpoint", es:"Mirador", npc:"wind",
+   lede:"Up the hill. Small talk, not a textbook.",
+   items:[
+    {hear:null, say:"Krass, die Aussicht ist echt schön.", en:"Damn, the view is really beautiful.", es:"La vista está brutal.",
+     ph:"krass, dee AUS-zikht ist ekht shern", why:"Krass = young slang. schön: ö like 'e' with rounded lips."},
+    {hear:null, say:"Kommst du oft hier hoch?", en:"Do you come up here often?", es:"¿Subes mucho?",
+     ph:"KOMST doo oft heer hokh", why:"du — same age. ch in hoch = loch."},
+    {hear:null, say:"Ich zeig dir morgen Berlin, wenn du willst.", en:"I'll show you Berlin tomorrow if you want.", es:"Mañana te muestro Berlín si quieres.",
+     ph:"ij tsaik deer MOR-gen ber-LEEN ven doo vilst", why:"dir/du informal. zeigen → ich zeige/zeig (spoken)."}
+   ]}
+],
+fr:[{id:"help", title:"Aider quelqu'un", es:"Ayudar", npc:"bag", live:true,
+  lede:"First French: someone is lost. You help.",
+  items:[
+    {hear:"Pardon, où est le métro ?", say:"Le métro est tout droit.", en:"The metro is straight ahead.", es:"El metro está todo recto.",
+     ph:"luh may-TRO eh too drwa", why:"é = ay. droit: oi = wa."},
+    {hear:null, say:"Je m'appelle Oliver, je travaille chez Saikan.", en:"I'm Oliver, I work at Saikan.", es:"Soy Oliver, trabajo en Saikan.",
+     ph:"zhuh ma-PELL Oliver, zhuh tra-VY chez ZAI-kan", why:"je = zh. travaille: ay sound."}
+  ]}],
+it:[],
+pt:[],
+flirt:[{id:"table", title:"Four at the table", es:"Mesa de cuatro", npc:"heart",
+  lede:"Easter egg. Waiter. PT, IT, FR, DE at one table. Playful, not creepy.",
+  items:[
+    {hear:null, say:"Boa noite. A senhora tem um sorriso difícil de ignorar.", en:"Good evening. That smile is hard to ignore.", es:"Buenas. Esa sonrisa no se ignora.",
+     ph:"boa NOY-te. a se-NYO-ra teng oong so-HEE-zoo", why:"Portuguese to the Portuguese guest. First."},
+    {hear:null, say:"Signorina, gli occhi dicono già più di un menu.", en:"Miss, your eyes already say more than a menu.", es:"Señorita, los ojos hablan más que el menú.",
+     ph:"sin-yo-REE-na, lyee OK-kee DEE-ko-no ja", why:"Italian to the Italian. gli = ly."},
+    {hear:null, say:"Mademoiselle, vous avez l'air d'aimer les toits de Berlin.", en:"You look like someone who'd like Berlin rooftops.", es:"Parece que te gustarían los tejados de Berlín.",
+     ph:"mad-mwa-ZELL voo-za-VAY lehr de-MAY lay twa", why:"French. rooftops = joke for tomorrow morning."},
+    {hear:null, say:"Und du? Morgen früh habe ich frei. Nur reden, versprochen.", en:"And you? I'm free tomorrow morning. Just talk, promised.", es:"¿Y tú? Mañana libre. Solo hablar.",
+     ph:"unt doo? MOR-gen frue HAH-be ij fry. noor RAY-den", why:"German last. du — same energy, not Sie."}
+  ]}]
+};
+
 function npcSvg(id, mood){
   const hair={air:"#1e1e1e",train:"#3a2418",ask:"#6b3a22",give:"#4a3020",cafe:"#c45c3e",talk:"#121212"}[id]||"#222";
   const shirt={air:"#3d5a80",train:"#6a3030",ask:"#2f4a38",give:"#2f4a38",cafe:"#8a2e2e",talk:"#243044"}[id]||"#2f4a38";
@@ -891,46 +995,124 @@ function awardPath(){
 }
 
 function renderHome(){
-  const m=mastered();
-  app.innerHTML=`<header class="top">
-      <div class="mark"><div class="ball"></div><div class="brand"><b>Sprechen</b><small>Oliver · ruta</small></div></div>
-      ${langs()}
-    </header>
+  S.screen="home";
+  app.innerHTML=`<header class="top"><div class="mark"><div class="ball"></div><div class="brand"><b>Sprechen</b><small>islands · ${S.streak||0} day streak</small></div></div>${langs()}</header>
     <div class="hud">
-      <div class="stat"><b>${S.xp||0} XP</b><div class="xpbar"><i style="width:${Math.min(100,((S.xp||0)%80)/80*100)}%"></i></div></div>
-      <div class="stat"><b>${m}/100</b><div class="xpbar"><i style="width:${m}%"></i></div></div>
+      <div class="stat"><b>${S.xp||0} XP</b></div>
+      <div class="stat"><b>${S.goal||10} min/day</b></div>
     </div>
-    <div class="path" id="path"></div>
-    <button class="btn primary" id="cont" style="width:100%;margin:8px 0">Continuar ruta</button>
-    <div class="soon">Français · bientôt</div>
-    <div class="soon">Português · em breve</div>`;
-  const box=$("#path");
-  AREAS.forEach((a,i)=>{
-    const p=pathOf(a.id), open=areaUnlocked(i);
-    const el=document.createElement("div"); el.className="area-block";
-    el.innerHTML=`<p class="lede" style="text-align:center;margin:0 0 8px"><b style="color:var(--gold)">${i+1}. ${loc(a.n)}</b><br>${loc(a.lede)}</p>
-      <div class="trail"></div>`;
-    const trail=el.querySelector(".trail");
-    a.levels.forEach((lv,j)=>{
-      const st=p.s[j]||0;
-      const b=document.createElement("button");
-      b.className="node-lvl "+( !open?"lock": st?"done":"open");
-      b.disabled=!open;
-      b.innerHTML=`${j+1}<div class="stars">${st?("★".repeat(st)):""}</div>`;
-      b.onclick=()=>{ if(open) startPathLesson(a,j); };
-      trail.appendChild(b);
-    });
-    const ch=document.createElement("button");
-    ch.className="chest"+(p.chest?"":(p.ready?"":" lock"));
-    ch.title="cofre";
-    if(p.ready && !p.chest){
-      ch.onclick=()=>{ p.chest=true; S.xp+=40; save(); go("home"); };
-    }
-    trail.appendChild(ch);
-    box.appendChild(el);
+    <p class="lede">One island. One job. Not scattered dots.</p>
+    <div class="rowbtns" id="isles"></div>
+    <div class="card">
+      <p class="lede">Daily goal</p>
+      <div class="rowbtns" style="flex-direction:row;gap:8px">
+        <button class="btn ghost" data-g="5">5</button>
+        <button class="btn ghost" data-g="10">10</button>
+        <button class="btn ghost" data-g="15">15</button>
+      </div>
+    </div>`;
+  const box=$("#isles");
+  WORLD.forEach(w=>{
+    const b=document.createElement("button");
+    b.className="btn "+(w.live?"primary":"ghost");
+    b.disabled=!w.live;
+    b.textContent=(w.egg?"♥ ":"")+w.name+(w.live?"":" · locked");
+    if(w.live) b.onclick=()=>renderIsland(w.id);
+    box.appendChild(b);
   });
   app.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>setUi(b.dataset.l));
-  if($("#cont")) $("#cont").onclick=()=>startNextPath();
+  app.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>{S.goal=+b.dataset.g; save(); renderHome();});
+  nav();
+}
+function renderIsland(id){
+  S.island=id; S.screen="home";
+  const list=THEMES[id]||[];
+  app.innerHTML=`<header class="top"><div class="brand"><b>${WORLD.find(x=>x.id===id).name}</b><small>themes</small></div>
+    <button class="btn ghost" id="back" style="width:auto;min-height:36px;padding:6px 10px">Map</button></header>
+    <p class="lede">${id==="flirt"?"Easter. Playful, not creepy.":"Short lessons. Real mouth."}</p>
+    <div class="rowbtns" id="th"></div>`;
+  $("#back").onclick=()=>renderHome();
+  const th=$("#th");
+  list.forEach(tm=>{
+    const st=(S.sit&&S.sit[id+"."+tm.id]&&S.sit[id+"."+tm.id].stars)||0;
+    const b=document.createElement("button");
+    b.className="btn "+(st?"accent":"ghost");
+    b.innerHTML=`<b>${S.ui==="es"?tm.es:tm.title}</b><div class="lede" style="margin:0">${"★".repeat(st)}${"☆".repeat(Math.max(0,3-st))} · ${tm.items.length} lines</div>`;
+    b.onclick=()=>startSit(id,tm.id, st>=3);
+    th.appendChild(b);
+  });
+  nav();
+}
+function startSit(wid, tid, harder){
+  const tm=(THEMES[wid]||[]).find(x=>x.id===tid); if(!tm) return;
+  S.sitRun={wid,tid,i:0,wrong:0,harder:!!harder,npc:tm.npc};
+  S.screen="speak";
+  renderSit();
+}
+function sitItem(){ const R=S.sitRun; return THEMES[R.wid].find(x=>x.id===R.tid).items[R.i]; }
+function renderSit(){
+  const R=S.sitRun, it=sitItem(); if(!it){ return sitDone(); }
+  const L1=S.ui==="es"?it.es:it.en;
+  const showHear=!R.harder && it.hear;
+  app.innerHTML=`<div class="qmeta"><button class="btn ghost" id="back" style="min-height:36px;padding:6px 10px">Island</button>
+    <span>${R.i+1}/${THEMES[R.wid].find(x=>x.id===R.tid).items.length}</span></div>
+    <div class="stage">${npcSvg(R.wid==="flirt"?"talk":R.wid,"talk")}</div>
+    ${showHear?`<div class="bub">${it.hear}</div><p class="lede">They said that. You answer.</p>`:`<div class="bub">${L1}</div>`}
+    <p class="lede">${R.harder?"Hard replay — no phonetic until you miss.":"Type it. Or hold the mic."}</p>
+    <p class="eshint" id="ph">${R.harder?"":"("+it.ph+") · "+it.why}</p>
+    <input class="ans" id="ans" autocapitalize="off" autocomplete="off" placeholder="…">
+    <div style="display:flex;gap:8px">
+      <button class="btn primary" id="check" style="flex:1">Check</button>
+      <button class="btn ghost" id="mic">mic</button>
+      <button class="btn ghost" id="hear">🔊</button>
+    </div>
+    <div id="feed"></div>
+    <p class="lede" style="margin-top:10px">${it.why.includes("Sie")||it.why.includes("du")||it.why.includes("Ihnen")? (S.ui==="es"?"du = jóvenes / colegas. Sie = señores, clientes, desconocidos.":"du = young / peers. Sie = older people, guests, strangers."):""}</p>`;
+  $("#back").onclick=()=>renderIsland(R.wid);
+  const toHear=it.hear||it.say;
+  const lang=R.wid==="fr"?"fr":R.wid==="it"?"it":R.wid==="pt"||R.wid==="flirt"&&R.i===0?"pt":R.wid==="flirt"&&R.i===1?"it":R.wid==="flirt"&&R.i===2?"fr":"de";
+  if(showHear) speak(it.hear, lang==="pt"?"pt":lang);
+  $("#hear").onclick=()=>speak(R.harder||!it.hear?it.say:toHear, lang);
+  $("#check").onclick=()=>sitGrade();
+  $("#ans").onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); sitGrade(); } };
+  $("#mic").onclick=()=>sitMic(lang);
+  nav();
+}
+function sitGrade(){
+  const R=S.sitRun, it=sitItem();
+  const ok=norm($("#ans").value)===norm(it.say);
+  npcSet(ok?"yes":"no");
+  if(!ok) R.wrong++;
+  $("#ph").textContent="("+it.ph+") · "+it.why;
+  $("#feed").innerHTML=`<div class="explain"><b>${ok?"Yes.":"Not yet."}</b><div class="de">${it.say}</div><div class="eshint">(${it.ph})</div></div>`;
+  speak(it.say, R.wid==="fr"?"fr":"de");
+  $("#check").textContent="Next";
+  $("#check").onclick=()=>{ if(ok){ R.i++; renderSit(); } else { $("#ans").value=""; $("#ans").focus(); $("#check").onclick=()=>sitGrade(); $("#check").textContent="Check"; } };
+}
+function sitMic(lang){
+  const Rec=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!Rec){ $("#feed").innerHTML=`<div class="explain">This Safari build has no dictation. Type it.</div>`; return; }
+  const r=new Rec(); r.lang=lang==="de"?"de-DE":lang==="fr"?"fr-FR":lang==="it"?"it-IT":"pt-PT";
+  r.onresult=e=>{ $("#ans").value=e.results[0][0].transcript; sitGrade(); };
+  r.onerror=()=>{$("#feed").innerHTML=`<div class="explain">Mic failed. Type.</div>`;};
+  r.start();
+}
+function sitDone(){
+  const R=S.sitRun;
+  const stars=R.wrong===0?3:R.wrong===1?2:1;
+  S.sit=S.sit||{};
+  const k=R.wid+"."+R.tid;
+  const prev=(S.sit[k]&&S.sit[k].stars)||0;
+  S.sit[k]={stars:Math.max(prev,stars)};
+  S.xp+=12*stars; save();
+  if(stars===3) confetti();
+  app.innerHTML=`<div class="card" style="text-align:center">
+    ${npcSvg("talk","win")}
+    <p class="stars" style="font-size:1.4rem">${"★".repeat(stars)}${"☆".repeat(3-stars)}</p>
+    <p class="lede">${R.wrong} misses. Replay at 3★ is harder (no phonetic).</p>
+    <button class="btn primary" id="back">Island</button>
+  </div>`;
+  $("#back").onclick=()=>renderIsland(R.wid);
   nav();
 }
 
