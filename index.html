@@ -1,81 +1,95 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Sprechen">
-<meta name="theme-color" content="#0E1116">
+<meta name="theme-color" content="#0B0E14">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Sprechen</title>
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
 :root{
-  --bg:#0E1116; --elev:#161B22; --card:#1A2029; --ink:#E8EAED; --muted:#8B919C;
-  --line:#2A303A; --accent:#E8B86D; --on:#0E1116; --ok:#3D9B6E; --bad:#C45C4A;
-  --radius:16px; --touch:48px;
+  --bg:#0B0E14; --elev:#12151C; --card:#181C24; --card2:#1F242F;
+  --ink:#F1F3F7; --muted:#8A92A0; --soft:#D0D4DC;
+  --line:#232834; --accent:#6499BE; --accent2:#98cdf4; --on:#0B0E14;
+  --ok:#4E8B7C; --bad:#A85B5B; --warn:#A88258;
+  --radius:20px; --radius-sm:16px; --touch:48px;
 }
-html[data-theme="berlin"]{ --bg:#0B1220; --elev:#132038; --card:#17263F; --accent:#7EB6FF; --on:#0B1220; }
-html[data-theme="stone"]{ --bg:#121212; --elev:#1C1C1C; --card:#222; --accent:#C4B8A5; --ink:#EEE; --muted:#9A958C; --line:#333; --on:#121212; }
-html[data-theme="afterhours"]{ --bg:#140C12; --elev:#1E121A; --card:#261820; --accent:#E07A9A; --on:#140C12; }
+html[data-theme="berlin"]{ --accent:#7EB6FF; --bg:#0B1220; --elev:#121A28; --card:#182233; }
+html[data-theme="stone"]{ --accent:#C4B8A5; --bg:#121212; --elev:#1C1C1C; --card:#222; --ink:#EEE; --muted:#9A958C; --line:#333; }
+html[data-theme="afterhours"]{ --accent:#BE7A99; --bg:#140C12; --elev:#1E121A; --card:#261820; }
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;
-  font-size:16px;line-height:1.45}
-body{background:radial-gradient(900px 420px at 50% -20%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 55%), var(--bg)}
+  font-family:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,sans-serif;
+  font-size:15px;line-height:1.45}
+body{background:var(--bg)}
 button,input{font:inherit;color:inherit} button{cursor:pointer}
 .wrap{max-width:430px;margin:0 auto;padding:16px 16px 112px}
-.top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:14px}
-.brand b{display:block;font-size:1.28rem;letter-spacing:-.02em}
-.brand small{color:var(--muted);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin:10px 0}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:16px}
+.brand b{display:block;font-size:1.35rem;font-weight:700;letter-spacing:-.02em}
+.brand small,.kicker{color:var(--muted);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+.pulse{width:6px;height:6px;border-radius:99px;background:var(--accent);display:inline-block;animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.mono{font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.card{background:var(--elev);border:1px solid var(--line);border-radius:var(--radius);padding:18px 18px;margin:10px 0}
 .hud{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.stat{background:var(--elev);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
-.stat b{display:block;font-size:1.05rem}
-.lede{color:var(--muted);margin:0 0 10px}
-.isle{display:grid;gap:10px}
-.isle button{
-  text-align:left;border:1px solid var(--line);border-radius:18px;min-height:72px;
-  padding:14px 16px;background:var(--card);color:var(--ink);
-  background-image:linear-gradient(135deg, color-mix(in srgb, var(--tint, var(--accent)) 22%, transparent), transparent 60%);
-}
-.isle button b{display:block;font-size:1.05rem}
-.isle button span{color:var(--muted);font-size:.86rem}
-.isle button[disabled]{opacity:.38}
-.btn{border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-height:var(--touch);
-  font-weight:650;background:var(--elev);text-align:left;width:100%}
+.stat{background:var(--elev);border:1px solid var(--line);border-radius:16px;padding:12px}
+.stat b{display:block;font-size:1.05rem;font-weight:700}
+.lede{color:var(--muted);margin:0 0 10px;font-size:.86rem}
+.isle{display:grid;gap:14px}
+.dest{text-align:left;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--elev);color:var(--ink);padding:0;width:100%}
+.dest .hero{height:140px;background-size:cover;background-position:center;position:relative}
+.dest.de .hero{background:linear-gradient(180deg,transparent 10%,var(--elev)),url("img/berlin.jpg") center/cover}
+.dest.fr .hero{background:linear-gradient(180deg,transparent 10%,var(--elev)),url("img/night.jpg") center/cover}
+.dest.it .hero, .dest.pt .hero{background:linear-gradient(135deg,#1a1a1a,#111);filter:grayscale(.4);opacity:.7}
+.dest.flirt .hero{background:linear-gradient(180deg,transparent 20%,var(--elev)),url("img/npc-flirt.png") center/cover}
+.dest .hero .tag{position:absolute;top:12px;left:12px;background:var(--accent);color:var(--on);border-radius:99px;padding:4px 10px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.dest .body{padding:16px}
+.dest h3{margin:0 0 4px;font-size:1.25rem;letter-spacing:-.02em}
+.dest p{margin:0;color:var(--muted);font-size:.82rem}
+.btn{border:1px solid var(--line);border-radius:16px;padding:12px 14px;min-height:var(--touch);
+  font-weight:600;background:var(--card);text-align:left;width:100%;transition:transform .12s ease,background .15s}
+.btn:active{transform:scale(.985)}
 .btn.primary{background:var(--accent);color:var(--on);border-color:var(--accent)}
 .btn.ghost{background:transparent}
+.btn:disabled{opacity:.38}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:4px 10px;background:var(--card);border:1px solid var(--line);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
 .row{display:flex;flex-direction:column;gap:8px}
-.ans{width:100%;padding:14px;border:1px solid var(--line);border-radius:14px;margin:8px 0;background:var(--elev)}
-.ph{color:var(--muted);font-size:.9rem;margin:6px 0}
-.de{font-weight:700;font-size:1.2rem}
-.nav{position:fixed;bottom:0;left:0;right:0;z-index:5;background:color-mix(in srgb, var(--bg) 92%, black);
+.ans{width:100%;padding:14px;border:1px solid var(--line);border-radius:16px;margin:8px 0;background:#0B0E14;color:var(--ink)}
+.ans:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(100,153,190,.15)}
+.ph{color:var(--muted);font-size:.9rem;margin:6px 0;letter-spacing:.02em}
+.de{font-weight:700;font-size:1.35rem;letter-spacing:-.02em;line-height:1.3}
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:5;background:color-mix(in srgb,var(--bg) 94%,black);
   border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);
   padding:6px 8px calc(10px + env(safe-area-inset-bottom))}
-.nav button{border:0;background:transparent;color:var(--muted);min-height:48px;border-radius:12px;font-size:.68rem;font-weight:700}
-.nav button.on{color:var(--accent);background:color-mix(in srgb, var(--accent) 12%, transparent)}
+.nav button{border:0;background:transparent;color:var(--muted);min-height:52px;border-radius:12px;font-size:.65rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.nav button.on{color:var(--accent2)}
+.nav svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-.dot{height:36px;border-radius:10px;border:1px solid var(--line);display:grid;place-items:center;font-size:.72rem;color:var(--muted)}
+.dot{height:40px;border-radius:12px;border:1px solid var(--line);display:grid;place-items:center;font-size:.72rem;color:var(--muted);background:var(--elev)}
 .dot.on{background:var(--accent);color:var(--on);border-color:var(--accent)}
-.npc{font-size:3.2rem;text-align:center;line-height:1;margin:8px 0;animation:bob 2.4s ease-in-out infinite}
+.npc{font-size:3.2rem;text-align:center;line-height:1;margin:8px 0}
+.npc-photo{width:100%;height:220px;border-radius:20px;object-fit:cover;border:1px solid var(--line);display:block;margin:8px 0 12px}
 .npc.yes{animation:pop .4s ease}
 .npc.no{animation:shake .35s ease}
-.bub{background:var(--ink);color:var(--bg);border-radius:16px 16px 16px 4px;padding:12px 14px;font-weight:700}
-.stars{color:var(--accent);letter-spacing:.12em}
-.xpbar{height:8px;background:var(--elev);border-radius:99px;overflow:hidden}
+.bub{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:14px 16px;font-weight:700;font-size:1.2rem;letter-spacing:-.02em}
+.stars{color:var(--accent2);letter-spacing:.2em;font-size:1.2rem}
+.xpbar{height:6px;background:var(--card2);border-radius:99px;overflow:hidden}
 .xpbar>i{display:block;height:100%;background:var(--accent);width:0}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:grid;place-items:center;z-index:30;padding:24px}
 .skins{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.glyph{width:56px;height:56px;border-radius:16px;background:var(--card);border:1px solid var(--line);display:grid;place-items:center;margin:0 auto 12px;position:relative}
+.glyph .dot{position:absolute;bottom:-2px;right:-2px;width:10px;height:10px;border-radius:99px;background:var(--accent);animation:pulse 1.8s ease-in-out infinite;border:0}
+.mic{width:56px;height:56px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--accent);flex:0 0 56px}
+.dock{display:flex;gap:8px;align-items:center}
 #fx{position:fixed;inset:0;pointer-events:none;z-index:20}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.08)}100%{transform:scale(1)}}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
 
-</style>
-</head>
-<body>
+</style></head><body>
 <div class="wrap" id="app"></div>
 <script>
 const WORLD=[
@@ -506,7 +520,13 @@ function $(q){ return document.querySelector(q); }
 function app(){ return $("#app"); }
 function nav(on){
   const el=$(".nav"); if(!el) return;
-  el.innerHTML=["today","map","cal","you"].map(id=>`<button data-n="${id}" class="${on===id?"on":""}">${t(id)}</button>`).join("");
+  const ic={
+    today:'<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>',
+    map:'<svg viewBox="0 0 24 24"><path d="M3 7l6-3 6 3 6-3v13l-6 3-6-3-6 3z"/><path d="M9 4v13M15 7v13"/></svg>',
+    cal:'<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16"/></svg>',
+    you:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c1.5-3 4-5 7-5s5.5 2 7 5"/></svg>'
+  };
+  el.innerHTML=["today","map","cal","you"].map(id=>`<button data-n="${id}" class="${on===id?"on":""}">${ic[id]}${t(id)}</button>`).join("");
   el.querySelectorAll("button").forEach(b=>b.onclick=()=>{
     if(b.dataset.n==="today") renderHub();
     if(b.dataset.n==="map") renderWorld();
@@ -525,11 +545,18 @@ function lastSit(){
   return keys[keys.length-1]||"de.help";
 }
 function renderLogin(){
-  app().innerHTML=`<header class="top"><div class="brand"><b>Sprechen</b><small>local · yours</small></div></header>
-    <div class="card"><p class="lede">${t("setup")}</p>
+  app().innerHTML=`<div style="padding-top:36px;text-align:center">
+    <div class="glyph">💬<span class="dot"></span></div>
+    <div class="brand"><b>Sprechen</b></div>
+    <div class="pill" style="margin:10px auto"><span class="pulse"></span> Local · yours</div>
+    </div>
+    <div class="card">
+      <div class="kicker" style="margin-bottom:12px">Local account</div>
+      <label class="kicker">Name</label>
       <input class="ans" id="nm" placeholder="${t("name")}" value="${S.name||""}">
-      <input class="ans" id="pw" type="password" placeholder="${t("secret")}">
-      <button class="btn primary" id="go">${t("go")}</button>
+      <label class="kicker">Secret</label>
+      <input class="ans" id="pw" type="password" placeholder="${t("secret")}" style="letter-spacing:.2em">
+      <button class="btn primary" id="go">Enter Sprechen →</button>
       <p class="ph">On this phone. Export a backup in You.</p>
     </div>`;
   $("#go").onclick=async()=>{
@@ -542,16 +569,20 @@ function renderLogin(){
 }
 function renderOnboard(){
   if(S.didSetup){ renderHub(); return; }
-  app().innerHTML=`<header class="top"><div class="brand"><b>${t("setup")}</b><small>once</small></div></header>
-    <div class="card"><p class="lede">${t("ui")}</p>
+  app().innerHTML=`<p class="kicker"><span class="pulse"></span> Protocol 01 · Setup</p>
+    <div class="brand"><b>Acoustic identity</b><small>once</small></div>
+    <div class="card"><p class="kicker">${t("ui")}</p>
       <div class="row" style="flex-direction:row;gap:8px">
-        <button class="btn" id="en">English</button><button class="btn" id="es">Español</button>
+        <button class="btn ${S.ui==="en"?"primary":""}" id="en">EN</button>
+        <button class="btn ${S.ui==="es"?"primary":""}" id="es">ES</button>
       </div></div>
-    <div class="card"><p class="lede">${t("goal")}</p>
+    <div class="card"><p class="kicker">${t("goal")}</p>
       <div class="row" style="flex-direction:row;gap:8px">
-        <button class="btn" data-g="5">5</button><button class="btn" data-g="10">10</button><button class="btn" data-g="15">15</button>
+        <button class="btn ${S.goal===5?"primary":""}" data-g="5">5</button>
+        <button class="btn ${(S.goal||10)===10?"primary":""}" data-g="10">10</button>
+        <button class="btn ${S.goal===15?"primary":""}" data-g="15">15</button>
       </div></div>
-    <button class="btn primary" id="ok">Start</button>`;
+    <button class="btn primary" id="ok">Initialize session →</button>`;
   $("#en").onclick=()=>{S.ui="en";save();renderOnboard();};
   $("#es").onclick=()=>{S.ui="es";save();renderOnboard();};
   app().querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>{S.goal=+b.dataset.g;save();renderOnboard();});
@@ -562,32 +593,38 @@ function renderHub(){
   const p=prog(S.xp||0);
   const cont=lastSit();
   const st=packStats();
-  app().innerHTML=`<header class="top"><div class="brand"><b>${greet()}</b><small>Lv ${p.l} · ${S.streak||0} ${t("streak")}</small></div></header>
+  app().innerHTML=`<p class="kicker"><span class="pulse"></span> Nocturne session</p>
+    <header class="top"><div class="brand"><b>${greet()}</b><small>Lv ${p.l} · ${S.streak||0} ${t("streak")}</small></div></header>
     <div class="hud">
-      <div class="stat"><b>${S.xp||0}</b><span class="lede" style="margin:0">XP</span></div>
-      <div class="stat"><b>${S.goal||10}</b><span class="lede" style="margin:0">min</span></div>
-      <div class="stat"><b>${st.left}</b><span class="lede" style="margin:0">${t("left")}</span></div>
+      <div class="stat"><b class="mono">${S.xp||0}</b><span class="lede" style="margin:0">XP</span></div>
+      <div class="stat"><b class="mono">${S.goal||10}</b><span class="lede" style="margin:0">min</span></div>
+      <div class="stat"><b class="mono">${st.left}</b><span class="lede" style="margin:0">${t("left")}</span></div>
     </div>
     <div class="xpbar"><i style="width:${p.pct}%"></i></div>
-    <p class="ph">${st.done} / ${st.total} lessons</p>
-    <div class="card"><p class="lede">${t("daily")}</p>
-      <button class="btn primary" id="cont">${t("cont")} · ${(()=>{const [a,b]=cont.split("."); const tm=(THEMES[a]||[]).find(x=>x.id===b); return tm?(S.ui==="es"?tm.es:tm.title):cont;})()}</button>
+    <p class="ph mono">${st.done} / ${st.total} lessons</p>
+    <div class="card"><p class="kicker">${t("daily")}</p>
+      <button class="btn primary" id="cont">${t("cont")} · ${(()=>{const [a,b]=cont.split("."); const tm=findLesson(a,b); return tm?(S.ui==="es"?tm.es:tm.title):cont;})()} →</button>
     </div>
-    <p class="lede">Islands</p>
+    <p class="kicker">Active territory</p>
     <div class="isle" id="isles"></div>
     <nav class="nav"></nav>`;
   const box=$("#isles");
-  WORLD.forEach(w=>{
-    const b=document.createElement("button");
-    b.style.setProperty("--tint", w.tint);
-    b.disabled=!w.live;
-    const n=packStatsTrack(w.id);
-    b.innerHTML=`<b>${w.egg?"♥ ":""}${w.name}</b><span>${w.live?(n.total?n.done+" / "+n.total+" · "+w.blurb:w.blurb):"Locked"}</span>`;
-    if(w.live) b.onclick=()=>renderTrack(w.id);
-    box.appendChild(b);
-  });
+  WORLD.filter(w=>w.id==="de"||w.id==="flirt").forEach(w=>box.appendChild(destCard(w)));
   $("#cont").onclick=()=>{ const [a,b]=cont.split("."); startSit(a,b,false); };
   nav("today");
+}
+function destCard(w){
+  const n=packStatsTrack(w.id);
+  const b=document.createElement("button");
+  b.className="dest "+w.id;
+  b.disabled=!w.live;
+  b.innerHTML=`<div class="hero"><span class="tag">${w.live?(w.egg?"Easter":"Active journey"):"Locked"}</span></div>
+    <div class="body"><h3>${w.egg?"♥ ":""}${w.name}</h3>
+    <p>${w.blurb}</p>
+    <p class="ph mono">${n.total?n.done+" / "+n.total+" lessons":t("soon")}</p>
+    ${w.live?'<div class="btn primary" style="margin-top:10px">Enter territory →</div>':""}</div>`;
+  if(w.live) b.onclick=()=>renderTrack(w.id);
+  return b;
 }
 function packStatsTrack(id){
   let total=0, done=0;
@@ -603,7 +640,15 @@ function packStatsTrack(id){
   }
   return {total, done};
 }
-function renderWorld(){ renderHub(); nav("map"); }
+function renderWorld(){
+  const st=packStats();
+  app().innerHTML=`<p class="kicker"><span class="pulse"></span> Reisekarte · Atlas</p>
+    <header class="top"><div class="brand"><b>Destinations</b><small class="mono">${st.done} / ${st.total}</small></div></header>
+    <div class="isle" id="isles"></div>
+    <nav class="nav"></nav>`;
+  WORLD.forEach(w=>$("#isles").appendChild(destCard(w)));
+  nav("map");
+}
 function renderTrack(id){
   const tr=trackOf(id);
   const w=WORLD.find(x=>x.id===id);
@@ -729,20 +774,21 @@ function renderSit(){
   const L1=S.ui==="es"?it.es:it.en;
   const show=!R.harder && it.hear;
   const n=(tm.items||[]).length;
-  app().innerHTML=`<div class="top"><button class="btn ghost" id="back" style="width:auto;min-height:40px">${t("island")}</button>
-    <span class="ph">${R.i+1}/${n}</span></div>
-    <div class="npc" id="npc">${tm.npc||"◎"}</div>
+  const photo=R.wid==="flirt"?`<img class="npc-photo" alt="" src="img/npc-flirt.png">`:`<div class="npc" id="npc">${tm.npc||"◎"}</div>`;
+  app().innerHTML=`<div class="top"><button class="btn ghost" id="back" style="width:auto;min-height:40px">←</button>
+    <span class="kicker mono">${R.i+1} / ${n}</span></div>
+    ${photo}
+    <p class="kicker">${R.wid==="flirt"?"Live encounter":"Produce"}</p>
     ${show?`<div class="bub">${it.hear}</div><p class="lede">They said that. You answer.</p>`:`<div class="bub">${L1}</div>`}
     <p class="ph" id="ph">${R.harder?t("hard"):"("+it.ph+") · "+it.why}</p>
-    <input class="ans" id="ans" autocapitalize="off" autocomplete="off">
-    <div style="display:flex;gap:8px">
+    <input class="ans" id="ans" autocapitalize="off" autocomplete="off" placeholder="…">
+    <div class="dock">
       <button class="btn primary" id="check" style="flex:1">${t("check")}</button>
-      <button class="btn ghost" id="mic" style="width:auto">mic</button>
-      <button class="btn ghost" id="hear" style="width:auto">🔊</button>
+      <button class="mic" id="mic" aria-label="mic">●</button>
+      <button class="btn ghost" id="hear" style="width:auto;min-width:48px">♪</button>
     </div>
     <div id="feed"></div>
-    <p class="ph">${it.why&&/Sie|du |Ihnen|Dein /.test(it.why)?t("du"):""}</p>
-    <nav class="nav"></nav>`;
+    <p class="ph">${it.why&&/Sie|du |Ihnen|Dein /.test(it.why)?t("du"):""}</p>`;
   $("#back").onclick=()=>renderIsland(R.wid);
   const lg=langOf();
   if(show) speak(it.hear, lg);
@@ -750,13 +796,12 @@ function renderSit(){
   $("#check").onclick=grade;
   $("#ans").onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); grade(); } };
   $("#mic").onclick=()=>mic(lg);
-  nav("map");
 }
 function norm(s){ return (s||"").trim().toLowerCase().replace(/[?!.,]/g,"").replace(/\s+/g," "); }
 function grade(){
   const R=S.run, it=item();
   const ok=norm($("#ans").value)===norm(it.say);
-  $("#npc").className="npc "+(ok?"yes":"no");
+  const n=$("#npc"); if(n) n.className="npc "+(ok?"yes":"no");
   if(!ok) R.wrong++;
   $("#ph").textContent="("+it.ph+") · "+it.why;
   $("#feed").innerHTML=`<div class="card"><b>${ok?t("yes"):t("no")}</b><div class="de">${it.say}</div><div class="ph">(${it.ph})</div></div>`;
@@ -794,14 +839,16 @@ function sitDone(){
   if(R.wid==="flirt") S.eggs.flirt=true;
   save();
   if(stars===3) confetti();
-  app().innerHTML=`<div class="card" style="text-align:center">
-    <div class="npc">✦</div>
-    <p class="stars">${"★".repeat(stars)}${"☆".repeat(3-stars)}</p>
-    <p class="lede">${R.wrong} misses. 3★ replay is harder.</p>
-    <button class="btn primary" id="back">${t("island")}</button>
-  </div><nav class="nav"></nav>`;
+  app().innerHTML=`<p class="kicker">Lesson summary</p>
+    <div class="card" style="text-align:center">
+      <div class="pill" style="margin:0 auto 12px">${stars===3?"Passed":"Cleared"}</div>
+      <p class="stars">${"★".repeat(stars)}${"☆".repeat(3-stars)}</p>
+      <h3 style="margin:8px 0">Territory ${stars===3?"mastered":"logged"}</h3>
+      <p class="lede">${R.wrong} misses. Replay at 3★ hides phonetics.</p>
+      <p class="ph mono">+${12*stars} XP</p>
+      <button class="btn primary" id="back">Back to island →</button>
+    </div>`;
   $("#back").onclick=()=>renderIsland(R.wid);
-  nav("map");
 }
 function renderCal(){
   const days=[...Array(7)].map((_,i)=>{
@@ -872,6 +919,4 @@ function boot(){
 }
 document.addEventListener("DOMContentLoaded", boot);
 
-</script>
-</body>
-</html>
+</script></body></html>
