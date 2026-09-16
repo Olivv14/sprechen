@@ -1,0 +1,237 @@
+[
+  {
+    "id": "DE-01",
+    "language": "de",
+    "live": true,
+    "category": "MODAL_POLITE",
+    "difficulty": "A1",
+    "pattern_display": "[Ich möchte / Könnte ich] + OBJ + INF-final",
+    "core_formula": "{modal} {obj} {verb_inf}",
+    "example_de": "Ich möchte Ihnen einen Wein empfehlen.",
+    "example_en": "I would like to recommend a wine to you.",
+    "cultural_context": "Modal in position 2, infinitive magnet at the end.",
+    "slots": {
+      "modal": [
+        "Ich möchte",
+        "Könnte ich",
+        "Darf ich"
+      ],
+      "obj": [
+        "Ihnen einen Wein",
+        "die Karte",
+        "ein stilles Wasser",
+        "den Weg zur U-Bahn"
+      ],
+      "verb_inf": [
+        "empfehlen",
+        "bringen",
+        "zeigen",
+        "erklären"
+      ]
+    }
+  },
+  {
+    "id": "DE-02",
+    "language": "de",
+    "live": true,
+    "category": "POSSIBILITY",
+    "difficulty": "A1",
+    "pattern_display": "[Kann man hier] + … + INF?",
+    "core_formula": "Kann man hier {place} {verb_inf}?",
+    "example_de": "Kann man hier draußen sitzen?",
+    "example_en": "Can one sit outside here?",
+    "cultural_context": "man = people in general, not 'hombre'.",
+    "slots": {
+      "place": [
+        "hier draußen",
+        "am Fenster",
+        "ohne Reservierung",
+        "bar"
+      ],
+      "verb_inf": [
+        "sitzen",
+        "probieren",
+        "bestellen",
+        "zahlen"
+      ]
+    }
+  },
+  {
+    "id": "DE-03",
+    "language": "de",
+    "live": true,
+    "category": "WEIL",
+    "difficulty": "A2",
+    "pattern_display": "HAUPT + weil + … + VERB-final",
+    "core_formula": "{main}, weil {rest} {verb}",
+    "example_de": "Ich mag diesen Ort, weil die Musik super ist.",
+    "example_en": "I like this place because the music is great.",
+    "cultural_context": "weil kicks the finite verb to the end. That is the German flex.",
+    "slots": {
+      "main": [
+        "Ich mag diesen Ort",
+        "Wir kommen später",
+        "Ich bringe die Karte sofort"
+      ],
+      "rest": [
+        "die Musik super",
+        "wir heute neue Weine",
+        "es heute regnet"
+      ],
+      "verb": [
+        "ist",
+        "haben",
+        "regnet"
+      ]
+    }
+  },
+  {
+    "id": "DE-04",
+    "language": "de",
+    "live": true,
+    "category": "ORIGIN",
+    "difficulty": "A1",
+    "pattern_display": "[Aus welcher Stadt] kommen Sie?",
+    "core_formula": "Aus welcher Stadt kommen Sie? Aus {city}?",
+    "example_de": "Aus welcher Stadt kommen Sie? Aus Berlin?",
+    "example_en": "Which city are you from? Berlin?",
+    "cultural_context": "Sie with strangers. du only if they switch first.",
+    "slots": {
+      "city": [
+        "Berlin",
+        "München",
+        "Hamburg",
+        "Köln",
+        "Wien",
+        "Dresden",
+        "Frankfurt"
+      ]
+    }
+  },
+  {
+    "id": "DE-05",
+    "language": "de",
+    "live": true,
+    "category": "TASTE",
+    "difficulty": "A2",
+    "pattern_display": "Hat es Ihnen gut geschmeckt?",
+    "core_formula": "Hat es Ihnen {how} geschmeckt?",
+    "example_de": "Hat es Ihnen allen gut geschmeckt?",
+    "example_en": "Did you all enjoy the meal?",
+    "cultural_context": "Hat alles gepasst? is even more natural.",
+    "slots": {
+      "how": [
+        "gut",
+        "allen gut",
+        "ein bisschen"
+      ]
+    }
+  },
+  {
+    "id": "DE-06",
+    "language": "de",
+    "live": true,
+    "category": "BILL_EGG",
+    "difficulty": "A1",
+    "pattern_display": "Zusammen oder getrennt?",
+    "core_formula": "Möchten Sie {how} bezahlen?",
+    "example_de": "Möchten Sie zusammen oder getrennt bezahlen?",
+    "example_en": "Together or separately?",
+    "cultural_context": "Germans split bills without drama. Ask. Do not assume.",
+    "slots": {
+      "how": [
+        "zusammen oder getrennt",
+        "mit Karte",
+        "bar",
+        "die Rechnung"
+      ]
+    }
+  },
+  {
+    "id": "DE-07",
+    "language": "de",
+    "live": true,
+    "category": "OPINION",
+    "difficulty": "A2",
+    "pattern_display": "Meiner Meinung nach ist + N + Adj",
+    "core_formula": "Meiner Meinung nach ist {noun} {adj}.",
+    "example_de": "Meiner Meinung nach ist das Fleisch perfekt.",
+    "example_en": "In my opinion the meat is perfect.",
+    "cultural_context": "Opinion frame for investor dinners in Vienna too.",
+    "slots": {
+      "noun": [
+        "das Fleisch",
+        "die Musik",
+        "dieser Wein",
+        "das Tempo"
+      ],
+      "adj": [
+        "perfekt",
+        "frisch",
+        "zu laut",
+        "typisch"
+      ]
+    }
+  },
+  {
+    "id": "DE-08",
+    "language": "de",
+    "live": true,
+    "category": "OFFER",
+    "difficulty": "A1",
+    "pattern_display": "Brauchen Sie noch + Akk?",
+    "core_formula": "Brauchen Sie noch {noun}?",
+    "example_de": "Brauchen Sie noch etwas Wasser oder Brot?",
+    "example_en": "Do you still need some water or bread?",
+    "cultural_context": "noch = still/more. Accusative after brauchen.",
+    "slots": {
+      "noun": [
+        "etwas Wasser",
+        "Brot",
+        "Besteck",
+        "eine Serviette",
+        "die Karte"
+      ]
+    }
+  },
+  {
+    "id": "DE-09",
+    "language": "de",
+    "live": true,
+    "category": "PLANS",
+    "difficulty": "A2",
+    "pattern_display": "Was haben Sie heute noch vor?",
+    "core_formula": "Was haben Sie {when} noch vor?",
+    "example_de": "Was haben Sie heute Abend noch vor?",
+    "example_en": "What else are you planning this evening?",
+    "cultural_context": "vorhaben: prefix vor goes to the end in questions too.",
+    "slots": {
+      "when": [
+        "heute Abend",
+        "nach dem Essen",
+        "in Berlin",
+        "am Wochenende"
+      ]
+    }
+  },
+  {
+    "id": "DE-10",
+    "language": "de",
+    "live": true,
+    "category": "WISH",
+    "difficulty": "A1",
+    "pattern_display": "Ich wünsche Ihnen + Adj + N",
+    "core_formula": "Ich wünsche Ihnen {wish}.",
+    "example_de": "Ich wünsche Ihnen einen schönen Abend!",
+    "example_en": "I wish you a nice evening.",
+    "cultural_context": "Standard close. Never birthday wishes early.",
+    "slots": {
+      "wish": [
+        "einen schönen Abend",
+        "einen schönen Urlaub",
+        "eine gute Reise",
+        "einen guten Appetit"
+      ]
+    }
+  }
+]

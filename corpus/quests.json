@@ -1,0 +1,66 @@
+[
+  {
+    "id": "q-de-01",
+    "language": "de",
+    "title": "El diplomático U-Bahn",
+    "frame_id": "DE-04",
+    "xp": 150,
+    "prompt": "Usa 'Aus welcher Stadt kommen Sie?' con un desconocido. Pulsa ejecutada y anota qué respondieron."
+  },
+  {
+    "id": "q-de-02",
+    "language": "de",
+    "title": "Rechnung Meister",
+    "frame_id": "DE-06",
+    "xp": 120,
+    "prompt": "Pregunta zusammen oder getrennt. Anota si pagaron con Karte o bar."
+  },
+  {
+    "id": "q-de-03",
+    "language": "de",
+    "title": "Weil al final",
+    "frame_id": "DE-03",
+    "xp": 180,
+    "prompt": "Di una frase con weil y el verbo al final. Palabra nueva → HLR."
+  },
+  {
+    "id": "q-de-04",
+    "language": "de",
+    "title": "Hotel Sie",
+    "frame_id": "DE-01",
+    "xp": 100,
+    "prompt": "En recepción: Könnte ich … + infinitivo al final. Cero du."
+  },
+  {
+    "id": "q-de-05",
+    "language": "de",
+    "title": "Guten Appetit",
+    "frame_id": "DE-10",
+    "xp": 80,
+    "prompt": "Cierra una mesa con Ich wünsche Ihnen …"
+  },
+  {
+    "id": "q-de-06",
+    "language": "de",
+    "title": "Dresden lluvia",
+    "frame_id": "DE-02",
+    "xp": 130,
+    "prompt": "Kann man hier … sitzen/warten porque llueve."
+  },
+  {
+    "id": "q-de-07",
+    "language": "de",
+    "title": "Vienna cena",
+    "frame_id": "DE-07",
+    "xp": 160,
+    "prompt": "Meiner Meinung nach … en una mesa formal."
+  },
+  {
+    "id": "q-de-08",
+    "language": "de",
+    "title": "Ragazzas DE",
+    "frame_id": "DE-05",
+    "xp": 140,
+    "prompt": "Hat es euch geschmeckt? si ya hay du en la mesa."
+  }
+]

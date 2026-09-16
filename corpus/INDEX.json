@@ -1,0 +1,19 @@
+{
+  "frames_de": 10,
+  "expansions_de": 103,
+  "ammo": 8,
+  "quests": 8,
+  "taboos": 7,
+  "audio_only": 8,
+  "podcasts": 8,
+  "podcasts_with_audio": 8,
+  "dw_items": 12,
+  "tatoeba": 12,
+  "verdict": {
+    "audio_pipeline": "original scripts + Edge neural TTS (Microsoft), not ElevenLabs",
+    "dw": "catalog + hotlink RSS, never rehost",
+    "duo_stories": "rejected, Duolingo copyright",
+    "common_voice": "too big, future accent sampling only",
+    "tatoeba": "CC BY 2.0 FR text with owner attribution"
+  }
+}

@@ -1,0 +1,58 @@
+[
+  {
+    "id": "tab-de-01",
+    "lang": "de",
+    "kind": "taboo",
+    "title": "Cumpleaños anticipado",
+    "wrong": "Alles Gute schon am Montag",
+    "right": "Feliz cumpleaños SOLO el día. Antes = mala suerte."
+  },
+  {
+    "id": "tab-de-02",
+    "lang": "de",
+    "kind": "taboo",
+    "title": "Leitungswasser",
+    "wrong": "Ein Leitungswasser, bitte",
+    "right": "Mineralwasser mit oder ohne Kohlensäure. Grifo puede sonar tacaño en restaurante."
+  },
+  {
+    "id": "tab-de-03",
+    "lang": "de",
+    "kind": "false_friend",
+    "title": "bekommen ≠ become",
+    "wrong": "I become the bill",
+    "right": "bekommen = recibir. Ich bekomme die Rechnung."
+  },
+  {
+    "id": "tab-de-04",
+    "lang": "de",
+    "kind": "pragmatic",
+    "title": "du demasiado pronto",
+    "wrong": "Hey, wo ist das Klo?",
+    "right": "Entschuldigung, wo ist die Toilette?"
+  },
+  {
+    "id": "tab-de-05",
+    "lang": "de",
+    "kind": "culture",
+    "title": "Pünktlichkeit",
+    "wrong": "Ich komme irgendwann",
+    "right": "Si dices 20:00, 20:00. 20:10 ya se nota."
+  },
+  {
+    "id": "tab-it-01",
+    "lang": "it",
+    "live": false,
+    "kind": "taboo",
+    "title": "Cappuccino after lunch",
+    "right": "LOCKED island. ristretto after pasta."
+  },
+  {
+    "id": "tab-pt-01",
+    "lang": "pt",
+    "live": false,
+    "kind": "false_friend",
+    "title": "propina ≠ tip (PT-PT)",
+    "right": "LOCKED. PT-PT propina ≈ bribe. Tip = gorjeta."
+  }
+]

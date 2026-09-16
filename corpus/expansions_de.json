@@ -1,0 +1,954 @@
+[
+  {
+    "frame_id": "DE-01",
+    "n": 1,
+    "say": "Ich möchte Ihnen einen Wein empfehlen",
+    "slots": {
+      "modal": "Ich möchte",
+      "obj": "Ihnen einen Wein",
+      "verb_inf": "empfehlen"
+    }
+  },
+  {
+    "frame_id": "DE-01",
+    "n": 2,
+    "say": "Ich möchte Ihnen einen Wein bringen",
+    "slots": {
+      "modal": "Ich möchte",
+      "obj": "Ihnen einen Wein",
+      "verb_inf": "bringen"
+    }
+  },
+  {
+    "frame_id": "DE-01",
+    "n": 3,
+    "say": "Ich möchte Ihnen einen Wein zeigen",
+    "slots": {
+      "modal": "Ich möchte",
+      "obj": "Ihnen einen Wein",
+      "verb_inf": "zeigen"
+    }
+  },
+  {
+    "frame_id": "DE-01",
+    "n": 4,
+    "say": "Ich möchte Ihnen einen Wein erklären",
+    "slots": {
+      "modal": "Ich möchte",
+      "obj": "Ihnen einen Wein",
+      "verb_inf": "erklären"
+    }
+  },
+  {
+    "frame_id": "DE-01",
+    "n": 5,
+    "say": "Ich möchte die Karte empfehlen",
+    "slots": {
+      "modal": "Ich möchte",
+      "obj": "die Karte",
+      "verb_inf": "empfehlen"
+    }
+  },
+  {
+    "frame_id": "DE-01",
+    "n": 6,
+    "say": "Ich möchte die Karte bringen",
+    "slots": {
+      "modal": "Ich möchte",
+      "obj": "die Karte",
+      "verb_inf": "bringen"
+    }
+  },
+  {
+    "frame_id": "DE-01",
+    "n": 7,
+    "say": "Ich möchte die Karte zeigen",
+    "slots": {
+      "modal": "Ich möchte",
+      "obj": "die Karte",
+      "verb_inf": "zeigen"
+    }
+  },
+  {
+    "frame_id": "DE-01",
+    "n": 8,
+    "say": "Ich möchte die Karte erklären",
+    "slots": {
+      "modal": "Ich möchte",
+      "obj": "die Karte",
+      "verb_inf": "erklären"
+    }
+  },
+  {
+    "frame_id": "DE-01",
+    "n": 9,
+    "say": "Ich möchte ein stilles Wasser empfehlen",
+    "slots": {
+      "modal": "Ich möchte",
+      "obj": "ein stilles Wasser",
+      "verb_inf": "empfehlen"
+    }
+  },
+  {
+    "frame_id": "DE-01",
+    "n": 10,
+    "say": "Ich möchte ein stilles Wasser bringen",
+    "slots": {
+      "modal": "Ich möchte",
+      "obj": "ein stilles Wasser",
+      "verb_inf": "bringen"
+    }
+  },
+  {
+    "frame_id": "DE-01",
+    "n": 11,
+    "say": "Ich möchte ein stilles Wasser zeigen",
+    "slots": {
+      "modal": "Ich möchte",
+      "obj": "ein stilles Wasser",
+      "verb_inf": "zeigen"
+    }
+  },
+  {
+    "frame_id": "DE-01",
+    "n": 12,
+    "say": "Ich möchte ein stilles Wasser erklären",
+    "slots": {
+      "modal": "Ich möchte",
+      "obj": "ein stilles Wasser",
+      "verb_inf": "erklären"
+    }
+  },
+  {
+    "frame_id": "DE-01",
+    "n": 13,
+    "say": "Ich möchte den Weg zur U-Bahn empfehlen",
+    "slots": {
+      "modal": "Ich möchte",
+      "obj": "den Weg zur U-Bahn",
+      "verb_inf": "empfehlen"
+    }
+  },
+  {
+    "frame_id": "DE-01",
+    "n": 14,
+    "say": "Ich möchte den Weg zur U-Bahn bringen",
+    "slots": {
+      "modal": "Ich möchte",
+      "obj": "den Weg zur U-Bahn",
+      "verb_inf": "bringen"
+    }
+  },
+  {
+    "frame_id": "DE-01",
+    "n": 15,
+    "say": "Ich möchte den Weg zur U-Bahn zeigen",
+    "slots": {
+      "modal": "Ich möchte",
+      "obj": "den Weg zur U-Bahn",
+      "verb_inf": "zeigen"
+    }
+  },
+  {
+    "frame_id": "DE-01",
+    "n": 16,
+    "say": "Ich möchte den Weg zur U-Bahn erklären",
+    "slots": {
+      "modal": "Ich möchte",
+      "obj": "den Weg zur U-Bahn",
+      "verb_inf": "erklären"
+    }
+  },
+  {
+    "frame_id": "DE-01",
+    "n": 17,
+    "say": "Könnte ich Ihnen einen Wein empfehlen",
+    "slots": {
+      "modal": "Könnte ich",
+      "obj": "Ihnen einen Wein",
+      "verb_inf": "empfehlen"
+    }
+  },
+  {
+    "frame_id": "DE-01",
+    "n": 18,
+    "say": "Könnte ich Ihnen einen Wein bringen",
+    "slots": {
+      "modal": "Könnte ich",
+      "obj": "Ihnen einen Wein",
+      "verb_inf": "bringen"
+    }
+  },
+  {
+    "frame_id": "DE-01",
+    "n": 19,
+    "say": "Könnte ich Ihnen einen Wein zeigen",
+    "slots": {
+      "modal": "Könnte ich",
+      "obj": "Ihnen einen Wein",
+      "verb_inf": "zeigen"
+    }
+  },
+  {
+    "frame_id": "DE-01",
+    "n": 20,
+    "say": "Könnte ich Ihnen einen Wein erklären",
+    "slots": {
+      "modal": "Könnte ich",
+      "obj": "Ihnen einen Wein",
+      "verb_inf": "erklären"
+    }
+  },
+  {
+    "frame_id": "DE-01",
+    "n": 21,
+    "say": "Könnte ich die Karte empfehlen",
+    "slots": {
+      "modal": "Könnte ich",
+      "obj": "die Karte",
+      "verb_inf": "empfehlen"
+    }
+  },
+  {
+    "frame_id": "DE-01",
+    "n": 22,
+    "say": "Könnte ich die Karte bringen",
+    "slots": {
+      "modal": "Könnte ich",
+      "obj": "die Karte",
+      "verb_inf": "bringen"
+    }
+  },
+  {
+    "frame_id": "DE-01",
+    "n": 23,
+    "say": "Könnte ich die Karte zeigen",
+    "slots": {
+      "modal": "Könnte ich",
+      "obj": "die Karte",
+      "verb_inf": "zeigen"
+    }
+  },
+  {
+    "frame_id": "DE-01",
+    "n": 24,
+    "say": "Könnte ich die Karte erklären",
+    "slots": {
+      "modal": "Könnte ich",
+      "obj": "die Karte",
+      "verb_inf": "erklären"
+    }
+  },
+  {
+    "frame_id": "DE-02",
+    "n": 1,
+    "say": "Kann man hier hier draußen sitzen?",
+    "slots": {
+      "place": "hier draußen",
+      "verb_inf": "sitzen"
+    }
+  },
+  {
+    "frame_id": "DE-02",
+    "n": 2,
+    "say": "Kann man hier hier draußen probieren?",
+    "slots": {
+      "place": "hier draußen",
+      "verb_inf": "probieren"
+    }
+  },
+  {
+    "frame_id": "DE-02",
+    "n": 3,
+    "say": "Kann man hier hier draußen bestellen?",
+    "slots": {
+      "place": "hier draußen",
+      "verb_inf": "bestellen"
+    }
+  },
+  {
+    "frame_id": "DE-02",
+    "n": 4,
+    "say": "Kann man hier hier draußen zahlen?",
+    "slots": {
+      "place": "hier draußen",
+      "verb_inf": "zahlen"
+    }
+  },
+  {
+    "frame_id": "DE-02",
+    "n": 5,
+    "say": "Kann man hier am Fenster sitzen?",
+    "slots": {
+      "place": "am Fenster",
+      "verb_inf": "sitzen"
+    }
+  },
+  {
+    "frame_id": "DE-02",
+    "n": 6,
+    "say": "Kann man hier am Fenster probieren?",
+    "slots": {
+      "place": "am Fenster",
+      "verb_inf": "probieren"
+    }
+  },
+  {
+    "frame_id": "DE-02",
+    "n": 7,
+    "say": "Kann man hier am Fenster bestellen?",
+    "slots": {
+      "place": "am Fenster",
+      "verb_inf": "bestellen"
+    }
+  },
+  {
+    "frame_id": "DE-02",
+    "n": 8,
+    "say": "Kann man hier am Fenster zahlen?",
+    "slots": {
+      "place": "am Fenster",
+      "verb_inf": "zahlen"
+    }
+  },
+  {
+    "frame_id": "DE-02",
+    "n": 9,
+    "say": "Kann man hier ohne Reservierung sitzen?",
+    "slots": {
+      "place": "ohne Reservierung",
+      "verb_inf": "sitzen"
+    }
+  },
+  {
+    "frame_id": "DE-02",
+    "n": 10,
+    "say": "Kann man hier ohne Reservierung probieren?",
+    "slots": {
+      "place": "ohne Reservierung",
+      "verb_inf": "probieren"
+    }
+  },
+  {
+    "frame_id": "DE-02",
+    "n": 11,
+    "say": "Kann man hier ohne Reservierung bestellen?",
+    "slots": {
+      "place": "ohne Reservierung",
+      "verb_inf": "bestellen"
+    }
+  },
+  {
+    "frame_id": "DE-02",
+    "n": 12,
+    "say": "Kann man hier ohne Reservierung zahlen?",
+    "slots": {
+      "place": "ohne Reservierung",
+      "verb_inf": "zahlen"
+    }
+  },
+  {
+    "frame_id": "DE-02",
+    "n": 13,
+    "say": "Kann man hier bar sitzen?",
+    "slots": {
+      "place": "bar",
+      "verb_inf": "sitzen"
+    }
+  },
+  {
+    "frame_id": "DE-02",
+    "n": 14,
+    "say": "Kann man hier bar probieren?",
+    "slots": {
+      "place": "bar",
+      "verb_inf": "probieren"
+    }
+  },
+  {
+    "frame_id": "DE-02",
+    "n": 15,
+    "say": "Kann man hier bar bestellen?",
+    "slots": {
+      "place": "bar",
+      "verb_inf": "bestellen"
+    }
+  },
+  {
+    "frame_id": "DE-02",
+    "n": 16,
+    "say": "Kann man hier bar zahlen?",
+    "slots": {
+      "place": "bar",
+      "verb_inf": "zahlen"
+    }
+  },
+  {
+    "frame_id": "DE-03",
+    "n": 1,
+    "say": "Ich mag diesen Ort, weil die Musik super ist",
+    "slots": {
+      "main": "Ich mag diesen Ort",
+      "rest": "die Musik super",
+      "verb": "ist"
+    }
+  },
+  {
+    "frame_id": "DE-03",
+    "n": 2,
+    "say": "Ich mag diesen Ort, weil die Musik super haben",
+    "slots": {
+      "main": "Ich mag diesen Ort",
+      "rest": "die Musik super",
+      "verb": "haben"
+    }
+  },
+  {
+    "frame_id": "DE-03",
+    "n": 3,
+    "say": "Ich mag diesen Ort, weil die Musik super regnet",
+    "slots": {
+      "main": "Ich mag diesen Ort",
+      "rest": "die Musik super",
+      "verb": "regnet"
+    }
+  },
+  {
+    "frame_id": "DE-03",
+    "n": 4,
+    "say": "Ich mag diesen Ort, weil wir heute neue Weine ist",
+    "slots": {
+      "main": "Ich mag diesen Ort",
+      "rest": "wir heute neue Weine",
+      "verb": "ist"
+    }
+  },
+  {
+    "frame_id": "DE-03",
+    "n": 5,
+    "say": "Ich mag diesen Ort, weil wir heute neue Weine haben",
+    "slots": {
+      "main": "Ich mag diesen Ort",
+      "rest": "wir heute neue Weine",
+      "verb": "haben"
+    }
+  },
+  {
+    "frame_id": "DE-03",
+    "n": 6,
+    "say": "Ich mag diesen Ort, weil wir heute neue Weine regnet",
+    "slots": {
+      "main": "Ich mag diesen Ort",
+      "rest": "wir heute neue Weine",
+      "verb": "regnet"
+    }
+  },
+  {
+    "frame_id": "DE-03",
+    "n": 7,
+    "say": "Ich mag diesen Ort, weil es heute regnet ist",
+    "slots": {
+      "main": "Ich mag diesen Ort",
+      "rest": "es heute regnet",
+      "verb": "ist"
+    }
+  },
+  {
+    "frame_id": "DE-03",
+    "n": 8,
+    "say": "Ich mag diesen Ort, weil es heute regnet haben",
+    "slots": {
+      "main": "Ich mag diesen Ort",
+      "rest": "es heute regnet",
+      "verb": "haben"
+    }
+  },
+  {
+    "frame_id": "DE-03",
+    "n": 9,
+    "say": "Ich mag diesen Ort, weil es heute regnet regnet",
+    "slots": {
+      "main": "Ich mag diesen Ort",
+      "rest": "es heute regnet",
+      "verb": "regnet"
+    }
+  },
+  {
+    "frame_id": "DE-03",
+    "n": 10,
+    "say": "Wir kommen später, weil die Musik super ist",
+    "slots": {
+      "main": "Wir kommen später",
+      "rest": "die Musik super",
+      "verb": "ist"
+    }
+  },
+  {
+    "frame_id": "DE-03",
+    "n": 11,
+    "say": "Wir kommen später, weil die Musik super haben",
+    "slots": {
+      "main": "Wir kommen später",
+      "rest": "die Musik super",
+      "verb": "haben"
+    }
+  },
+  {
+    "frame_id": "DE-03",
+    "n": 12,
+    "say": "Wir kommen später, weil die Musik super regnet",
+    "slots": {
+      "main": "Wir kommen später",
+      "rest": "die Musik super",
+      "verb": "regnet"
+    }
+  },
+  {
+    "frame_id": "DE-03",
+    "n": 13,
+    "say": "Wir kommen später, weil wir heute neue Weine ist",
+    "slots": {
+      "main": "Wir kommen später",
+      "rest": "wir heute neue Weine",
+      "verb": "ist"
+    }
+  },
+  {
+    "frame_id": "DE-03",
+    "n": 14,
+    "say": "Wir kommen später, weil wir heute neue Weine haben",
+    "slots": {
+      "main": "Wir kommen später",
+      "rest": "wir heute neue Weine",
+      "verb": "haben"
+    }
+  },
+  {
+    "frame_id": "DE-03",
+    "n": 15,
+    "say": "Wir kommen später, weil wir heute neue Weine regnet",
+    "slots": {
+      "main": "Wir kommen später",
+      "rest": "wir heute neue Weine",
+      "verb": "regnet"
+    }
+  },
+  {
+    "frame_id": "DE-03",
+    "n": 16,
+    "say": "Wir kommen später, weil es heute regnet ist",
+    "slots": {
+      "main": "Wir kommen später",
+      "rest": "es heute regnet",
+      "verb": "ist"
+    }
+  },
+  {
+    "frame_id": "DE-03",
+    "n": 17,
+    "say": "Wir kommen später, weil es heute regnet haben",
+    "slots": {
+      "main": "Wir kommen später",
+      "rest": "es heute regnet",
+      "verb": "haben"
+    }
+  },
+  {
+    "frame_id": "DE-03",
+    "n": 18,
+    "say": "Wir kommen später, weil es heute regnet regnet",
+    "slots": {
+      "main": "Wir kommen später",
+      "rest": "es heute regnet",
+      "verb": "regnet"
+    }
+  },
+  {
+    "frame_id": "DE-03",
+    "n": 19,
+    "say": "Ich bringe die Karte sofort, weil die Musik super ist",
+    "slots": {
+      "main": "Ich bringe die Karte sofort",
+      "rest": "die Musik super",
+      "verb": "ist"
+    }
+  },
+  {
+    "frame_id": "DE-03",
+    "n": 20,
+    "say": "Ich bringe die Karte sofort, weil die Musik super haben",
+    "slots": {
+      "main": "Ich bringe die Karte sofort",
+      "rest": "die Musik super",
+      "verb": "haben"
+    }
+  },
+  {
+    "frame_id": "DE-03",
+    "n": 21,
+    "say": "Ich bringe die Karte sofort, weil die Musik super regnet",
+    "slots": {
+      "main": "Ich bringe die Karte sofort",
+      "rest": "die Musik super",
+      "verb": "regnet"
+    }
+  },
+  {
+    "frame_id": "DE-03",
+    "n": 22,
+    "say": "Ich bringe die Karte sofort, weil wir heute neue Weine ist",
+    "slots": {
+      "main": "Ich bringe die Karte sofort",
+      "rest": "wir heute neue Weine",
+      "verb": "ist"
+    }
+  },
+  {
+    "frame_id": "DE-03",
+    "n": 23,
+    "say": "Ich bringe die Karte sofort, weil wir heute neue Weine haben",
+    "slots": {
+      "main": "Ich bringe die Karte sofort",
+      "rest": "wir heute neue Weine",
+      "verb": "haben"
+    }
+  },
+  {
+    "frame_id": "DE-03",
+    "n": 24,
+    "say": "Ich bringe die Karte sofort, weil wir heute neue Weine regnet",
+    "slots": {
+      "main": "Ich bringe die Karte sofort",
+      "rest": "wir heute neue Weine",
+      "verb": "regnet"
+    }
+  },
+  {
+    "frame_id": "DE-04",
+    "n": 1,
+    "say": "Aus welcher Stadt kommen Sie? Aus Berlin?",
+    "slots": {
+      "city": "Berlin"
+    }
+  },
+  {
+    "frame_id": "DE-04",
+    "n": 2,
+    "say": "Aus welcher Stadt kommen Sie? Aus München?",
+    "slots": {
+      "city": "München"
+    }
+  },
+  {
+    "frame_id": "DE-04",
+    "n": 3,
+    "say": "Aus welcher Stadt kommen Sie? Aus Hamburg?",
+    "slots": {
+      "city": "Hamburg"
+    }
+  },
+  {
+    "frame_id": "DE-04",
+    "n": 4,
+    "say": "Aus welcher Stadt kommen Sie? Aus Köln?",
+    "slots": {
+      "city": "Köln"
+    }
+  },
+  {
+    "frame_id": "DE-05",
+    "n": 1,
+    "say": "Hat es Ihnen gut geschmeckt?",
+    "slots": {
+      "how": "gut"
+    }
+  },
+  {
+    "frame_id": "DE-05",
+    "n": 2,
+    "say": "Hat es Ihnen allen gut geschmeckt?",
+    "slots": {
+      "how": "allen gut"
+    }
+  },
+  {
+    "frame_id": "DE-05",
+    "n": 3,
+    "say": "Hat es Ihnen ein bisschen geschmeckt?",
+    "slots": {
+      "how": "ein bisschen"
+    }
+  },
+  {
+    "frame_id": "DE-06",
+    "n": 1,
+    "say": "Möchten Sie zusammen oder getrennt bezahlen?",
+    "slots": {
+      "how": "zusammen oder getrennt"
+    }
+  },
+  {
+    "frame_id": "DE-06",
+    "n": 2,
+    "say": "Möchten Sie mit Karte bezahlen?",
+    "slots": {
+      "how": "mit Karte"
+    }
+  },
+  {
+    "frame_id": "DE-06",
+    "n": 3,
+    "say": "Möchten Sie bar bezahlen?",
+    "slots": {
+      "how": "bar"
+    }
+  },
+  {
+    "frame_id": "DE-06",
+    "n": 4,
+    "say": "Möchten Sie die Rechnung bezahlen?",
+    "slots": {
+      "how": "die Rechnung"
+    }
+  },
+  {
+    "frame_id": "DE-07",
+    "n": 1,
+    "say": "Meiner Meinung nach ist das Fleisch perfekt.",
+    "slots": {
+      "noun": "das Fleisch",
+      "adj": "perfekt"
+    }
+  },
+  {
+    "frame_id": "DE-07",
+    "n": 2,
+    "say": "Meiner Meinung nach ist das Fleisch frisch.",
+    "slots": {
+      "noun": "das Fleisch",
+      "adj": "frisch"
+    }
+  },
+  {
+    "frame_id": "DE-07",
+    "n": 3,
+    "say": "Meiner Meinung nach ist das Fleisch zu laut.",
+    "slots": {
+      "noun": "das Fleisch",
+      "adj": "zu laut"
+    }
+  },
+  {
+    "frame_id": "DE-07",
+    "n": 4,
+    "say": "Meiner Meinung nach ist das Fleisch typisch.",
+    "slots": {
+      "noun": "das Fleisch",
+      "adj": "typisch"
+    }
+  },
+  {
+    "frame_id": "DE-07",
+    "n": 5,
+    "say": "Meiner Meinung nach ist die Musik perfekt.",
+    "slots": {
+      "noun": "die Musik",
+      "adj": "perfekt"
+    }
+  },
+  {
+    "frame_id": "DE-07",
+    "n": 6,
+    "say": "Meiner Meinung nach ist die Musik frisch.",
+    "slots": {
+      "noun": "die Musik",
+      "adj": "frisch"
+    }
+  },
+  {
+    "frame_id": "DE-07",
+    "n": 7,
+    "say": "Meiner Meinung nach ist die Musik zu laut.",
+    "slots": {
+      "noun": "die Musik",
+      "adj": "zu laut"
+    }
+  },
+  {
+    "frame_id": "DE-07",
+    "n": 8,
+    "say": "Meiner Meinung nach ist die Musik typisch.",
+    "slots": {
+      "noun": "die Musik",
+      "adj": "typisch"
+    }
+  },
+  {
+    "frame_id": "DE-07",
+    "n": 9,
+    "say": "Meiner Meinung nach ist dieser Wein perfekt.",
+    "slots": {
+      "noun": "dieser Wein",
+      "adj": "perfekt"
+    }
+  },
+  {
+    "frame_id": "DE-07",
+    "n": 10,
+    "say": "Meiner Meinung nach ist dieser Wein frisch.",
+    "slots": {
+      "noun": "dieser Wein",
+      "adj": "frisch"
+    }
+  },
+  {
+    "frame_id": "DE-07",
+    "n": 11,
+    "say": "Meiner Meinung nach ist dieser Wein zu laut.",
+    "slots": {
+      "noun": "dieser Wein",
+      "adj": "zu laut"
+    }
+  },
+  {
+    "frame_id": "DE-07",
+    "n": 12,
+    "say": "Meiner Meinung nach ist dieser Wein typisch.",
+    "slots": {
+      "noun": "dieser Wein",
+      "adj": "typisch"
+    }
+  },
+  {
+    "frame_id": "DE-07",
+    "n": 13,
+    "say": "Meiner Meinung nach ist das Tempo perfekt.",
+    "slots": {
+      "noun": "das Tempo",
+      "adj": "perfekt"
+    }
+  },
+  {
+    "frame_id": "DE-07",
+    "n": 14,
+    "say": "Meiner Meinung nach ist das Tempo frisch.",
+    "slots": {
+      "noun": "das Tempo",
+      "adj": "frisch"
+    }
+  },
+  {
+    "frame_id": "DE-07",
+    "n": 15,
+    "say": "Meiner Meinung nach ist das Tempo zu laut.",
+    "slots": {
+      "noun": "das Tempo",
+      "adj": "zu laut"
+    }
+  },
+  {
+    "frame_id": "DE-07",
+    "n": 16,
+    "say": "Meiner Meinung nach ist das Tempo typisch.",
+    "slots": {
+      "noun": "das Tempo",
+      "adj": "typisch"
+    }
+  },
+  {
+    "frame_id": "DE-08",
+    "n": 1,
+    "say": "Brauchen Sie noch etwas Wasser?",
+    "slots": {
+      "noun": "etwas Wasser"
+    }
+  },
+  {
+    "frame_id": "DE-08",
+    "n": 2,
+    "say": "Brauchen Sie noch Brot?",
+    "slots": {
+      "noun": "Brot"
+    }
+  },
+  {
+    "frame_id": "DE-08",
+    "n": 3,
+    "say": "Brauchen Sie noch Besteck?",
+    "slots": {
+      "noun": "Besteck"
+    }
+  },
+  {
+    "frame_id": "DE-08",
+    "n": 4,
+    "say": "Brauchen Sie noch eine Serviette?",
+    "slots": {
+      "noun": "eine Serviette"
+    }
+  },
+  {
+    "frame_id": "DE-09",
+    "n": 1,
+    "say": "Was haben Sie heute Abend noch vor?",
+    "slots": {
+      "when": "heute Abend"
+    }
+  },
+  {
+    "frame_id": "DE-09",
+    "n": 2,
+    "say": "Was haben Sie nach dem Essen noch vor?",
+    "slots": {
+      "when": "nach dem Essen"
+    }
+  },
+  {
+    "frame_id": "DE-09",
+    "n": 3,
+    "say": "Was haben Sie in Berlin noch vor?",
+    "slots": {
+      "when": "in Berlin"
+    }
+  },
+  {
+    "frame_id": "DE-09",
+    "n": 4,
+    "say": "Was haben Sie am Wochenende noch vor?",
+    "slots": {
+      "when": "am Wochenende"
+    }
+  },
+  {
+    "frame_id": "DE-10",
+    "n": 1,
+    "say": "Ich wünsche Ihnen einen schönen Abend.",
+    "slots": {
+      "wish": "einen schönen Abend"
+    }
+  },
+  {
+    "frame_id": "DE-10",
+    "n": 2,
+    "say": "Ich wünsche Ihnen einen schönen Urlaub.",
+    "slots": {
+      "wish": "einen schönen Urlaub"
+    }
+  },
+  {
+    "frame_id": "DE-10",
+    "n": 3,
+    "say": "Ich wünsche Ihnen eine gute Reise.",
+    "slots": {
+      "wish": "eine gute Reise"
+    }
+  },
+  {
+    "frame_id": "DE-10",
+    "n": 4,
+    "say": "Ich wünsche Ihnen einen guten Appetit.",
+    "slots": {
+      "wish": "einen guten Appetit"
+    }
+  }
+]

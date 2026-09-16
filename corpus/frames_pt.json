@@ -1,0 +1,30 @@
+[
+  {
+    "id": "PT-01",
+    "language": "pt",
+    "live": false,
+    "category": "DESIRE",
+    "difficulty": "A1",
+    "pattern_display": "[Gostaria de] + INF",
+    "core_formula": "Gostaria de {verb} {comp}",
+    "example_en": "I'd like to suggest the dish of the day.",
+    "cultural_context": "LOCKED. PT-PT vs BR is a later island.",
+    "slots": {
+      "verb": [
+        "sugerir",
+        "experimentar",
+        "pedir"
+      ]
+    }
+  },
+  {
+    "id": "PT-10",
+    "language": "pt",
+    "live": false,
+    "category": "EGG_ACCENT",
+    "difficulty": "A2",
+    "pattern_display": "Lisboa ou Norte / de que estado do Brasil",
+    "example_en": "Lisbon or the north / which Brazilian state",
+    "cultural_context": "LOCKED."
+  }
+]

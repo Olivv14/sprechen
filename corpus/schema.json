@@ -1,0 +1,64 @@
+{
+  "version": "sprechen.corpus.v1",
+  "storage": "JSON files + Safari localStorage. No Postgres.",
+  "tables": {
+    "sentence_frames": [
+      "id",
+      "language",
+      "category",
+      "difficulty",
+      "pattern_display",
+      "core_formula",
+      "example_de",
+      "example_en",
+      "cultural_context",
+      "slots",
+      "live"
+    ],
+    "cultural_easter_eggs": [
+      "id",
+      "nationality",
+      "trigger",
+      "title",
+      "script",
+      "badge"
+    ],
+    "quick_ammo": [
+      "id",
+      "table_tag",
+      "icebreaker",
+      "service",
+      "egg"
+    ],
+    "real_world_quests": [
+      "id",
+      "language",
+      "title",
+      "frame_id",
+      "xp",
+      "prompt"
+    ],
+    "podcast_episode": [
+      "id",
+      "title",
+      "lang",
+      "difficulty",
+      "audio",
+      "segments",
+      "pauses"
+    ],
+    "feeds": [
+      "id",
+      "title",
+      "rss",
+      "license",
+      "hotlink_only"
+    ]
+  },
+  "rejected": [
+    "unofficial-duolingo-stories (Duolingo copyright)",
+    "ElevenLabs",
+    "Common Voice 34GB in repo",
+    "RAI unofficial scrapers"
+  ]
+}

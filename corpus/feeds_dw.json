@@ -1,0 +1,82 @@
+{
+  "id": "dw-lgn",
+  "title": "Langsam Gesprochene Nachrichten (DW)",
+  "rss": "https://rss.dw.com/xml/DKpodcast_lgn_de",
+  "license": "© DW — hotlink only, do not rehost mp3",
+  "hotlink_only": true,
+  "n_feed": 99,
+  "items": [
+    {
+      "title": "15.09.2026 – Langsam Gesprochene Nachrichten",
+      "link": "https://learngerman.dw.com/de/15-09-2026-langsam-gesprochene-nachrichten/a-79270311?maca=de-DKpodcast_lgn_de-2288-xml-mrss",
+      "enclosure": "https://radiodownloaddw-a.akamaihd.net/Events/podcasts/de/2288_DKpodcast_lgn_de/6E71D368_2-podcast-2288-79270311.mp3",
+      "type": "audio/mpeg"
+    },
+    {
+      "title": "14.09.2026 – Langsam Gesprochene Nachrichten",
+      "link": "https://learngerman.dw.com/de/14-09-2026-langsam-gesprochene-nachrichten/a-79256907?maca=de-DKpodcast_lgn_de-2288-xml-mrss",
+      "enclosure": "https://radiodownloaddw-a.akamaihd.net/Events/podcasts/de/2288_DKpodcast_lgn_de/AE210D31_2-podcast-2288-79256907.mp3",
+      "type": "audio/mpeg"
+    },
+    {
+      "title": "12.09.2026 – Langsam Gesprochene Nachrichten",
+      "link": "https://learngerman.dw.com/de/12-09-2026-langsam-gesprochene-nachrichten/a-79243414?maca=de-DKpodcast_lgn_de-2288-xml-mrss",
+      "enclosure": "https://radiodownloaddw-a.akamaihd.net/Events/podcasts/de/2288_DKpodcast_lgn_de/D1BDB3E4_2-podcast-2288-79243414.mp3",
+      "type": "audio/mpeg"
+    },
+    {
+      "title": "11.09.2026 – Langsam Gesprochene Nachrichten",
+      "link": "https://learngerman.dw.com/de/11-09-2026-langsam-gesprochene-nachrichten/a-79227192?maca=de-DKpodcast_lgn_de-2288-xml-mrss",
+      "enclosure": "https://radiodownloaddw-a.akamaihd.net/Events/podcasts/de/2288_DKpodcast_lgn_de/C21571C5_2-podcast-2288-79227192.mp3",
+      "type": "audio/mpeg"
+    },
+    {
+      "title": "10.09.2026 – Langsam Gesprochene Nachrichten",
+      "link": "https://learngerman.dw.com/de/10-09-2026-langsam-gesprochene-nachrichten/a-79210223?maca=de-DKpodcast_lgn_de-2288-xml-mrss",
+      "enclosure": "https://radiodownloaddw-a.akamaihd.net/Events/podcasts/de/2288_DKpodcast_lgn_de/D79BDF07_2-podcast-2288-79210223.mp3",
+      "type": "audio/mpeg"
+    },
+    {
+      "title": "09.09.2026 – Langsam Gesprochene Nachrichten",
+      "link": "https://learngerman.dw.com/de/09-09-2026-langsam-gesprochene-nachrichten/a-79198829?maca=de-DKpodcast_lgn_de-2288-xml-mrss",
+      "enclosure": "https://radiodownloaddw-a.akamaihd.net/Events/podcasts/de/2288_DKpodcast_lgn_de/B57C2150_2-podcast-2288-79198829.mp3",
+      "type": "audio/mpeg"
+    },
+    {
+      "title": "08.09.2026 – Langsam Gesprochene Nachrichten",
+      "link": "https://learngerman.dw.com/de/08-09-2026-langsam-gesprochene-nachrichten/a-79155060?maca=de-DKpodcast_lgn_de-2288-xml-mrss",
+      "enclosure": "https://radiodownloaddw-a.akamaihd.net/Events/podcasts/de/2288_DKpodcast_lgn_de/386109F0_2-podcast-2288-79155060.mp3",
+      "type": "audio/mpeg"
+    },
+    {
+      "title": "07.09.2026 – Langsam Gesprochene Nachrichten",
+      "link": "https://learngerman.dw.com/de/07-09-2026-langsam-gesprochene-nachrichten/a-79138028?maca=de-DKpodcast_lgn_de-2288-xml-mrss",
+      "enclosure": "https://radiodownloaddw-a.akamaihd.net/Events/podcasts/de/2288_DKpodcast_lgn_de/33722E97_2-podcast-2288-79138028.mp3",
+      "type": "audio/mpeg"
+    },
+    {
+      "title": "05.09.2026 – Langsam Gesprochene Nachrichten",
+      "link": "https://learngerman.dw.com/de/05-09-2026-langsam-gesprochene-nachrichten/a-79045107?maca=de-DKpodcast_lgn_de-2288-xml-mrss",
+      "enclosure": "https://radiodownloaddw-a.akamaihd.net/Events/podcasts/de/2288_DKpodcast_lgn_de/BAB396C7_2-podcast-2288-79045107.mp3",
+      "type": "audio/mpeg"
+    },
+    {
+      "title": "04.09.2026 – Langsam Gesprochene Nachrichten",
+      "link": "https://learngerman.dw.com/de/04-09-2026-langsam-gesprochene-nachrichten/a-78917587?maca=de-DKpodcast_lgn_de-2288-xml-mrss",
+      "enclosure": "https://radiodownloaddw-a.akamaihd.net/Events/podcasts/de/2288_DKpodcast_lgn_de/36BE5A30_2-podcast-2288-78917587.mp3",
+      "type": "audio/mpeg"
+    },
+    {
+      "title": "03.09.2026 – Langsam Gesprochene Nachrichten",
+      "link": "https://learngerman.dw.com/de/03-09-2026-langsam-gesprochene-nachrichten/a-78832755?maca=de-DKpodcast_lgn_de-2288-xml-mrss",
+      "enclosure": "https://radiodownloaddw-a.akamaihd.net/Events/podcasts/de/2288_DKpodcast_lgn_de/2E64EF78_2-podcast-2288-78832755.mp3",
+      "type": "audio/mpeg"
+    },
+    {
+      "title": "02.09.2026 – Langsam Gesprochene Nachrichten",
+      "link": "https://learngerman.dw.com/de/02-09-2026-langsam-gesprochene-nachrichten/a-78703530?maca=de-DKpodcast_lgn_de-2288-xml-mrss",
+      "enclosure": "https://radiodownloaddw-a.akamaihd.net/Events/podcasts/de/2288_DKpodcast_lgn_de/61710710_2-podcast-2288-78703530.mp3",
+      "type": "audio/mpeg"
+    }
+  ]
+}

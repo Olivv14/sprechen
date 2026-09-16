@@ -1,0 +1,66 @@
+[
+  {
+    "id": "ao-01",
+    "title": "Metro, manos en el bolsillo",
+    "prompt": "Te llega un berlinés apurado. Quieres el U-Bahn sin ser grosero. 4 segundos. Luego el modelo.",
+    "model": "Entschuldigung, wie komme ich zur nächsten U-Bahn?",
+    "why": "Saludo + pregunta. Verbo komme en segunda posición.",
+    "frame_id": "DE-01"
+  },
+  {
+    "id": "ao-02",
+    "title": "Hotel lluvia Dresde",
+    "prompt": "Recepción. Sie. Quieres un taxi porque llueve.",
+    "model": "Könnte ich ein Taxi bestellen, weil es stark regnet?",
+    "why": "Modal + INF final, weil + verb final.",
+    "frame_id": "DE-03"
+  },
+  {
+    "id": "ao-03",
+    "title": "Bar Kreuzberg",
+    "prompt": "Mesa joven. Ya te tutean. Pide un Bier.",
+    "model": "Ich möchte ein Bier, bitte.",
+    "why": "möchte + objeto + (bitte). Infinitivo no hace falta aquí.",
+    "frame_id": "DE-01"
+  },
+  {
+    "id": "ao-04",
+    "title": "Cuenta",
+    "prompt": "La mesa se levanta. ¿Juntos o separados?",
+    "model": "Möchten Sie zusammen oder getrennt bezahlen?",
+    "why": "Egg cultural. Infinitiv bezahlen al final.",
+    "frame_id": "DE-06"
+  },
+  {
+    "id": "ao-05",
+    "title": "Origen",
+    "prompt": "Mesa alemana. Rompehielos.",
+    "model": "Aus welcher Stadt kommen Sie?",
+    "why": "kommen en posición 2.",
+    "frame_id": "DE-04"
+  },
+  {
+    "id": "ao-06",
+    "title": "Cena inversores",
+    "prompt": "Viena. Formal. Opinión sobre el vino.",
+    "model": "Meiner Meinung nach ist der Wein perfekt.",
+    "why": "Opinion frame, Sie all night.",
+    "frame_id": "DE-07"
+  },
+  {
+    "id": "ao-07",
+    "title": "Cierre",
+    "prompt": "Se van. Deséales la noche.",
+    "model": "Ich wünsche Ihnen einen schönen Abend.",
+    "why": "wishes frame.",
+    "frame_id": "DE-10"
+  },
+  {
+    "id": "ao-08",
+    "title": "weil música",
+    "prompt": "Te preguntan por qué te gusta el local.",
+    "model": "Ich mag den Laden, weil die Musik super ist.",
+    "why": "ist al final.",
+    "frame_id": "DE-03"
+  }
+]

@@ -1,0 +1,36 @@
+[
+  {
+    "id": "IT-01",
+    "language": "it",
+    "live": false,
+    "category": "ORDERING_POLITE",
+    "difficulty": "A1",
+    "pattern_display": "[Vorrei] + INF + COMP",
+    "core_formula": "Vorrei {verb} {comp}",
+    "example_de": "—",
+    "example_en": "I'd like to try the house wine.",
+    "cultural_context": "LOCKED island. vorrei not voglio.",
+    "slots": {
+      "verb": [
+        "provare",
+        "ordinare",
+        "sapere"
+      ],
+      "comp": [
+        "il vino della casa",
+        "un piatto tipico"
+      ]
+    }
+  },
+  {
+    "id": "IT-10",
+    "language": "it",
+    "live": false,
+    "category": "EGG_COFFEE",
+    "difficulty": "A2",
+    "pattern_display": "niente cappuccino dopo le 11",
+    "core_formula": "niente cappuccino con la pasta",
+    "example_en": "No cappuccino with pasta.",
+    "cultural_context": "LOCKED. Humor, not scolding."
+  }
+]

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#1a2438"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="480" fill="url(#sky)"/>
+  <rect x="0" y="340" width="800" height="140" fill="#121820"/>
+  <rect x="40" y="220" width="70" height="140" fill="#1c2533"/>
+  <rect x="130" y="180" width="90" height="180" fill="#243044"/>
+  <rect x="240" y="200" width="60" height="160" fill="#1a2330"/>
+  <rect x="620" y="190" width="80" height="170" fill="#243044"/>
+  <rect x="710" y="230" width="50" height="130" fill="#1c2533"/>
+  <!-- Seine -->
+  <path d="M0 390 Q400 360 800 400 L800 480 L0 480 Z" fill="#1e3a4c"/>
+  <!-- Eiffel -->
+  <path d="M400 70 L415 70 L460 340 L340 340 Z" fill="#c9a227" opacity=".85"/>
+  <path d="M400 70 L385 70 L340 340 L460 340 Z" fill="#a8841a" opacity=".5"/>
+  <rect x="372" y="160" width="56" height="8" fill="#e8d48a"/>
+  <rect x="384" y="230" width="32" height="6" fill="#e8d48a"/>
+  <circle cx="400" cy="62" r="7" fill="#f4e4a4"/>
+  <text x="24" y="36" fill="#98cdf4" font-family="system-ui" font-size="18" letter-spacing="3">PARIS · RIVE GAUCHE</text>
+</svg>

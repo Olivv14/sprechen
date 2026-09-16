@@ -1,0 +1,66 @@
+[
+  {
+    "id": "ammo-de-metro",
+    "table_tag": "GERMAN_STREET",
+    "icebreaker": "Entschuldigung, darf ich Sie kurz etwas fragen?",
+    "service": "Wie komme ich zur nächsten U-Bahn?",
+    "egg": "Wiederholen: geradeaus, dann links.",
+    "frame_id": "DE-01"
+  },
+  {
+    "id": "ammo-de-hotel",
+    "table_tag": "HOTEL_DESK",
+    "icebreaker": "Guten Abend, ich habe eine Reservierung.",
+    "service": "Könnte ich noch ein Handtuch bekommen?",
+    "egg": "Sie, never du, at the desk.",
+    "frame_id": "DE-08"
+  },
+  {
+    "id": "ammo-de-bar",
+    "table_tag": "GERMAN_BAR",
+    "icebreaker": "Hey, ist hier noch frei?",
+    "service": "Ich möchte ein Bier, bitte.",
+    "egg": "du after they offer it.",
+    "frame_id": "DE-01"
+  },
+  {
+    "id": "ammo-de-bill",
+    "table_tag": "GERMAN_TABLE",
+    "icebreaker": "Hat es Ihnen geschmeckt?",
+    "service": "Zusammen oder getrennt?",
+    "egg": "mit Karte oder bar",
+    "frame_id": "DE-06"
+  },
+  {
+    "id": "ammo-de-saikan",
+    "table_tag": "SAIKAN",
+    "icebreaker": "Aus welcher Stadt kommt ihr?",
+    "service": "Braucht ihr noch etwas?",
+    "egg": "weil der Wein vom Haus super ist",
+    "frame_id": "DE-04"
+  },
+  {
+    "id": "ammo-de-rain",
+    "table_tag": "DRESDEN",
+    "icebreaker": "Entschuldigung, regnet es hier immer so?",
+    "service": "Kann man hier drinnen warten?",
+    "egg": "weil es heute stark regnet",
+    "frame_id": "DE-03"
+  },
+  {
+    "id": "ammo-de-vienna",
+    "table_tag": "VIENNA_DINNER",
+    "icebreaker": "Darf ich Ihnen etwas empfehlen?",
+    "service": "Meiner Meinung nach ist der Wein perfekt.",
+    "egg": "Sie the whole night unless they switch.",
+    "frame_id": "DE-07"
+  },
+  {
+    "id": "ammo-de-club",
+    "table_tag": "BERLIN_NIGHT",
+    "icebreaker": "Was habt ihr heute noch vor?",
+    "service": "Kann man hier draußen stehen?",
+    "egg": "zu laut? Meiner Meinung nach ja.",
+    "frame_id": "DE-09"
+  }
+]

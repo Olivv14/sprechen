@@ -1,0 +1,427 @@
+[
+  {
+    "id": "pod-de-ubahn",
+    "title": "Alexanderplatz, un minuto",
+    "lang": "de",
+    "difficulty": "A1",
+    "scene": "U-Bahn rain noise in the head, not a stored mp3",
+    "pauses": [
+      {
+        "after": 2,
+        "prompt": "Produce: cómo pedir el camino al U-Bahn",
+        "frame_id": "DE-01"
+      }
+    ],
+    "audio": "audio/pod-de-ubahn.mp3",
+    "concat_ok": true,
+    "segments": [
+      {
+        "i": 0,
+        "speaker": "NPC",
+        "text": "Entschuldigung, ich bin spät. Wo ist die U-Bahn, bitte?",
+        "voice": "de-DE-KatjaNeural",
+        "start": 0.0,
+        "end": 9.14,
+        "tts_ok": true
+      },
+      {
+        "i": 1,
+        "speaker": "OLIVER",
+        "text": "Geradeaus, dann links. Die Station ist Alexanderplatz.",
+        "voice": "de-DE-ConradNeural",
+        "start": 9.39,
+        "end": 18.25,
+        "tts_ok": true
+      },
+      {
+        "i": 2,
+        "speaker": "NPC",
+        "text": "Geradeaus, dann links. Danke!",
+        "voice": "de-DE-KatjaNeural",
+        "start": 18.5,
+        "end": 25.56,
+        "tts_ok": true
+      },
+      {
+        "i": 3,
+        "speaker": "OLIVER",
+        "text": "Gern. Ich wünsche Ihnen eine gute Fahrt.",
+        "voice": "de-DE-ConradNeural",
+        "start": 25.81,
+        "end": 32.5,
+        "tts_ok": true
+      }
+    ],
+    "duration_est": 32.8
+  },
+  {
+    "id": "pod-de-hotel",
+    "title": "Dresden, recepción, lluvia",
+    "lang": "de",
+    "difficulty": "A2",
+    "scene": "Hotel desk, Sie only",
+    "pauses": [
+      {
+        "after": 1,
+        "prompt": "Produce: Könnte ich … + inf final",
+        "frame_id": "DE-01"
+      }
+    ],
+    "audio": "audio/pod-de-hotel.mp3",
+    "concat_ok": true,
+    "segments": [
+      {
+        "i": 0,
+        "speaker": "NPC",
+        "text": "Guten Abend. Ich habe eine Reservierung auf den Namen Oliver.",
+        "voice": "de-DE-KillianNeural",
+        "start": 0.0,
+        "end": 8.46,
+        "tts_ok": true
+      },
+      {
+        "i": 1,
+        "speaker": "OLIVER",
+        "text": "Willkommen. Könnte ich noch ein Handtuch bringen, weil es stark regnet?",
+        "voice": "de-DE-KatjaNeural",
+        "start": 8.71,
+        "end": 18.54,
+        "tts_ok": true
+      },
+      {
+        "i": 2,
+        "speaker": "NPC",
+        "text": "Ja, bitte. Und ein Taxi für später?",
+        "voice": "de-DE-KillianNeural",
+        "start": 18.79,
+        "end": 26.46,
+        "tts_ok": true
+      },
+      {
+        "i": 3,
+        "speaker": "OLIVER",
+        "text": "Klar. Ich bestelle das Taxi um zwanzig Uhr.",
+        "voice": "de-DE-KatjaNeural",
+        "start": 26.71,
+        "end": 34.37,
+        "tts_ok": true
+      }
+    ],
+    "duration_est": 34.6
+  },
+  {
+    "id": "pod-de-bar",
+    "title": "Kreuzberg, ya hay du",
+    "lang": "de",
+    "difficulty": "A1",
+    "scene": "Bar, young table",
+    "pauses": [
+      {
+        "after": 0,
+        "prompt": "Icebreaker informal",
+        "frame_id": "DE-09"
+      }
+    ],
+    "audio": "audio/pod-de-bar.mp3",
+    "concat_ok": true,
+    "segments": [
+      {
+        "i": 0,
+        "speaker": "NPC",
+        "text": "Hey, ist hier noch frei?",
+        "voice": "de-DE-SeraphinaMultilingualNeural",
+        "start": 0.0,
+        "end": 3.6,
+        "tts_ok": true
+      },
+      {
+        "i": 1,
+        "speaker": "OLIVER",
+        "text": "Ja, klar. Setz dich. Was habt ihr heute noch vor?",
+        "voice": "de-DE-FlorianMultilingualNeural",
+        "start": 3.85,
+        "end": 12.02,
+        "tts_ok": true
+      },
+      {
+        "i": 2,
+        "speaker": "NPC",
+        "text": "Techno, später. Und du?",
+        "voice": "de-DE-SeraphinaMultilingualNeural",
+        "start": 12.27,
+        "end": 17.24,
+        "tts_ok": true
+      },
+      {
+        "i": 3,
+        "speaker": "OLIVER",
+        "text": "Ich möchte erst ein Bier trinken, weil die Nacht lang ist.",
+        "voice": "de-DE-FlorianMultilingualNeural",
+        "start": 17.49,
+        "end": 23.0,
+        "tts_ok": true
+      }
+    ],
+    "duration_est": 23.2
+  },
+  {
+    "id": "pod-de-bill",
+    "title": "Zusammen oder getrennt",
+    "lang": "de",
+    "difficulty": "A1",
+    "scene": "End of meal",
+    "pauses": [
+      {
+        "after": 2,
+        "prompt": "Egg: la cuenta",
+        "frame_id": "DE-06"
+      }
+    ],
+    "audio": "audio/pod-de-bill.mp3",
+    "concat_ok": true,
+    "segments": [
+      {
+        "i": 0,
+        "speaker": "OLIVER",
+        "text": "Hat es Ihnen geschmeckt?",
+        "voice": "de-DE-ConradNeural",
+        "start": 0.0,
+        "end": 3.67,
+        "tts_ok": true
+      },
+      {
+        "i": 1,
+        "speaker": "NPC",
+        "text": "Ja, sehr. Die Rechnung bitte.",
+        "voice": "de-DE-AmalaNeural",
+        "start": 3.92,
+        "end": 10.55,
+        "tts_ok": true
+      },
+      {
+        "i": 2,
+        "speaker": "OLIVER",
+        "text": "Möchten Sie zusammen oder getrennt bezahlen?",
+        "voice": "de-DE-ConradNeural",
+        "start": 10.8,
+        "end": 16.52,
+        "tts_ok": true
+      },
+      {
+        "i": 3,
+        "speaker": "NPC",
+        "text": "Getrennt, mit Karte.",
+        "voice": "de-DE-AmalaNeural",
+        "start": 16.77,
+        "end": 21.2,
+        "tts_ok": true
+      }
+    ],
+    "duration_est": 21.4
+  },
+  {
+    "id": "pod-de-vienna",
+    "title": "Wien, mesa de inversores",
+    "lang": "de",
+    "difficulty": "B1",
+    "scene": "Formal dinner, Sie",
+    "pauses": [
+      {
+        "after": 1,
+        "prompt": "Opinión formal",
+        "frame_id": "DE-07"
+      }
+    ],
+    "audio": "audio/pod-de-vienna.mp3",
+    "concat_ok": true,
+    "segments": [
+      {
+        "i": 0,
+        "speaker": "NPC",
+        "text": "Sagen Sie, der Wein. Was denken Sie?",
+        "voice": "de-AT-IngridNeural",
+        "start": 0.0,
+        "end": 6.62,
+        "tts_ok": true
+      },
+      {
+        "i": 1,
+        "speaker": "OLIVER",
+        "text": "Meiner Meinung nach ist der Wein perfekt, weil er nicht zu schwer ist.",
+        "voice": "de-AT-JonasNeural",
+        "start": 6.87,
+        "end": 13.79,
+        "tts_ok": true
+      },
+      {
+        "i": 2,
+        "speaker": "NPC",
+        "text": "Gut. Dann nehmen wir noch eine Flasche.",
+        "voice": "de-AT-IngridNeural",
+        "start": 14.04,
+        "end": 20.66,
+        "tts_ok": true
+      },
+      {
+        "i": 3,
+        "speaker": "OLIVER",
+        "text": "Ich bringe sie sofort.",
+        "voice": "de-AT-JonasNeural",
+        "start": 20.91,
+        "end": 24.62,
+        "tts_ok": true
+      }
+    ],
+    "duration_est": 24.9
+  },
+  {
+    "id": "pod-de-saikan",
+    "title": "Saikan, mesa alemana",
+    "lang": "de",
+    "difficulty": "A2",
+    "scene": "Oliver's world, table talk",
+    "pauses": [
+      {
+        "after": 0,
+        "prompt": "Origen",
+        "frame_id": "DE-04"
+      }
+    ],
+    "audio": "audio/pod-de-saikan.mp3",
+    "concat_ok": true,
+    "segments": [
+      {
+        "i": 0,
+        "speaker": "OLIVER",
+        "text": "Aus welcher Stadt kommt ihr? Aus Berlin?",
+        "voice": "de-DE-ConradNeural",
+        "start": 0.0,
+        "end": 7.13,
+        "tts_ok": true
+      },
+      {
+        "i": 1,
+        "speaker": "NPC",
+        "text": "Hamburg. Und du, du klingst nicht deutsch.",
+        "voice": "de-DE-KatjaNeural",
+        "start": 7.38,
+        "end": 14.83,
+        "tts_ok": true
+      },
+      {
+        "i": 2,
+        "speaker": "OLIVER",
+        "text": "Ich lerne. Kann man hier draußen sitzen?",
+        "voice": "de-DE-ConradNeural",
+        "start": 15.08,
+        "end": 21.99,
+        "tts_ok": true
+      },
+      {
+        "i": 3,
+        "speaker": "NPC",
+        "text": "Ja. Setz dich. Die Musik ist laut, weil heute DJ ist.",
+        "voice": "de-DE-KatjaNeural",
+        "start": 22.24,
+        "end": 33.01,
+        "tts_ok": true
+      }
+    ],
+    "duration_est": 33.3
+  },
+  {
+    "id": "pod-de-accent",
+    "title": "Misma frase, tres voces",
+    "lang": "de",
+    "difficulty": "A1",
+    "scene": "Accent bowling: DE / AT / CH neural. Not true Bavarian.",
+    "pauses": [],
+    "audio": "audio/pod-de-accent.mp3",
+    "concat_ok": true,
+    "segments": [
+      {
+        "i": 0,
+        "speaker": "DE",
+        "text": "Ich möchte die nächste U-Bahn finden.",
+        "voice": "de-DE-KatjaNeural",
+        "start": 0.0,
+        "end": 5.29,
+        "tts_ok": true
+      },
+      {
+        "i": 1,
+        "speaker": "AT",
+        "text": "Ich möchte die nächste U-Bahn finden.",
+        "voice": "de-AT-IngridNeural",
+        "start": 5.54,
+        "end": 10.47,
+        "tts_ok": true
+      },
+      {
+        "i": 2,
+        "speaker": "CH",
+        "text": "Ich möchte die nächste U-Bahn finden.",
+        "voice": "de-CH-LeniNeural",
+        "start": 10.72,
+        "end": 15.66,
+        "tts_ok": true
+      }
+    ],
+    "duration_est": 15.9
+  },
+  {
+    "id": "pod-de-handsfree",
+    "title": "Audio-only: 4 segundos",
+    "lang": "de",
+    "difficulty": "A1",
+    "scene": "Pocket mode. Pause is silence in the file.",
+    "pauses": [
+      {
+        "after": 0,
+        "prompt": "Susurra ahora",
+        "frame_id": "DE-04"
+      }
+    ],
+    "audio": "audio/pod-de-handsfree.mp3",
+    "concat_ok": true,
+    "segments": [
+      {
+        "i": 0,
+        "speaker": "NARR",
+        "text": "Eine deutsche Gruppe. Du willst höflich nach der Stadt fragen. Vier Sekunden.",
+        "voice": "de-DE-ConradNeural",
+        "start": 0.0,
+        "end": 11.56,
+        "tts_ok": true
+      },
+      {
+        "i": 1,
+        "speaker": "NARR",
+        "text": "...",
+        "voice": "de-DE-ConradNeural",
+        "start": 11.81,
+        "end": 13.01,
+        "tts_ok": false
+      },
+      {
+        "i": 2,
+        "speaker": "MODEL",
+        "text": "Aus welcher Stadt kommen Sie? Aus Berlin?",
+        "voice": "de-DE-KatjaNeural",
+        "start": 13.26,
+        "end": 20.24,
+        "tts_ok": true
+      },
+      {
+        "i": 3,
+        "speaker": "NARR",
+        "text": "Das Verb kommen steht an Position zwei. Sag es noch einmal.",
+        "voice": "de-DE-ConradNeural",
+        "start": 20.49,
+        "end": 29.2,
+        "tts_ok": true
+      }
+    ],
+    "duration_est": 29.5
+  }
+]
