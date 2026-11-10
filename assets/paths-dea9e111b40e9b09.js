@@ -291,7 +291,7 @@ function speak(text, language2, report) {
 // src/app.ts
 var BASE = "/sprechen";
 var root = document.getElementById("root");
-root.dataset.build = "03d838211c5333bf";
+root.dataset.build = "703d5ff621b9d470";
 var escape = (value2) => String(value2 ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 var link = (path, text, cls = "") => `<a class="${cls}" href="${BASE}${path}">${escape(text)}</a>`;
 var button = (id, text, cls = "") => `<button type="button" id="${id}" class="${cls}">${escape(text)}</button>`;
@@ -407,14 +407,14 @@ async function refreshOffline() {
     if (registration.waiting) {
       const candidate = registration.waiting;
       const candidateStatus = await workerMessage(candidate, "STATUS");
-      if (candidateStatus.version === "sprechen-core-03d838211c5333bf" && candidateStatus.ready) candidate.postMessage("ACTIVATE");
+      if (candidateStatus.version === "sprechen-core-703d5ff621b9d470" && candidateStatus.ready) candidate.postMessage("ACTIVATE");
     }
     const worker = registration.active;
     const status = worker ? await workerMessage(worker, "STATUS") : void 0;
     if (sequence !== offlineSequence) return;
-    if (status?.version === "sprechen-core-03d838211c5333bf" && status.ready) {
+    if (status?.version === "sprechen-core-703d5ff621b9d470" && status.ready) {
       offlineText = "Offline ready \xB7 core lessons and text practice saved on this device";
-    } else if (status?.version !== void 0 && status.version !== "sprechen-core-03d838211c5333bf") {
+    } else if (status?.version !== void 0 && status.version !== "sprechen-core-703d5ff621b9d470") {
       offlineText = `${status.ready ? "Previous version available" : "Other version incomplete"} \xB7 this loaded build offline preparation ${installFailed ? "failed. Reconnect and retry." : registration.installing || registration.waiting ? "in progress\u2026" : "incomplete. Reconnect and retry."}`;
     } else {
       offlineText = installFailed ? "Offline preparation failed. Reconnect and retry." : registration.installing ? "Preparing offline core for this loaded build\u2026" : "Offline preparation incomplete. Reconnect and retry.";
@@ -466,7 +466,7 @@ async function offlineStatus(retry = false) {
       const worker = registration.active;
       if (worker) {
         const status = await workerMessage(worker, "STATUS");
-        if (status.version === "sprechen-core-03d838211c5333bf" && !status.ready) {
+        if (status.version === "sprechen-core-703d5ff621b9d470" && !status.ready) {
           const repaired = await workerMessage(worker, "REPAIR");
           if (!repaired.ready) throw Error(repaired.error || "Required core resources are still missing.");
         }
@@ -504,7 +504,7 @@ if ("serviceWorker" in navigator) {
 void offlineStatus();
 function shell(title, body) {
   document.body.classList.add("local-paths");
-  root.innerHTML = `<div class="paths-shell"><header class="paths-header">${link("/today", "Sprechen", "brand")}<span>LOCAL / NIGHT</span>${link("/you", "You")}</header><main id="main"><p class="eyebrow">YOUR LANGUAGE, YOUR PATH</p><h1>${escape(title)}</h1>${body}<p id="notice" role="status"></p><aside class="offline-box"><p id="offline-status" role="status"></p>${button("offline-retry", "Retry offline preparation", "quiet")}<p>Text exercises and review work locally after preparation. System audio depends on installed voices. External support stays online.</p></aside></main><nav class="paths-nav" aria-label="Main">${link("/today", "Languages")}${link("/review-local", "Review")}${link("/backup-safe", "Backup")}${link("/you", "You")}</nav></div>`;
+  root.innerHTML = `<div class="paths-shell"><header class="paths-header">${link("/today", "Sprechen", "brand")}<span>Local / Night</span>${link("/you", "You")}</header><main id="main"><p class="eyebrow">Your language, your path</p><h1>${escape(title)}</h1>${body}<p id="notice" role="status"></p><aside class="offline-box"><p id="offline-status" role="status"></p>${button("offline-retry", "Retry offline preparation", "quiet")}<p>Text exercises and review work locally after preparation. System audio depends on installed voices. External support stays online.</p></aside></main><nav class="paths-nav" aria-label="Main">${link("/today", "Languages")}${link("/review-local", "Review")}${link("/backup-safe", "Backup")}${link("/you", "You")}</nav></div>`;
   updateOffline();
   on("offline-retry", () => {
     offlineText = "Preparing offline core\u2026";
@@ -560,7 +560,7 @@ function language(id) {
     return;
   }
   const available = forLanguage(all, id);
-  const body = id === "tn" ? `<section class="panel"><h2>An honest starting point</h2><p>Tunisian Arabic (Derja) and Modern Standard Arabic are different learning contexts. This build has no verified Tunisian lesson corpus, native recordings, or Arabic reading unit.</p><p>No assessed course is offered here. Generic Arabic TTS or dictation would not establish Tunisian pronunciation accuracy.</p><p>You can choose this context at any time; it is not locked behind another language.</p></section>` : `${id === "fr" ? `<section class="panel accent"><p class="eyebrow">ORIGINAL \xB7 INTEGRATED UNIT 01</p><h2>A programmer\u2019s introduction</h2><p>Meet a colleague, describe a systems and AI company, and repair a misunderstanding.</p>${link("/series/fr/intro", "Start French unit", "action")}</section>` : ""}<section class="panel"><h2>${id === "pt" || id === "it" ? "Social-scene sampler" : "Practice in context"}</h2><p>${available.length} locally available items. Existing indices and progress identities stay intact.</p>${id === "pt" ? "<p>Portugal text selection. Inherited phonetic hints and unverified media are omitted. Audio requires an exact pt-PT voice; no pt-BR fallback.</p>" : ""}${link(`/practice/${id}`, "Start text practice", "action")}${link(`/review-local?language=${id}`, "Review this language")}</section>${id === "de" || id === "fr" ? `<section class="panel"><h2>Original lessons</h2><p>Existing lesson engine and saved progress.</p>${link(`/t/${id}`, "Browse original lessons")}${link(`/play/${id}/${id === "de" ? "m1" : "fh1"}`, "Open original first lesson")}${id === "de" ? `${link("/lego", "German sentence frames")}${link("/mission", "German missions")}${link("/listen", "German listening support")}${link("/slang", "German slang practice")}` : ""}</section>` : ""}<details class="panel"><summary>Preserved mixed collection</summary><p>Original multilingual social/flirt scenes are retained with original progress keys. These are situational lines, not a full language course. Select a language above for filtered practice.</p>${link("/t/flirt", "Original mixed scenes")}</details>`;
+  const body = id === "tn" ? `<section class="panel"><h2>An honest starting point</h2><p>Tunisian Arabic (Derja) and Modern Standard Arabic are different learning contexts. This build has no verified Tunisian lesson corpus, native recordings, or Arabic reading unit.</p><p>No assessed course is offered here. Generic Arabic TTS or dictation would not establish Tunisian pronunciation accuracy.</p><p>You can choose this context at any time; it is not locked behind another language.</p></section>` : `${id === "fr" ? `<section class="panel accent"><p class="eyebrow">Original \xB7 Integrated unit 01</p><h2>A programmer\u2019s introduction</h2><p>Meet a colleague, describe a systems and AI company, and repair a misunderstanding.</p>${link("/series/fr/intro", "Start French unit", "action")}</section>` : ""}<section class="panel"><h2>${id === "pt" || id === "it" ? "Social-scene sampler" : "Practice in context"}</h2><p>${available.length} locally available items. Existing indices and progress identities stay intact.</p>${id === "pt" ? "<p>Portugal text selection. Inherited phonetic hints and unverified media are omitted. Audio requires an exact pt-PT voice; no pt-BR fallback.</p>" : ""}${link(`/practice/${id}`, "Start text practice", "action")}${link(`/review-local?language=${id}`, "Review this language")}</section>${id === "de" || id === "fr" ? `<section class="panel"><h2>Original lessons</h2><p>Existing lesson engine and saved progress.</p>${link(`/t/${id}`, "Browse original lessons")}${link(`/play/${id}/${id === "de" ? "m1" : "fh1"}`, "Open original first lesson")}${id === "de" ? `${link("/lego", "German sentence frames")}${link("/mission", "German missions")}${link("/listen", "German listening support")}${link("/slang", "German slang practice")}` : ""}</section>` : ""}<details class="panel"><summary>Preserved mixed collection</summary><p>Original multilingual social/flirt scenes are retained with original progress keys. These are situational lines, not a full language course. Select a language above for filtered practice.</p>${link("/t/flirt", "Original mixed scenes")}</details>`;
   shell(language2.title, `<p class="lead">${escape(language2.scope)}</p>${body}${id === "de" ? `<section class="panel"><h2>Optional Berlin context clip</h2><p>Existing muted stock context, not a spoken lesson or an improvised conversation. Text exercises do not depend on this video.</p>${button("load-context-video", "Load optional context clip")}<video id="context-video" controls muted playsinline preload="none" hidden aria-label="Optional Berlin context clip"></video><p id="media-status" role="status"></p><p>Faktenwiki \xB7 CC BY-SA 4.0. Existing attribution: video/CREDITS.md.</p></section>` : ""}${link("/today", "Choose another language")}`);
   on("load-context-video", () => {
     const video = document.getElementById("context-video");

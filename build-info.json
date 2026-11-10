@@ -1,7 +1,7 @@
 {
-  "version": "03d838211c5333bf",
+  "version": "703d5ff621b9d470",
   "legacy": "assets/legacy-0a6805017f71a194.js",
-  "bootstrap": "assets/paths-d164e1d69cc54926.js",
+  "bootstrap": "assets/paths-dea9e111b40e9b09.js",
   "identityAlgorithm": "sha256-16 of ordered template resource hashes plus worker template; fixed app identity slot filled once",
   "identityResourceHashes": [
     [
@@ -10,7 +10,7 @@
     ],
     [
       "404.html",
-      "f58f30393eaae8f7"
+      "690380198157a964"
     ],
     [
       "apple-touch-icon.png",
@@ -25,12 +25,12 @@
       "0a6805017f71a194"
     ],
     [
-      "assets/paths-c365eca67698dcbc.js",
-      "c365eca67698dcbc"
+      "assets/paths-5fed3c0d37605e1a.css",
+      "5fed3c0d37605e1a"
     ],
     [
-      "assets/paths-c98b257b77db36eb.css",
-      "c98b257b77db36eb"
+      "assets/paths-61056975f14b7bee.js",
+      "61056975f14b7bee"
     ],
     [
       "audio/pod-de-accent.mp3",
@@ -149,12 +149,24 @@
       "58d1e17ffe5109a7"
     ],
     [
+      "fonts/Nunito-Italic-wght-8c6a9bb9.ttf",
+      "b520cc871868b0ac"
+    ],
+    [
+      "fonts/Nunito-wght-8c6a9bb9.ttf",
+      "bb55a5ca5c204233"
+    ],
+    [
+      "fonts/OFL-Nunito.txt",
+      "580df76c95a1ec5a"
+    ],
+    [
       "fonts/OFL-Plus-Jakarta-Sans.txt",
       "995c7199cab65954"
     ],
     [
       "fonts/SOURCES.md",
-      "94a47e68ef9c2836"
+      "50538b31582436ae"
     ],
     [
       "fonts/symbols-0.woff2",
@@ -230,7 +242,7 @@
     ],
     [
       "index.html",
-      "f58f30393eaae8f7"
+      "690380198157a964"
     ],
     [
       "manifest.json",
@@ -256,7 +268,7 @@
     ],
     [
       "404.html",
-      "a3d21534b97bed62"
+      "f319c35a72c36d9c"
     ],
     [
       "apple-touch-icon.png",
@@ -271,12 +283,12 @@
       "0a6805017f71a194"
     ],
     [
-      "assets/paths-d164e1d69cc54926.js",
-      "d164e1d69cc54926"
+      "assets/paths-5fed3c0d37605e1a.css",
+      "5fed3c0d37605e1a"
     ],
     [
-      "assets/paths-c98b257b77db36eb.css",
-      "c98b257b77db36eb"
+      "assets/paths-dea9e111b40e9b09.js",
+      "dea9e111b40e9b09"
     ],
     [
       "audio/pod-de-accent.mp3",
@@ -395,12 +407,24 @@
       "58d1e17ffe5109a7"
     ],
     [
+      "fonts/Nunito-Italic-wght-8c6a9bb9.ttf",
+      "b520cc871868b0ac"
+    ],
+    [
+      "fonts/Nunito-wght-8c6a9bb9.ttf",
+      "bb55a5ca5c204233"
+    ],
+    [
+      "fonts/OFL-Nunito.txt",
+      "580df76c95a1ec5a"
+    ],
+    [
       "fonts/OFL-Plus-Jakarta-Sans.txt",
       "995c7199cab65954"
     ],
     [
       "fonts/SOURCES.md",
-      "94a47e68ef9c2836"
+      "50538b31582436ae"
     ],
     [
       "fonts/symbols-0.woff2",
@@ -476,7 +500,7 @@
     ],
     [
       "index.html",
-      "a3d21534b97bed62"
+      "f319c35a72c36d9c"
     ],
     [
       "manifest.json",
@@ -524,5 +548,5 @@
   "semanticCorrections": [
     "de::a1::2: restore shifted Richtung Kreuzberg record"
   ],
-  "coreResources": 61
+  "coreResources": 64
 }
